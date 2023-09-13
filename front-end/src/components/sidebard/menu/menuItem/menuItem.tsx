@@ -2,45 +2,33 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { IconProps } from "phosphor-react";
 import painelActive from "public/painel_active.svg";
+import { ForwardRefExoticComponent, ReactNode, RefAttributes } from "react";
 
 interface MenuItemProps {
     nome: string;
-    icon: string;
-    activeIcon: string;
+    icon: ForwardRefExoticComponent<IconProps & RefAttributes<SVGSVGElement>>
+    url: string
 }
 
-export default function MenuItem( props: MenuItemProps) {
+export default function MenuItem( { nome, url, icon:Icon}: MenuItemProps) {
     console.log("Painel: ",painelActive.src)
 
-    const router = useRouter()
-    
-    const active1 = router.pathname.split("/")
-    const path = active1[active1.length -1]
-    console.log("teste: ",props.nome.toLowerCase())
+    const {asPath} = useRouter()
+    const isActive = asPath.includes(url)
 
     return (
-        <div>
-            <li >
-                <Link href={`${props.nome.toLowerCase()}`}>
-                    <Head>
-                        <title>VerdeCard | {path[0].toUpperCase() + path.slice(1)}</title>
-                    </Head>
-                    <div className={`
-                        flex rounded-xl ${path == props.nome.toLowerCase() ? "text-white" : "text-zinc-500"} font-bold text-xl items-center justify-between p-3 hover:cursor-pointer ${path == props.nome.toLowerCase() ? "bg-green-800 text-white" : "hover:bg-green-100"}
-                    `}>
-                        <span>{props.nome}</span>
-                        <span>
-                            <Image
-                                src={path == props.nome.toLowerCase() ? `${props.activeIcon}` : props.icon}
-                                width={42}
-                                height={42}
-                                alt="icone-dashboard"
-                            />
-                        </span>
-                    </div>
-                </Link>
-            </li>
-        </div>
+        <li data-active={isActive} className="group">
+            <Link href={url}>
+                <div className="flex rounded-xl  font-bold text-xl items-center justify-between p-3 text-zinc-500 group-data-[active=false]:hover:bg-green-200 cursor-pointer group-data-[active=true]:text-white group-data-[active=true]:bg-green-800">
+                    <span>{nome}</span>
+                    <Icon weight="fill" className="h-10 w-10"/>
+                </div>
+            </Link>
+        </li>
     )
 }
+
+// ${path == nome.toLowerCase() ? "text-white" : "text-zinc-500"}
+// {path == nome.toLowerCase() ? "bg-green-800 text-white" : "hover:bg-green-200"}
