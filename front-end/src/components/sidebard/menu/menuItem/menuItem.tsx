@@ -24,7 +24,7 @@ export default function MenuItem( { nome, url, icon:Icon}: MenuItemProps) {
             <Link href={url}>
                 <div className="flex rounded-xl  font-bold text-xl items-center justify-between p-3 text-zinc-500 group-data-[active=false]:hover:bg-green-200 cursor-pointer group-data-[active=true]:text-white group-data-[active=true]:bg-green-800">
                     <span>{nome}</span>
-                    <Icon weight="fill" className="h-10 w-10"/>
+                    {/* <Icon weight="fill" /> */}
                 </div>
             </Link>
         </li>
