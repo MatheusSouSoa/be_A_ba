@@ -1,4 +1,4 @@
-import Content from "@/components/content/content";
+import PaginaDashboard from "@/components/content/dashboard/PaginaDashboard";
 import Header from "@/components/header/header";
 import Side from "@/components/sidebard/side";
 import Head from "next/head";
@@ -13,7 +13,7 @@ export default function AdminDashboard() {
       <Header/>
       <div className="flex bg-zinc-300 h-full w-full main-content">
         <Side/>
-        <Content/>
+        <PaginaDashboard />
       </div>
     </div>
   </>

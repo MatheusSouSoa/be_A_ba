@@ -1,5 +1,6 @@
 import { useState } from "react"
 import User from "./user/user"
+import Image from "next/image"
 
 export default function Header() {
 
@@ -13,7 +14,12 @@ export default function Header() {
         <div>
             <header className="flex bg-green-800 h-24 justify-between items-center px-16">
                 <div>
-                    logo
+                    <Image
+                        src={'/logo.png'}
+                        width={138}
+                        height={132}
+                        alt="Logo Site"
+                    />
                 </div>
                 <div>
                     <User/>
