@@ -10,7 +10,7 @@ export default function AdminTemplates() {
         <title>VerdeCard | Templates</title>
       </Head>
       <div className="h-screen w-screen max-h-full max-w-full">
-        <Header/>
+        <Header isLoggedIn/>
         <div className="flex bg-zinc-300 h-full w-full main-content">
           <Side/>
           <Content/>

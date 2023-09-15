@@ -35,7 +35,7 @@ export default function TabelaDashboard() {
                         type="text" placeholder="Pesquisar por formato"/>
                     </div>
                 </div>
-                <div className="flex flex-col flex-1 gap-2 p-4 max-h-[100%] ">
+                <div className="flex flex-col flex-1 gap-2 p-2 max-h-[100%] ">
                     <table className="w-full bg-gray-300 rounded-t-2xl overflow-hidden">
                         <thead className="bg-green-800 text-white">
                             <tr className="">
@@ -47,7 +47,7 @@ export default function TabelaDashboard() {
                             </tr>
                         </thead>
                     </table>
-                    <div className="flex-1 overflow-y-auto scrollbar-custom max-h-[75%]">
+                    <div className="flex-1 overflow-y-auto scrollbar-custom max-h-[72%]">
                         <table className="w-full bg-gray-300 rounded-b-2xl">
                             <tbody className="text-center font-semibold text-zinc-600">
                                 {arquivoLista.map((arquivo, index) => (

@@ -2,6 +2,10 @@ import { useState } from "react"
 import User from "./user/user"
 import Image from "next/image"
 
+interface LoginProps {
+    isLoggedIn: boolean
+}
+
 export default function Header() {
 
     const [logged, isLogged] = useState(false)
