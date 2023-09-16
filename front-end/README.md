@@ -36,3 +36,41 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+
+{/* <table className="w-full bg-red-500 rounded-2xl overflow-hidden">
+                            <thead className="bg-green-800 text-white ">
+                                <tr className="rounded-2xl">
+                                    {campos.map((campo, index) => (
+                                        <th key={index}>{campo}</th>       
+                                    ))}
+                                </tr>
+                            </thead> */}
+
+// const obj = {
+//     arquivo: {
+//         nome_arquivo: "Arquivos",
+//         template: {
+//             nome_template: "Clientes 1",
+//             campos: {
+//                 nome: {
+//                     nome: "Nome",
+//                     tipo_dado: "varchar"
+//                 },
+//                 formato: {
+//                     nome: "Formato",
+//                     tipo_dado: "varchar"
+//                 },
+//                 data: {
+//                     nome: "Data",
+//                     tipo_dado: "date"
+//                 }
+//             },
+//             criado_por: "Matheus",
+//             data_criacao: "2023-09-14"
+//         },
+//         criado_por: "Matheus",
+//         data_criacao: "2023-09-14",
+//         numero_de_linhas: 67
+//     },
+// }
