@@ -45,6 +45,7 @@ export default function CardUsuario({id, nome, email, isadmin} : UsuariosCardPro
                         <input
                             className="cursor-pointer"
                             type="radio"
+                            checked={!isAdmin}
                             name={"adminStatus"+id}
                             value="cadastro"
                             onChange={handleRadioChange}
