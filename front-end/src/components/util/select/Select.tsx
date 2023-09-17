@@ -15,7 +15,7 @@ export default function Select(props: SelectProps) {
             <select
                 name={props.name}
                 id={props.id}
-                className="outline-none border-2 rounded-2xl font-semibold bg-zinc-200"
+                className="outline-none border-2 rounded-2xl font-semibold bg-zinc-200 overflow-hidden cursor-pointer"
                 value={props.value} // Defina o valor selecionado
                 onChange={props.onChange} // Defina a função onChange
             >

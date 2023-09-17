@@ -17,7 +17,7 @@ export default function MenuUser(props: MenuUserProps) {
                     src={props.icone}
                     width={132}
                     height={132}
-                    alt={"imagem" + props.titulo}
+                    alt={"imagem " + props.titulo}
                 />
             </div>
             <div className="p-3 flex justify-center items-center">

@@ -4,7 +4,7 @@ interface optionProps {
 
 export default function Options(props: optionProps){
     return (
-        <option className="rounded-md font-semibold" value={props.value}>
+        <option className="font-semibold" value={props.value}>
             {props.value}
         </option>
     )

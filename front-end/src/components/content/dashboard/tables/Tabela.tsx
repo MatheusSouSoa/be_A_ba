@@ -37,9 +37,9 @@ export default function TabelaDashboard() {
     const [objetoSelecionado, setObjetoSelecionado] = useState("Arquivos");
     const [campoSelecionado, setCampoSelecionado] = useState(camposArquivo[0]); // Valor inicial
     const [camposDisponiveis, setCamposDisponiveis] = useState(camposArquivo);
-    const [listaAtiva, setListaAtiva]: any = useState(arquivoLista)
+    const [listaAtiva, setListaAtiva]: any[] = useState(arquivoLista)
 
-    const handleObjetoChange = (e) => {
+    const handleObjetoChange = (e: any) => {
         const novoObjetoSelecionado = e.target.value;
         setObjetoSelecionado(novoObjetoSelecionado);
 
@@ -59,7 +59,7 @@ export default function TabelaDashboard() {
         }
     };
 
-    const handleCampoChange = (e) => {
+    const handleCampoChange = (e: any) => {
         const novoCampoSelecionado = e.target.value;
         setCampoSelecionado(novoCampoSelecionado);
     };

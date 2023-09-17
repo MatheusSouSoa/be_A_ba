@@ -43,7 +43,7 @@ export default function PaginaLogin() {
     const [email, setEmail] = useState("")
     const [senha, setSenha] = useState("")
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: any) => {
         e.preventDefault(); 
 
         if(email == "" || senha == "" ) return false
