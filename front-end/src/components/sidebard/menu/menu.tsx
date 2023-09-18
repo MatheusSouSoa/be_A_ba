@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MenuItem from "./menuItem/menuItem";
 import { ChartBar, FolderSimple, MicrosoftExcelLogo, UsersThree } from "phosphor-react";
-import {users} from "../../../../test/users/Users"
+// import {users} from "../../../../test/users/Users"
 
 // const user = {
 //     permissions: [
@@ -84,13 +84,39 @@ const menu = [
 
 export default function Menu() {
 
+    const [currentUser, setCurrentUser] = useState<any>(null);
+
+    useEffect(() => {
+        // Recupere o usuário do localStorage
+        const userString = localStorage.getItem("currentUser");
+        
+        if (userString) {
+            try {
+                const user = JSON.parse(userString);
+                setCurrentUser(user);
+            } catch (error) {
+                console.error("Erro ao analisar JSON de usuário do localStorage:", error);
+            }
+        }
+    }, []);
+
     return (
-        <div className=" pt-5">
+        <div className="pt-5">
             <ul className="flex flex-col gap-2 p-2">
-                {menu.filter(item => users.at(3)?.permissions.includes(item.url) ).map(({name, icon, url}, index) => (
-                    <MenuItem key={index} nome={name} icon={icon} url={url} />
-                ))}
+                {menu
+                    .filter(item => currentUser && currentUser.permissions.includes(item.url))
+                    .map(({ name, icon, url }, index) => (
+                        <MenuItem key={index} nome={name} icon={icon} url={url} />
+                    ))}
             </ul>
         </div>
     )
 }
+
+
+
+
+
+
+
+

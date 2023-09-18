@@ -106,7 +106,7 @@ export default function PaginaLogin() {
                                         autoFocus
                                         type="text" 
                                         className="outline-none border-2 rounded-2xl bg-zinc-100 px-2" 
-                                        placeholder="matricula ou email" 
+                                        placeholder="email" 
                                         size={15} 
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}

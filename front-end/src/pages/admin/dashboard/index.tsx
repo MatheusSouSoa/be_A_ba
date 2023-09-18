@@ -2,8 +2,10 @@ import PaginaDashboard from "@/components/content/dashboard/PaginaDashboard";
 import Header from "@/components/header/header";
 import Side from "@/components/sidebard/side";
 import Head from "next/head";
+import { useRouter } from "next/router";
 
 export default function AdminDashboard() {
+  const router = useRouter();
 
   if (typeof window !== "undefined") {
     const usuarioString = localStorage.getItem("currentUser");
@@ -14,6 +16,7 @@ export default function AdminDashboard() {
     } else {
       // Lidar com o caso em que 'usuarioString' é nulo
       console.log("Nenhum usuário encontrado no localStorage");
+      router.push('/')
     }
   }
 

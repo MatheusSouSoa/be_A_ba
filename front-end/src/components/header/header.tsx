@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import User from "./user/user"
 import Image from "next/image"
 
@@ -9,10 +9,26 @@ interface LoginProps {
 export default function Header() {
 
     const [logged, isLogged] = useState(false)
+    const [currentUser, setCurrentUser] = useState<any>(null);
 
-    function setLogged() {
-        isLogged(!logged)
-    }
+    useEffect(() => {
+        // Recupere o usuário do localStorage
+        const userString = localStorage.getItem("currentUser");
+        
+        if (userString) {
+            try {
+                const user = JSON.parse(userString);
+                setCurrentUser(user);
+                isLogged(true)
+            } catch (error) {
+                console.error("Erro ao analisar JSON de usuário do localStorage:", error);
+            }
+        }
+        else {
+            isLogged(false)
+        }
+    }, []);
+
 
     return (
         <div>
@@ -26,7 +42,7 @@ export default function Header() {
                     />
                 </div>
                 <div>
-                    <User/>
+                    {logged ? <User/> : ""}
                 </div>
             </header>
         </div>
