@@ -1,41 +1,53 @@
 import { useState } from "react";
 import Header from "../header/header";
 import Head from "next/head";
+import {users} from "../../../test/users/Users"
 
-const users = {
-    user1: {
-        email: "email@example.com",
-        senha: "senha",
-        nome: "Matheus",
-        isAdmin: false,
-        permissions: [
-            "/templates",
-            "/arquivos"
-        ]
-    },
-    user2: {
-        email: "user@example.com",
-        senha: "senha",
-        nome: "Matheus",
-        isAdmin: false,
-        permissions: [
-            "/templates",
-            "/arquivos"
-        ]
-    },
-    user3: {
-        email: "matheus@email.com",
-        senha: "senha123",
-        nome: "Matheus",
-        isAdmin: true,
-        permissions: [
-            "/admin/templates",
-            "/admin/usuarios",
-            "/admin/dashboard",
-            "/arquivos"
-        ]
-    },
-}
+// const users = {
+//     user1: {
+//         email: "email@example.com",
+//         senha: "senha",
+//         nome: "Matheus",
+//         isAdmin: false,
+//         permissions: [
+//             "/templates",
+//             "/arquivos"
+//         ]
+//     },
+//     user2: {
+//         email: "user@example.com",
+//         senha: "senha",
+//         nome: "Matheus",
+//         isAdmin: false,
+//         permissions: [
+//             "/templates",
+//             "/arquivos"
+//         ]
+//     },
+//     user3: {
+//         email: "matheus@email.com",
+//         senha: "senha123",
+//         nome: "Matheus",
+//         isAdmin: true,
+//         permissions: [
+//             "/admin/templates",
+//             "/admin/usuarios",
+//             "/admin/dashboard",
+//             "/arquivos"
+//         ]
+//     },
+// }
+
+const user = {
+    id: null as number | null,
+    email: null as string | null,
+    senha: null as string | null,
+    nome: null as string | null,
+    isAdmin: null as boolean | null,
+    isNew: null as boolean | null,
+    permissions: [] as string[],
+};
+
 
 export default function PaginaLogin() {
 
@@ -44,37 +56,37 @@ export default function PaginaLogin() {
     const [senha, setSenha] = useState("")
 
     const handleSubmit = (e: any) => {
-        e.preventDefault(); 
+        e.preventDefault();
 
-        if(email == "" || senha == "" ) return false
+        if (email === "" || senha === "") return false;
 
-        const usuarios = Object.values(users)
+        const usuarios = Object.values(users);
 
-        let logged = false
-        let user 
+        for (const usuario of usuarios) {
+            if (usuario.email === email && usuario.senha === senha) {
+                setIsLogged(true);
+                user.id = usuario.id
+                user.nome = usuario.nome
+                user.email = usuario.email
+                usuario.isAdmin ? user.isAdmin = true : user.isAdmin = false;
+                usuario.isNew ? user.isNew = true : user.isNew = false;
+                user.permissions = usuario.permissions
 
-        for(const usuario of usuarios) {
-            if(usuario.email == email){
-                if(usuario.senha == senha){
-                    logged = true
-                    user = usuario
+
+                localStorage.setItem("currentUser", JSON.stringify(user));
+
+                if (usuario.isAdmin) {
+                    window.location.href = "/admin/dashboard";
+                } else {
+                    window.location.href = "/templates";
                 }
-                else {
-                    console.log("senha errada")
-                }
-            }
-            else {
-                console.log("Usuario não encontrado")
+
+                return;
             }
         }
-        if(logged) {
-            if(user?.isAdmin == true) {
-                window.location.href = "/admin/dashboard"
-                return
-            }
-            else if(user?.isAdmin == false )window.location.href = "/templates"
-        }
-      };
+
+        console.log("Usuário não encontrado ou senha incorreta");
+    };
 
 
     return (
@@ -91,6 +103,7 @@ export default function PaginaLogin() {
                                 <li className="flex flex-col gap-2">
                                     <span>Login:</span>
                                     <input 
+                                        autoFocus
                                         type="text" 
                                         className="outline-none border-2 rounded-2xl bg-zinc-100 px-2" 
                                         placeholder="matricula ou email" 
@@ -126,3 +139,37 @@ export default function PaginaLogin() {
         </>
     )
 }
+
+
+// const handleSubmit = (e: any) => {
+//     e.preventDefault(); 
+
+//     if(email == "" || senha == "" ) return false
+
+//     const usuarios = Object.values(users)
+
+//     let logged = false
+//     let user 
+
+//     for(const usuario of usuarios) {
+//         if(usuario.email == email){
+//             if(usuario.senha == senha){
+//                 logged = true
+//                 user = usuario
+//             }
+//             else {
+//                 console.log("senha errada")
+//             }
+//         }
+//         else {
+//             console.log("Usuario não encontrado")
+//         }
+//     }
+//     if(logged) {
+//         if(user?.isAdmin == true) {
+//             window.location.href = "/admin/dashboard"
+//             return
+//         }
+//         else if(user?.isAdmin == false )window.location.href = "/templates"
+//     }
+//   };

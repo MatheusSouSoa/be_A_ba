@@ -1,5 +1,5 @@
 import Select from "@/components/util/select/Select";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const objetos = ["Arquivos", "Templates", "Usuários"]
 
@@ -37,7 +37,7 @@ export default function TabelaDashboard() {
     const [objetoSelecionado, setObjetoSelecionado] = useState("Arquivos");
     const [campoSelecionado, setCampoSelecionado] = useState(camposArquivo[0]); // Valor inicial
     const [camposDisponiveis, setCamposDisponiveis] = useState(camposArquivo);
-    const [listaAtiva, setListaAtiva]: any[] = useState(arquivoLista)
+    const [listaAtiva, setListaAtiva]: any[]= useState(arquivoLista)
 
     const handleObjetoChange = (e: any) => {
         const novoObjetoSelecionado = e.target.value;
@@ -62,6 +62,13 @@ export default function TabelaDashboard() {
     const handleCampoChange = (e: any) => {
         const novoCampoSelecionado = e.target.value;
         setCampoSelecionado(novoCampoSelecionado);
+    
+        // Atualize o total com base no campo selecionado
+        const novoTotal = listaAtiva.reduce((acum: number, item: any) => {
+            return acum + item[novoCampoSelecionado];
+        }, 0);
+        
+        console.log(novoTotal);
     };
 
     
@@ -77,7 +84,7 @@ export default function TabelaDashboard() {
                 </div>
 
                     <div>
-                        Total: 2456
+                        Total: 5643
                     </div>
                     <div>
                         <input className="outline-none border-2 rounded-2xl bg-zinc-200 px-5"  

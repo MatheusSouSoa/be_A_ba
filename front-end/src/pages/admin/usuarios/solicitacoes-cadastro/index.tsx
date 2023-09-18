@@ -1,4 +1,5 @@
 import PaginaEditarUsuarios from "@/components/content/users/editar-usuarios/EditarUsuarios";
+import PaginaSolicitacoesUsuarios from "@/components/content/users/solicitacoesUsuarios/AceitarUsuarios";
 import Header from "@/components/header/header";
 import Side from "@/components/sidebard/side";
 import Head from "next/head";
@@ -13,7 +14,7 @@ export default function AdminUsuarios() {
         <Header/>
         <div className="flex bg-zinc-300 h-full w-full main-content">
           <Side/>
-          <PaginaEditarUsuarios />
+          <PaginaSolicitacoesUsuarios/>
         </div>
       </div>
     </>

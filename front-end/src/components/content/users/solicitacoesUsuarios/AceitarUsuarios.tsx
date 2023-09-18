@@ -7,7 +7,7 @@ import {users} from "../../../../../test/users/Users"
 //         id: 1,
 //         email: "email@example.com",
 //         senha: "senha",
-//         nome: "Null",
+//         nome: "novo2",
 //         isNew: true,
 //         permissions: [
 //             "/templates",
@@ -44,7 +44,7 @@ import {users} from "../../../../../test/users/Users"
 //         id: 4,
 //         email: "matheus@email.com",
 //         senha: "senha123",
-//         nome: "Undefined",
+//         nome: "novo1",
 //         isNew: true,
 //         permissions: [
 //             "/admin/templates",
@@ -55,9 +55,10 @@ import {users} from "../../../../../test/users/Users"
 //     },
 // ]
 
-export default function PaginaEditarUsuarios() {
+export default function PaginaSolicitacoesUsuarios() {
 
-    const buttons = ["Salvar", "Excluir"]
+    const buttons = ["Aprovar", "Recusar"]
+
     const [selectValue, setSelectValue] = useState("nome");
     const [inputValue, setInputValue] = useState("")
 
@@ -74,7 +75,7 @@ export default function PaginaEditarUsuarios() {
         <div className="h-full w-full flex flex-col overflow-y-auto scrollbar-custom px-5 pt-5">
             <div className="flex flex-col justify-center items-center  w-full">
                 <header className="bg-green-700 p-4 text-4xl font-black w-full flex justify-center items-center rounded-t-3xl">
-                    <h1>Usuários cadastrados</h1>
+                    <h1>Solicitações de cadastro</h1>
                 </header>
                 <div className="w-full bg-white rounded-b-full p-3">
                     <ul className="flex text-zinc-700 font-bold justify-around">
@@ -110,7 +111,16 @@ export default function PaginaEditarUsuarios() {
             </div>
             <div className="h-full w-full flex flex-col overflow-y-auto scrollbar-custom px-10 p-5 gap-5">
                 {users.map((user, index) => (
-                    <CardUsuario email={user.email} id={user.id} nome={user.nome} isadmin={user.isAdmin} key={index} isNew={user.isNew} pagina="edit" buttons={buttons} />
+                    <CardUsuario
+                        email={user.email}
+                        id={user.id}
+                        nome={user.nome}
+                        isadmin={user.isAdmin}
+                        key={index}
+                        pagina="cad"
+                        buttons={buttons}
+                        isNew={user.isNew !== undefined ? user.isNew : false}
+                    />
                 ))}
             </div>
         </div>
