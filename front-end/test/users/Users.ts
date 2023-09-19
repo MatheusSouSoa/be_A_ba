@@ -12,9 +12,9 @@ export const users = [
     },
     {
         id: 2,
-        email: "user2@example.com",
+        email: "allan@email.com",
         senha: "senha2",
-        nome: "Matheus",
+        nome: "Allan Souza",
         isAdmin: false,
         isNew: false,
         permissions: [
@@ -26,7 +26,7 @@ export const users = [
         id: 3,
         email: "matheus3@email.com",
         senha: "senha123",
-        nome: "Matheus",
+        nome: "Matheus Soares",
         isAdmin: true,
         isNew: false,
         permissions: [

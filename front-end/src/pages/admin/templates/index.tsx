@@ -1,9 +1,10 @@
-import PaginaTemplateAdmin from "@/components/content/TemplatesAdmin/PaginaTemplatesAdmin";
+import PaginaTemplateAdmin from "@/components/util/LayoutDefault/DefaultLayout";
 import Content from "@/components/content/content";
 import Header from "@/components/header/header";
 import Side from "@/components/sidebard/side";
 import Head from "next/head";
 import { useRouter } from "next/router";
+import DefaultLayout from "@/components/util/LayoutDefault/DefaultLayout";
 
 const camposTemplate = ["Nome", "Formato", "Campos",  "Criado por", "Ativo"]
 const templateLista = [
@@ -57,7 +58,7 @@ export default function AdminTemplates() {
         <Header/>
         <div className="flex bg-zinc-300 h-full w-full main-content">
           <Side/>
-          <PaginaTemplateAdmin listaCampos={camposTemplate} listaObj={templateLista} titulo="Templates disponível:"/>
+          <DefaultLayout listaCampos={camposTemplate} listaObj={templateLista} titulo="Templates disponível:"/>
         </div>
       </div>
     </>

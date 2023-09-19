@@ -127,6 +127,7 @@ export default function PaginaLogin() {
                                     <span>Login:</span>
                                     <input 
                                         autoFocus
+                                        name="email"
                                         type="text" 
                                         className="outline-none border-2 rounded-2xl bg-zinc-100 px-2" 
                                         placeholder="email" 
@@ -144,6 +145,7 @@ export default function PaginaLogin() {
                                         placeholder="Sua senha" 
                                         size={15} 
                                         value={senha}
+                                        name="senha"
                                         onChange={(e) => setSenha(e.target.value)}
                                         required
                                     />

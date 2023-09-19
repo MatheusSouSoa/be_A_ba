@@ -1,4 +1,5 @@
 import Select from "@/components/util/select/Select";
+import { MagnifyingGlass } from "phosphor-react";
 import { useEffect, useState } from "react";
 
 const objetos = ["Arquivos", "Templates", "Usuários"]
@@ -86,9 +87,15 @@ export default function TabelaDashboard() {
                     <div>
                         Total: 5643
                     </div>
-                    <div>
-                        <input className="outline-none border-2 rounded-2xl bg-zinc-200 px-5"  
+                    <div className="flex">
+                        <input className="outline-none border-2 rounded-l-2xl bg-zinc-200 px-5"  
                         type="text" placeholder="Pesquisar por formato"/>
+                        <div
+                            className="w-8 bg-zinc-200 rounded-r-2xl flex justify-center items-center"
+                            title="Pesquisar"
+                        >
+                            <MagnifyingGlass className="cursor-pointer" />
+                        </div>
                     </div>
                 </div>
                 <div className="flex flex-col flex-1 max-h-[100%] ">
