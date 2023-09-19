@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import User from "./user/user"
 import Image from "next/image"
+import UserProfile from "./user/user"
 
 interface LoginProps {
     isLoggedIn: boolean
@@ -42,7 +43,7 @@ export default function Header() {
                     />
                 </div>
                 <div>
-                    {logged ? <User/> : ""}
+                    {logged ? <UserProfile/> : ""}
                 </div>
             </header>
         </div>

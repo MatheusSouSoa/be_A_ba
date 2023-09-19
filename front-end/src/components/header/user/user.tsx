@@ -1,8 +1,10 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useRouter } from 'next/router';
+import { User2 } from "lucide-react";
+import { User, UserCircle, UserFocus } from "phosphor-react";
 
-export default function User() {
+export default function UserProfile() {
     const router = useRouter();
 
     const [currentUser, setCurrentUser] = useState<any>(null);
@@ -27,7 +29,7 @@ export default function User() {
       
         // Redirecione para a página de login
         router.push('/');
-      };
+    };
       
 
 
@@ -46,13 +48,8 @@ export default function User() {
                 )}
             </div>
             <div>
-                <div className=" rounded-full bg-yellow-500 border-4 w-16 h-16 cursor-pointer overflow-hidden flex justify-center items-end">
-                    <Image 
-                        src={'/user-profile.webp'}
-                        alt="user-profile"
-                        width={150}
-                        height={100}
-                    />
+                <div className=" rounded-full bg-yellow-500 border-4 w-16 h-16 cursor-pointer overflow-hidden flex justify-center items-center">
+                    <User className=" w-40 h-40"/>
                 </div>
             </div>
         </div>

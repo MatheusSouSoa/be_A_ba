@@ -1,11 +1,51 @@
+import SliderToggle from "@/components/util/slider/SliderToggle"
+import { MagnifyingGlass } from "phosphor-react"
 import { useState } from "react"
+
+interface ListagemProps {
+    titulo: string
+    listaObj: string[]
+    listaCampos: string[]
+}
+
+const camposTemplate = ["Nome", "Formato", "Campos",  "Criado por", "Ativo"]
+const templateLista = [
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: false},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: false},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: false},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: false},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: false},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: false},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: false},
+]
 
 export default function PaginaTemplateAdmin() {
 
     const [inputValue, setInputValue] = useState("")
+    const [selectValue, setSelectValue] = useState(camposTemplate[0])
 
     function handleInputSearchValue (event: any) {
         setInputValue(event.target.value)
+    }
+
+    function handleSelectValue (event: any) {
+        setSelectValue(event.target.value)
     }
 
     return (
@@ -23,29 +63,69 @@ export default function PaginaTemplateAdmin() {
                         </div>
                     </div>
                     <div className="bg-green-600 flex justify-between px-20 items-center p-5">
-                        <div>
-                            <input type="text" className="outline-none rounded-2xl w-80 p-1 px-2"
-                                placeholder={"buscar por nome"}  
+                        <div className="flex">
+                            <input type="text" className="outline-none rounded-l-2xl p-1 px-2"
+                                placeholder={"buscar por "+ selectValue}  
                                 value={inputValue}
                                 onChange={handleInputSearchValue}  
                             />
+                            <div className="w-8 bg-white rounded-r-2xl flex justify-center items-center">
+                                <MagnifyingGlass className="cursor-pointer"/>
+                            </div>
                         </div>
                         <div>
                             <ul className="flex gap-3">
                                 <li>Ordenar por: </li>
                                 <li>
-                                    <select name="campos" id="campos">
-                                        <option value="nome">Nome</option>
+                                    <select name="campos" id="campos" value={selectValue} onChange={handleSelectValue}
+                                    className="outline-none border-2 rounded-2xl font-semibold bg-white overflow-hidden cursor-pointer"
+                                    >
+                                        {camposTemplate.map((campo, index) => (
+                                            <option 
+                                                key={index} 
+                                                value={campo}
+                                            >
+                                                {campo}
+                                            </option>
+                                        ))}
                                     </select>
                                 </li>
                             </ul>
                         </div>
                     </div>
                     <div className="bg-zinc-300 flex justify-around items-center p-2 rounded-b-3xl">
-                        <div>
-                            a
+                        <div className="flex flex-col flex-1 max-h-[100%] ">
+                            <table className="w-full bg-gray-300 rounded-t-2xl overflow-hidden">
+                                <thead>
+                                    <tr className="">
+                                        {camposTemplate.map((campo, index) => (
+                                        <th key={index} className=" w-1/5">
+                                            {campo}
+                                        </th>
+                                        ))}
+                                    </tr>
+                                </thead>
+                            </table>
                         </div>
                     </div>
+                </div>
+                <div className="flex-1 overflow-y-auto scrollbar-custom max-h-[72%]">
+                    <table className="w-full rounded-b-2xl">
+                        <tbody className="text-center font-semibold text-zinc-600">
+                            {templateLista.map((lista: any, index: any) => (
+                            <tr
+                                key={index}
+                                className={`rounded-md`}
+                            >
+                                {Object.keys(lista).map((lista2, index) => (
+                                    <td key={index} className={`w-1/5`}>
+                                    {lista2 === 'status' ? <SliderToggle /> : lista[lista2]}
+                                  </td>
+                                ))}
+                            </tr>
+                            ))}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
