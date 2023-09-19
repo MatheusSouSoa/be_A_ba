@@ -7,7 +7,7 @@ export default function Templates() {
   return (
     <>
       <Head>
-          <title>VerdeCard | Templates</title>
+          <title>GreenLight | Templates</title>
       </Head>
       <div className="h-screen w-screen max-h-full max-w-full">
         <Header/>

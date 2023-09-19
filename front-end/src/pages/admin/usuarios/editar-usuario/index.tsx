@@ -24,7 +24,7 @@ export default function AdminUsuarios() {
   return (
     <>
       <Head>
-        <title>VerdeCard | Usuários</title>
+        <title>GreenLight | Usuários</title>
       </Head>
       <div className="h-screen w-screen max-h-full max-w-full">
         <Header/>

@@ -6,9 +6,10 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 export default function AdminDashboard() {
-  const router = useRouter();
 
   const [hasAccess, setHasAccess] = useState(true)
+  
+  const router = useRouter();
 
   useEffect(() => {
     const usuarioString = localStorage.getItem("currentUser");
@@ -31,7 +32,7 @@ export default function AdminDashboard() {
   return (
     <>
       <Head>
-        <title>VerdeCard | Dashboard</title>
+        <title>GreenLight | Dashboard</title>
       </Head>
       {hasAccess ? (
         <div className="h-screen w-screen max-h-full max-w-full">

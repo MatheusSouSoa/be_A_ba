@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "../header/header";
 import Head from "next/head";
 import {users} from "../../../test/users/Users"
+import { useRouter } from "next/router";
 
 // const users = {
 //     user1: {
@@ -54,6 +55,28 @@ export default function PaginaLogin() {
     const [isLogged, setIsLogged] = useState(false)
     const [email, setEmail] = useState("")
     const [senha, setSenha] = useState("")
+
+    const router = useRouter();
+
+    useEffect(() => {
+    const usuarioString = localStorage.getItem("currentUser");
+    if (usuarioString) {
+      const usuario = JSON.parse(usuarioString);
+
+      // Verifique se o usuário tem acesso à rota "/admin/dashboard"
+      if (!usuario.isAdmin) {
+        // Redirecione para a rota "/templates" se o acesso não for concedido
+        router.replace("/templates")
+      }
+      else {
+        router.replace("/admin/dashboard")
+      }
+    } else {
+      // Lidar com o caso em que 'usuarioString' é nulo
+      console.log("Nenhum usuário encontrado no localStorage");
+      router.push('/');
+    }
+  }, [router]);
 
     const handleSubmit = (e: any) => {
         e.preventDefault();

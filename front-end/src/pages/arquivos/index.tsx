@@ -7,7 +7,7 @@ export default function Arquivos() {
   return (
     <>
       <Head>
-        <title>VerdeCard | Arquivos</title>
+        <title>GreenLight | Arquivos</title>
       </Head>
       <div className="h-screen w-screen max-h-full max-w-full">
         <Header/>

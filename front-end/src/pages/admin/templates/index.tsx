@@ -5,6 +5,33 @@ import Side from "@/components/sidebard/side";
 import Head from "next/head";
 import { useRouter } from "next/router";
 
+const camposTemplate = ["Nome", "Formato", "Campos",  "Criado por", "Ativo"]
+const templateLista = [
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: false},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: false},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: false},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: false},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: false},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: false},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: false},
+]
+
 export default function AdminTemplates() {
 
   const router = useRouter();
@@ -24,13 +51,13 @@ export default function AdminTemplates() {
   return (
     <>
       <Head>
-        <title>VerdeCard | Templates</title>
+        <title>GreenLight | Templates</title>
       </Head>
       <div className="h-screen w-screen max-h-full max-w-full">
         <Header/>
         <div className="flex bg-zinc-300 h-full w-full main-content">
           <Side/>
-          <PaginaTemplateAdmin/>
+          <PaginaTemplateAdmin listaCampos={camposTemplate} listaObj={templateLista} titulo="Templates disponível:"/>
         </div>
       </div>
     </>
