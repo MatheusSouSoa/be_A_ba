@@ -39,6 +39,7 @@ export default function PaginaTemplateAdmin() {
 
     const [inputValue, setInputValue] = useState("")
     const [selectValue, setSelectValue] = useState(camposTemplate[0])
+    const [statuses, setStatuses] = useState(templateLista.map((item) => item.status));
 
     function handleInputSearchValue (event: any) {
         setInputValue(event.target.value)
@@ -47,6 +48,12 @@ export default function PaginaTemplateAdmin() {
     function handleSelectValue (event: any) {
         setSelectValue(event.target.value)
     }
+
+    const handleStatusChange = (index: number, newStatus: boolean) => {
+        const updatedStatuses = [...statuses];
+        updatedStatuses[index] = newStatus;
+        setStatuses(updatedStatuses);
+  };
 
     return (
         <div className="flex flex-col gap-4 w-full h-full p-5">
@@ -117,10 +124,17 @@ export default function PaginaTemplateAdmin() {
                                 key={index}
                                 className={`rounded-md`}
                             >
-                                {Object.keys(lista).map((lista2, index) => (
-                                    <td key={index} className={`w-1/5`}>
-                                    {lista2 === 'status' ? <SliderToggle /> : lista[lista2]}
-                                  </td>
+                                {Object.keys(lista).map((lista2, innerIndex) => (
+                                    <td key={innerIndex} className={`w-1/5`}>
+                                        {lista2 === 'status' ? (
+                                        <SliderToggle
+                                            isChecked={statuses[index]}
+                                            onChange={(newStatus) => handleStatusChange(index, newStatus)}
+                                        />
+                                        ) : (
+                                        lista[lista2]
+                                        )}
+                                    </td>
                                 ))}
                             </tr>
                             ))}
