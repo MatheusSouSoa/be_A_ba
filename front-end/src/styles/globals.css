@@ -15,7 +15,7 @@
 }
 
 .scrollbar-custom::-webkit-scrollbar-track {
-  background-color: #ccc; /* Altera a cor de fundo da área da barra de rolagem */
+  background-color: transparent; /* Altera a cor de fundo da área da barra de rolagem */
   border: none; /* Remove a borda */
 }
 

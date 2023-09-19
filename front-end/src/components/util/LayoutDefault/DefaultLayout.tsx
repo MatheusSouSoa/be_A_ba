@@ -49,14 +49,14 @@ export default function DefaultLayout({
 
     return (
         <div className="flex flex-col gap-4 w-full h-full p-5">
-            <div className="bg-white h-full w-full rounded-3xl overflow-hidden p-5">
+            <div className="bg-white h-full w-full rounded-3xl overflow-hidden">
                 <div className="flex flex-col text-zinc-800 rounded-2xl overflow-hidden">
                     <div className="bg-green-800 flex justify-between items-center px-20 p-5">
                         <div>
                             <h1 className="font-black text-3xl text-white">{titulo}</h1>
                         </div>
                         <div>
-                            {router.pathname !== "/arquivos" ? (
+                            {router.pathname !== "/arquivos/meus-arquivos" ? (
                                 <button
                                     title="Criar novo template"
                                     className="flex justify-center items-center bg-green-500 text-white px-4 rounded-2xl pb-1 text-2xl font-black hover:bg-green-400 border-white border"
@@ -105,9 +105,9 @@ export default function DefaultLayout({
                             </ul>
                         </div>
                     </div>
-                    <div className="bg-zinc-300 flex justify-around items-center p-2 rounded-b-3xl">
+                    <div className="bg-zinc-400 flex justify-around items-center p-2 rounded-b-3xl">
                         <div className="flex flex-col flex-1 max-h-[100%] ">
-                            <table className="w-full bg-gray-300 rounded-t-2xl overflow-hidden">
+                            <table className="w-full bg-gray-400 rounded-t-2xl overflow-hidden">
                                 <thead>
                                 <tr className="">
                                     {listaCampos.map((campo, index) => (
@@ -126,13 +126,16 @@ export default function DefaultLayout({
                         <tbody className="text-center font-semibold text-zinc-600">
                         {router.pathname === "/admin/templates" ? (
                             <AdminTemplate listaCampos={listaCampos} listaObj={listaObj} titulo={titulo} />
-                        ) : router.pathname === "/templates" ? (
-                            <TemplatesComponent listaCampos={listaCampos} listaObj={listaObj} titulo={titulo}/>
-                        ) : router.pathname === "/arquivos" ? (
-                            "<ArquivosComponent listaCampos={listaCampos} listaObj={listaObj} titulo={titulo} />"
-                        ) : (
-                            "<DefaultComponent listaCampos={listaCampos} listaObj={listaObj} titulo={titulo} />"
-                        )}
+                            ) : router.pathname === "/templates" ? (
+                                <TemplatesComponent listaCampos={listaCampos} listaObj={listaObj} titulo={titulo}/>
+                            ) : router.pathname === "/arquivos/meus-arquivos" ? (
+                                "<ArquivosComponent listaCampos={listaCampos} listaObj={listaObj} titulo={titulo} />"
+                            ) : 
+                                router.pathname === "/arquivos" ?
+                            (
+                                "<DefaultComponent listaCampos={listaCampos} listaObj={listaObj} titulo={titulo} />"
+                            ): ""
+                        }
                         </tbody>
                     </table>
                 </div>

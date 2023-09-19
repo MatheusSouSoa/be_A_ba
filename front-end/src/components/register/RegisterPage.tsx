@@ -51,33 +51,13 @@ const user = {
 };
 
 
-export default function PaginaLogin() {
+export default function PaginaCriarConta() {
 
     const [isLogged, setIsLogged] = useState(false)
     const [email, setEmail] = useState("")
     const [senha, setSenha] = useState("")
 
     const router = useRouter();
-
-    useEffect(() => {
-    const usuarioString = localStorage.getItem("currentUser");
-    if (usuarioString) {
-      const usuario = JSON.parse(usuarioString);
-
-      // Verifique se o usuário tem acesso à rota "/admin/dashboard"
-      if (!usuario.isAdmin) {
-        // Redirecione para a rota "/templates" se o acesso não for concedido
-        router.replace("/templates")
-      }
-      else {
-        router.replace("/admin/dashboard")
-      }
-    } else {
-      // Lidar com o caso em que 'usuarioString' é nulo
-      console.log("Nenhum usuário encontrado no localStorage");
-      router.push('/');
-    }
-  }, [router]);
 
     const handleSubmit = (e: any) => {
         e.preventDefault();
@@ -116,22 +96,22 @@ export default function PaginaLogin() {
     return (
         <>
             <Head>
-                <title>VerdeTemplates | Login</title>
+                <title>VerdeTemplates | Registre-se</title>
             </Head>
             <Header />
             <div className="bg-gray-300 bg-opacity-60 bg-[url(/bg-login.png)] bg-center bg-cover bg-no-repeat main-content">
-                <div className="bg-gray-300 bg-opacity-60 h-full flex justify-center pt-20">
-                    <div className="w-[25%] h-[70%] bg-white rounded-3xl text-zinc-700 text-2xl">
-                        <form action="" onSubmit={handleSubmit}>
-                            <ul className="flex flex-col p-4 gap-4 justify-center items-center">
+                <div className="bg-gray-300 bg-opacity-60 h-full flex justify-center items-center ">
+                    <div className=" bg-white w-[45%] h-[80%] rounded-3xl text-zinc-700 text-2xl">
+                        <form action="" >
+                            <ul className="grid grid-cols-2 p-4 gap-4">
                                 <li className="flex flex-col gap-2">
-                                    <span>Login:</span>
+                                    <span>Nome:</span>
                                     <input 
                                         autoFocus
-                                        name="email"
+                                        name="nome"
                                         type="text" 
                                         className="outline-none border-2 rounded-2xl bg-zinc-100 px-2" 
-                                        placeholder="email" 
+                                        placeholder="nome completo" 
                                         size={15} 
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
@@ -151,11 +131,63 @@ export default function PaginaLogin() {
                                         required
                                     />
                                 </li>
-                                <li className="flex flex-col">
+                                <li className="flex flex-col gap-2">
+                                    <span>Email:</span>
+                                    <input 
+                                        autoFocus
+                                        name="email"
+                                        type="text" 
+                                        className="outline-none border-2 rounded-2xl bg-zinc-100 px-2" 
+                                        placeholder="email" 
+                                        size={15} 
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        required
+                                    />
+                                </li>
+                                <li className="flex flex-col gap-2">
+                                    <span>Repitir Senha:</span>
+                                    <input 
+                                        type="password" 
+                                        className="outline-none border-2 rounded-2xl bg-zinc-100 px-2" 
+                                        placeholder="Repita sua senha" 
+                                        size={15} 
+                                        value={senha}
+                                        name="senha"
+                                        onChange={(e) => setSenha(e.target.value)}
+                                        required
+                                    />
+                                </li>
+                                <li className="flex flex-col gap-2">
+                                    <span>Matrícula:</span>
+                                    <input 
+                                        autoFocus
+                                        name="matricula"
+                                        type="text" 
+                                        className="outline-none border-2 rounded-2xl bg-zinc-100 px-2" 
+                                        placeholder="sua matricula" 
+                                        size={15} 
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        required
+                                    />
+                                </li>
+                            </ul>
+                            <ul className="flex justify-center items-center flex-col gap-5">
+                                <li>
+
+                                </li>
+                                <li className="flex justify-center items-center gap-5">
                                     <button className="px-7 py-2 mt-3 bg-green-800 rounded-2xl text-white font-bold hover:bg-green-600"
                                     type="submit"
-                                    >Login</button>
-                                    <Link href="/registrar" className="hover:underline mt-4">Criar conta</Link>
+                                    >Criar</button>
+                                    <Link href="/" className="py-2 mt-3">
+                                        Voltar
+                                    </Link>
+                                </li>
+                                <li className="flex gap-2  justify-center items-center">
+                                    <input type="checkbox"/>
+                                    <span>Li e concordo com os <span className="underline cursor-pointer">termos</span> de uso</span>
                                 </li>
                             </ul>
                         </form>

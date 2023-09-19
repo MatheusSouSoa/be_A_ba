@@ -39,9 +39,11 @@ export default function UserProfile() {
                 {currentUser ? (
                     <div className="flex flex-col">
                         <div className="text-xl ">{currentUser.nome}</div>
-                        <span className="flex bg-blue-300 justify-end text-xs cursor-pointer hover:underline hover:text-red-600 text-zinc-200" onClick={handleLogout}>
-                            Sair
-                        </span>
+                        <div className=" flex justify-end">
+                            <p className="flex  justify-end text-xs cursor-pointer hover:underline hover:text-red-600 text-zinc-200" onClick={handleLogout}>
+                                Sair
+                            </p>
+                        </div>
                     </div>
                 ) : (
                     <div>Carregando...</div>
