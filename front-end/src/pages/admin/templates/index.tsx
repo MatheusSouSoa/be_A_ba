@@ -1,5 +1,4 @@
 import PaginaTemplateAdmin from "@/components/util/LayoutDefault/DefaultLayout";
-import Content from "@/components/content/content";
 import Header from "@/components/header/header";
 import Side from "@/components/sidebard/side";
 import Head from "next/head";
