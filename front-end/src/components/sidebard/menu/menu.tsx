@@ -104,7 +104,7 @@ export default function Menu() {
         <div className="pt-5">
             <ul className="flex flex-col gap-2 p-2">
                 {menu
-                    .filter(item => currentUser && currentUser.permissions.includes(item.url))
+                    .filter(item => currentUser && currentUser.permissions && currentUser.permissions.includes(item.url))
                     .map(({ name, icon, url }, index) => (
                         <MenuItem key={index} nome={name} icon={icon} url={url} />
                     ))}

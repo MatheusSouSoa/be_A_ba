@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import User from "./user/user"
 import Image from "next/image"
 import UserProfile from "./user/user"
+import { UseAuth } from "@/hooks/useAuth"
 
 interface LoginProps {
     isLoggedIn: boolean
@@ -10,7 +11,7 @@ interface LoginProps {
 export default function Header() {
 
     const [logged, isLogged] = useState(false)
-    const [currentUser, setCurrentUser] = useState<any>(null);
+    const {user} = UseAuth()
 
     return (
         <div>
@@ -24,7 +25,7 @@ export default function Header() {
                     />
                 </div>
                 <div>
-                    {logged ? <UserProfile/> : ""}
+                    {user ? <UserProfile/> : ""}
                 </div>
             </header>
         </div>

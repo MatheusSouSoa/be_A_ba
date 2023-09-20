@@ -15,6 +15,7 @@ interface AuthProps {
         email: string,
         senha: string,
         isNew: boolean,
+        isAdmin: boolean,
         permissions: string[]
     } | null,
     handleLogout: () => void
@@ -46,13 +47,35 @@ export default function AuthProvider({children} : AuthProviderProps) {
             router.push("/")
             return
         }
-        // Verifique se o usuário tem acesso à rota "/admin/dashboard"
+        if(usuario.isAdmin == true) {
+            usuario.permissions = [
+                "/admin/dashboard",
+                "/admin/templates",
+                "/admin/usuarios",
+                "/admin/usuarios/editar-usuario",
+                "/admin/usuarios/solicitacoes-cadastro",
+                "/arquivos",
+                "/arquivos/meus-arquivos",
+                "/arquivos/validar-arquivo",
+                
+            ]
+        }
+        else {
+            usuario.permissions =  [
+                "/templates",
+                "/arquivos",
+                "/arquivos/meus-arquivos",
+                "/arquivos/validar-arquivo",
+            ]
+        }
+
         if (!usuario.permissions.includes(router.asPath)) {
-            // Redirecione para a rota "/templates" se o acesso não for concedido
-            router.push("/templates")
+            router.push(usuario.permissions[0])
             return
         }
         
+        console.log(usuario)
+
         setUser(usuario)
         setTimeout(() => {
             setIsLoading(false)
