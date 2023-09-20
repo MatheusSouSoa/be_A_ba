@@ -17,10 +17,6 @@ export const users = [
         nome: "Allan Souza",
         isAdmin: false,
         isNew: false,
-        permissions: [
-            "/templates",
-            "/arquivos"
-        ]
     },
     {
         id: 3,
@@ -29,12 +25,6 @@ export const users = [
         nome: "Matheus Soares",
         isAdmin: true,
         isNew: false,
-        permissions: [
-            "/admin/templates",
-            "/admin/usuarios",
-            "/admin/dashboard",
-            "/arquivos"
-        ]
     },
     {
         id: 4,

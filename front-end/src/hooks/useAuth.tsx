@@ -74,8 +74,6 @@ export default function AuthProvider({children} : AuthProviderProps) {
             return
         }
         
-        console.log(usuario)
-
         setUser(usuario)
         setTimeout(() => {
             setIsLoading(false)

@@ -47,7 +47,23 @@ import { ChartBar, FolderSimple, MicrosoftExcelLogo, UsersThree } from "phosphor
 //     },
 // }
 
-const menu = [
+const usuarioMenu = [
+    {
+        name: "Templates",
+        icon: MicrosoftExcelLogo,
+        url: "/templates",
+
+    },
+    {
+        name:"Arquivos",
+        icon: FolderSimple,
+        url: "/arquivos",
+
+    }
+
+]
+
+const adminMenu = [
     {
         name: "Dashboard",
         icon: ChartBar,
@@ -63,17 +79,9 @@ const menu = [
     {
         name: "Templates",
         icon: MicrosoftExcelLogo,
-        url: "/templates",
-
-    }
-    ,
-    {
-        name: "Templates",
-        icon: MicrosoftExcelLogo,
         url: "/admin/templates",
 
-    }
-    ,
+    },
     {
         name:"Arquivos",
         icon: FolderSimple,
@@ -94,23 +102,30 @@ export default function Menu() {
             try {
                 const user = JSON.parse(userString);
                 setCurrentUser(user);
+                console.log(user);
             } catch (error) {
                 console.error("Erro ao analisar JSON de usuário do localStorage:", error);
             }
+            console.log(currentUser);
         }
     }, []);
 
     return (
         <div className="pt-5">
             <ul className="flex flex-col gap-2 p-2">
-                {menu
-                    .filter(item => currentUser && currentUser.permissions && currentUser.permissions.includes(item.url))
-                    .map(({ name, icon, url }, index) => (
+                {currentUser?.isAdmin === true ? 
+                    adminMenu.map(({name, icon, url}, index) => (
                         <MenuItem key={index} nome={name} icon={icon} url={url} />
-                    ))}
+                    ))
+                    :
+                    usuarioMenu.map(({name, icon, url}, index) => (
+                        <MenuItem key={index} nome={name} icon={icon} url={url} />
+                    ))
+                }
             </ul>
         </div>
     )
+    
 }
 
 
