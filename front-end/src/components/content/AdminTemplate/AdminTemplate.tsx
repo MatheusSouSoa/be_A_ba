@@ -45,7 +45,7 @@ export default function AdminTemplate({
             {listaObj.map((lista: any, index: any) => (
                 <tr key={index} className={`rounded-md`}>
                 {Object.keys(lista).map((lista2, innerIndex) => (
-                    <td key={innerIndex} className={`w-1/5`}>
+                    <td key={innerIndex} className={`w-1/5 p-1`}>
                     {lista2 === "status" ? (
                         <SliderToggle
                         isChecked={statuses[index]}

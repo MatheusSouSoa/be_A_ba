@@ -50,8 +50,8 @@ export default function MeusArquivos({
                             // JSON.parse(lista[lista2]) ? 
                             //     <span className="text-green-500">ativo</span> : 
                             //     <span className="text-red-500">Inativo</span> 
-                            <span className="flex justify-center items-center">
-                                <DownloadSimple className="w-7 h-7"/>
+                            <span className="flex justify-center items-center p-1">
+                                <DownloadSimple className="w-7 h-7 cursor-pointer"/>
                             </span>
                         ) : (
                         lista[lista2]

@@ -77,24 +77,31 @@ export default function TabelaDashboard() {
         <div className="flex max-h-[50%] flex-col w-full h-full items-cente bg-white rounded-2xl gap-4  ">
             <div className="flex flex-col flex-1 gap-2 p-4 max-h-[100%] ">
                 <div className="flex justify-between font-bold text-zinc-700 ">
-                <div className="flex justify-center items-center gap-5">
-                    Ordenar:
-                    <Select name="objeto" options={objetos} id="0" value={objetoSelecionado} onChange={handleObjetoChange} />
-                    Por:
-                    <Select name="campos" options={camposDisponiveis} id="1" value={campoSelecionado} onChange={handleCampoChange} />
-                </div>
-
-                    <div>
-                        Total: 5643
+                    <div className="flex flex-1 flex-wrap justify-start items-center gap-2">
+                        <div className="flex">
+                            <span>
+                                Ordenar:
+                            </span>
+                            <Select name="objeto" options={objetos} id="0" value={objetoSelecionado} onChange={handleObjetoChange} />
+                        </div>
+                        <div className="flex">
+                            Por:
+                            <Select name="campos" options={camposDisponiveis} id="1" value={campoSelecionado} onChange={handleCampoChange} />
+                        </div>
                     </div>
-                    <div className="flex">
-                        <input className="outline-none border-2 rounded-l-2xl bg-zinc-200 px-5"  
-                        type="text" placeholder="Pesquisar por formato"/>
-                        <div
-                            className="w-8 bg-zinc-200 rounded-r-2xl flex justify-center items-center"
-                            title="Pesquisar"
-                        >
-                            <MagnifyingGlass className="cursor-pointer" />
+                    <div className="flex flex-wrap flex-1 justify-between gap-2">
+                        <div className="">
+                            Total: 5643
+                        </div>
+                        <div className="flex">
+                            <input className="outline-none border-2 rounded-l-2xl h-8 bg-zinc-200 px-5"  
+                            type="text" placeholder="Pesquisar por formato"/>
+                            <div
+                                className="w-8 h-8 bg-zinc-200 rounded-r-2xl flex justify-center items-center"
+                                title="Pesquisar"
+                            >
+                                <MagnifyingGlass className="cursor-pointer" />
+                            </div>
                         </div>
                     </div>
                 </div>
