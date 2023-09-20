@@ -21,16 +21,6 @@ const arquivoLista = [
 export default function Arquivos() {
   return (
     <>
-        {/* <Head>
-          <title>GreenLight | Arquivos</title>
-          </Head>
-          <div className="h-screen w-screen max-h-full max-w-full">
-          <Header/>
-          <div className="flex bg-zinc-300 h-full w-full main-content">
-          <Side/>
-          <DefaultLayout listaCampos={camposArquivo} listaObj={arquivoLista} titulo="Meus Arquivos"/>
-          </div>
-        </div> */}
       <Head>
           <title>GreenLight | Arquivos</title>
       </Head>
