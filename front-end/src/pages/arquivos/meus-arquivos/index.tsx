@@ -1,21 +1,32 @@
-import Content from "@/components/content/content";
 import Header from "@/components/header/header";
 import Side from "@/components/sidebard/side";
 import DefaultLayout from "@/components/util/LayoutDefault/DefaultLayout";
 import Head from "next/head";
 
-const camposArquivo = ["Nome", "Template", "Linhas", "Data", "Criado por"]
+const camposArquivo = ["Nome", "Template", "Linhas", "Data", "Download"]
 const arquivoLista = [
-    {nome: "Loja 01", template: "Loja A", linhas: 67, data: "2023-05-05", criado_por: "Matheus"},
-    {nome: "Loja 01", template: "Loja A", linhas: 67, data: "2023-05-05", criado_por: "Matheus"},
-    {nome: "Loja 01", template: "Loja A", linhas: 67, data: "2023-05-05", criado_por: "Matheus"},
-    {nome: "Loja 01", template: "Loja A", linhas: 67, data: "2023-05-05", criado_por: "Matheus"},
-    {nome: "Loja 01", template: "Loja A", linhas: 67, data: "2023-05-05", criado_por: "Matheus"},
-    {nome: "Loja 01", template: "Loja A", linhas: 67, data: "2023-05-05", criado_por: "Matheus"},
-    {nome: "Loja 01", template: "Loja A", linhas: 67, data: "2023-05-05", criado_por: "Matheus"},
-    {nome: "Loja 01", template: "Loja A", linhas: 67, data: "2023-05-05", criado_por: "Matheus"},
-    {nome: "Loja 01", template: "Loja A", linhas: 67, data: "2023-05-05", criado_por: "Matheus"},
-    {nome: "Loja 01", template: "Loja A", linhas: 67, data: "2023-05-05", criado_por: "Matheus"},
+    {nome: "Loja 01", template: "Loja A", linhas: 67, data: "2023-05-05", status: true},
+    {nome: "Loja 01", template: "Loja A", linhas: 67, data: "2023-05-05", status: true},
+    {nome: "Loja 01", template: "Loja A", linhas: 67, data: "2023-05-05", status: false},
+    {nome: "Loja 01", template: "Loja A", linhas: 67, data: "2023-05-05", status: true},
+    {nome: "Loja 01", template: "Loja A", linhas: 67, data: "2023-05-05", status: false},
+    {nome: "Loja 01", template: "Loja A", linhas: 67, data: "2023-05-05", status: true},
+    {nome: "Loja 01", template: "Loja A", linhas: 67, data: "2023-05-05", status: true},
+    {nome: "Loja 01", template: "Loja A", linhas: 67, data: "2023-05-05", status: false},
+    {nome: "Loja 01", template: "Loja A", linhas: 67, data: "2023-05-05", status: true},
+    {nome: "Loja 01", template: "Loja A", linhas: 67, data: "2023-05-05", status: false},
+    {nome: "Loja 01", template: "Loja A", linhas: 67, data: "2023-05-05", status: false},
+    {nome: "Loja 01", template: "Loja A", linhas: 67, data: "2023-05-05", status: true},
+    {nome: "Loja 01", template: "Loja A", linhas: 67, data: "2023-05-05", status: true},
+    {nome: "Loja 01", template: "Loja A", linhas: 67, data: "2023-05-05", status: false},
+    {nome: "Loja 01", template: "Loja A", linhas: 67, data: "2023-05-05", status: true},
+    {nome: "Loja 01", template: "Loja A", linhas: 67, data: "2023-05-05", status: false},
+    {nome: "Loja 01", template: "Loja A", linhas: 67, data: "2023-05-05", status: true},
+    {nome: "Loja 01", template: "Loja A", linhas: 67, data: "2023-05-05", status: true},
+    {nome: "Loja 01", template: "Loja A", linhas: 67, data: "2023-05-05", status: false},
+    {nome: "Loja 01", template: "Loja A", linhas: 67, data: "2023-05-05", status: true},
+    {nome: "Loja 01", template: "Loja A", linhas: 67, data: "2023-05-05", status: false},
+    {nome: "Loja 01", template: "Loja A", linhas: 67, data: "2023-05-05", status: false},
 ]
 
 export default function MeusArquivos() {

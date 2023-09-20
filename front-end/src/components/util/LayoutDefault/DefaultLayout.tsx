@@ -1,4 +1,5 @@
 import AdminTemplate from "@/components/content/AdminTemplate/AdminTemplate";
+import MeusArquivos from "@/components/content/Files/MyFiles/MeusArquivos";
 import TemplatesComponent from "@/components/content/Templates/TemplatesComponent";
 import SliderToggle from "@/components/util/slider/SliderToggle";
 import { useRouter } from "next/router";
@@ -86,7 +87,7 @@ export default function DefaultLayout({
                         </div>
                         <div>
                             <ul className="flex gap-3">
-                                <li>Ordenar por: </li>
+                                <li className="font-bold text-white">Ordenar por: </li>
                                 <li>
                                 <select
                                     name="campos"
@@ -129,7 +130,7 @@ export default function DefaultLayout({
                             ) : router.pathname === "/templates" ? (
                                 <TemplatesComponent listaCampos={listaCampos} listaObj={listaObj} titulo={titulo}/>
                             ) : router.pathname === "/arquivos/meus-arquivos" ? (
-                                "<ArquivosComponent listaCampos={listaCampos} listaObj={listaObj} titulo={titulo} />"
+                                <MeusArquivos listaCampos={listaCampos} listaObj={listaObj} titulo={titulo} />
                             ) : 
                                 router.pathname === "/arquivos" ?
                             (

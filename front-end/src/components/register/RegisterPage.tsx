@@ -56,6 +56,10 @@ export default function PaginaCriarConta() {
     const [isLogged, setIsLogged] = useState(false)
     const [email, setEmail] = useState("")
     const [senha, setSenha] = useState("")
+    const [rSenha, setRSenha] = useState("")
+    const [matricula, setMatricula] = useState("")
+    const [nome, setNome] = useState("")
+
 
     const router = useRouter();
 
@@ -113,8 +117,8 @@ export default function PaginaCriarConta() {
                                         className="outline-none border-2 rounded-2xl bg-zinc-100 px-2" 
                                         placeholder="nome completo" 
                                         size={15} 
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
+                                        value={nome}
+                                        onChange={(e) => setNome(e.target.value)}
                                         required
                                     />
                                 </li>
@@ -146,15 +150,15 @@ export default function PaginaCriarConta() {
                                     />
                                 </li>
                                 <li className="flex flex-col gap-2">
-                                    <span>Repitir Senha:</span>
+                                    <span>Repetir Senha:</span>
                                     <input 
                                         type="password" 
                                         className="outline-none border-2 rounded-2xl bg-zinc-100 px-2" 
                                         placeholder="Repita sua senha" 
                                         size={15} 
-                                        value={senha}
+                                        value={rSenha}
                                         name="senha"
-                                        onChange={(e) => setSenha(e.target.value)}
+                                        onChange={(e) => setRSenha(e.target.value)}
                                         required
                                     />
                                 </li>
@@ -167,8 +171,8 @@ export default function PaginaCriarConta() {
                                         className="outline-none border-2 rounded-2xl bg-zinc-100 px-2" 
                                         placeholder="sua matricula" 
                                         size={15} 
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
+                                        value={matricula}
+                                        onChange={(e) => setMatricula(e.target.value)}
                                         required
                                     />
                                 </li>
