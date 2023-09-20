@@ -13,11 +13,8 @@ interface MenuItemProps {
 }
 
 export default function MenuItem( { nome, url, icon:Icon}: MenuItemProps) {
-    console.log("Painel: ",painelActive.src)
-
     const {asPath} = useRouter()
     const isActive = asPath.includes(url)
-    console.log(asPath.split('/')[0])//mexi aqui
 
     return (
         <li data-active={isActive} className="group">

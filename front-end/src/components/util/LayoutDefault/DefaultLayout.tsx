@@ -1,7 +1,6 @@
 import AdminTemplate from "@/components/content/AdminTemplate/AdminTemplate";
 import MeusArquivos from "@/components/content/Files/MyFiles/MeusArquivos";
 import TemplatesComponent from "@/components/content/Templates/TemplatesComponent";
-import SliderToggle from "@/components/util/slider/SliderToggle";
 import { useRouter } from "next/router";
 import { MagnifyingGlass } from "phosphor-react";
 import { useState } from "react";
@@ -10,12 +9,14 @@ interface ListagemProps {
   titulo: string;
   listaObj: { [key: string]: any }[];
   listaCampos: string[];
+  handleSearch: (value: string) => void
 }
 
 export default function DefaultLayout({
     titulo,
     listaCampos,
     listaObj,
+    handleSearch
 }: ListagemProps) {
 
     const [inputValue, setInputValue] = useState("");
@@ -27,6 +28,7 @@ export default function DefaultLayout({
     const router = useRouter()
 
     function handleInputSearchValue(event: any) {
+        handleSearch(event.target.value)
         setInputValue(event.target.value);
     }
 
@@ -122,7 +124,7 @@ export default function DefaultLayout({
                         </div>
                     </div>
                 </div>
-                <div className="flex-1 overflow-y-auto scrollbar-custom max-h-[72%]">
+                <div className="flex-1 overflow-y-auto scrollbar-custom max-h-[72%] pb-16">
                     <table className="w-full rounded-b-2xl">
                         <tbody className="text-center font-semibold text-zinc-600">
                         {router.pathname === "/admin/templates" ? (

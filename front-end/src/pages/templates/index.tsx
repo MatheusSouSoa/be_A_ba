@@ -1,8 +1,8 @@
-import Content from "@/components/content/content";
 import Header from "@/components/header/header";
 import Side from "@/components/sidebard/side";
 import DefaultLayout from "@/components/util/LayoutDefault/DefaultLayout";
 import Head from "next/head";
+import { useState } from "react";
 
 const camposTemplate = ["Nome", "Formato", "Campos", "Criado por", "Status"]
 const templateLista = [
@@ -41,6 +41,17 @@ const templateLista = [
 ]
 
 export default function Templates() {
+
+  const [templateReq, setTemplateReq] = useState(templateLista)
+  const [search, setSearch] = useState("")
+
+  function handleSearch (value: string) {
+    setSearch(value)
+    console.log(search)
+  }
+
+  console.log(handleSearch)
+
   return (
     <>
       <Head>
@@ -50,7 +61,7 @@ export default function Templates() {
         <Header/>
         <div className="flex bg-zinc-300 h-full w-full main-content">
           <Side/>
-          <DefaultLayout listaCampos={camposTemplate} listaObj={templateLista} titulo="Templates"/>
+          <DefaultLayout handleSearch={handleSearch} listaCampos={camposTemplate} listaObj={templateReq} titulo="Templates"/>
         </div>
       </div>
     </>

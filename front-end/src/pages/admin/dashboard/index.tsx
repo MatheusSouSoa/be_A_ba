@@ -3,38 +3,45 @@ import Header from "@/components/header/header";
 import Side from "@/components/sidebard/side";
 import Head from "next/head";
 import { useRouter } from "next/router";
+import { CircleNotch } from "phosphor-react";
 import { useEffect, useState } from "react";
 
 export default function AdminDashboard() {
 
-  const [hasAccess, setHasAccess] = useState(true)
+//   const [isLoading, setIsLoading] = useState(true)
   
-  const router = useRouter();
+//   const router = useRouter();
 
-  useEffect(() => {
-    const usuarioString = localStorage.getItem("currentUser");
-    if (usuarioString) {
-      const usuario = JSON.parse(usuarioString);
+//  useEffect(() => {
+//   const storageData = localStorage.getItem("currentUser")
+//   const usuario = storageData ? JSON.parse(storageData) : null
+//     if(!usuario) {
+//       router.push("/")
+//       return
+//     }
+//     // Verifique se o usuário tem acesso à rota "/admin/dashboard"
+//     if (!usuario.permissions.includes("/admin/dashboard")) {
+//       // Redirecione para a rota "/templates" se o acesso não for concedido
+//       router.push("/templates")
+//       return
+//     }
 
-      // Verifique se o usuário tem acesso à rota "/admin/dashboard"
-      if (!usuario.permissions.includes("/admin/dashboard")) {
-        // Redirecione para a rota "/templates" se o acesso não for concedido
-        setHasAccess(false)
-        router.replace("/templates")
-      }
-    } else {
-      // Lidar com o caso em que 'usuarioString' é nulo
-      console.log("Nenhum usuário encontrado no localStorage");
-      router.push('/');
-    }
-  }, [router]);
+//     setIsLoading(false)
+//   }, []);
+
+//   if(isLoading) {
+//     return (
+//       <div className="w-screen h-screen grid place-items-center bg-white">
+//         <CircleNotch className="h-8 w-8 text-yellow-600 animate-spin"/>
+//       </div>
+//     )
+//   }
 
   return (
     <>
       <Head>
         <title>GreenLight | Dashboard</title>
-      </Head>
-      {hasAccess ? (
+      </Head>    
         <div className="h-screen w-screen max-h-full max-w-full">
           <Header />
           <div className="flex bg-zinc-300 h-full w-full main-content">
@@ -42,7 +49,6 @@ export default function AdminDashboard() {
             <PaginaDashboard />
           </div>
         </div>
-      ) : null}
     </>
   );
 

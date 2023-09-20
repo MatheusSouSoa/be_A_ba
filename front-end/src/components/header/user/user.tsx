@@ -3,42 +3,18 @@ import { useEffect, useState } from "react";
 import { useRouter } from 'next/router';
 import { User2 } from "lucide-react";
 import { User, UserCircle, UserFocus } from "phosphor-react";
+import { UseAuth } from "@/hooks/useAuth";
 
 export default function UserProfile() {
     const router = useRouter();
-
-    const [currentUser, setCurrentUser] = useState<any>(null);
-
-    useEffect(() => {
-        // Recupere o usuário do localStorage
-        const userString = localStorage.getItem("currentUser");
-        
-        if (userString) {
-            try {
-                const user = JSON.parse(userString);
-                setCurrentUser(user);
-            } catch (error) {
-                console.error("Erro ao analisar JSON de usuário do localStorage:", error);
-            }
-        }
-    }, []);
-
-    const handleLogout = () => {
-        // Remova o currentUser do localStorage
-        localStorage.removeItem('currentUser');
-      
-        // Redirecione para a página de login
-        router.push('/');
-    };
-      
-
+    const {user, handleLogout} = UseAuth()
 
     return (
         <div className="flex justify-around gap-5 items-center font-black  text-white ">
             <div className="">
-                {currentUser ? (
+                {user ? (
                     <div className="flex flex-col">
-                        <div className="text-xl ">{currentUser.nome}</div>
+                        <div className="text-xl ">{user.nome}</div>
                         <div className=" flex justify-end">
                             <p className="flex  justify-end text-xs cursor-pointer hover:underline hover:text-red-600 text-zinc-200" onClick={handleLogout}>
                                 Sair
