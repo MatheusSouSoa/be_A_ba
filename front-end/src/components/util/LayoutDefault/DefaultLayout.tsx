@@ -1,6 +1,7 @@
 import AdminTemplate from "@/components/content/AdminTemplate/AdminTemplate";
 import MeusArquivos from "@/components/content/Files/MyFiles/MeusArquivos";
 import TemplatesComponent from "@/components/content/Templates/TemplatesComponent";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { MagnifyingGlass } from "phosphor-react";
 import { useState } from "react";
@@ -60,12 +61,12 @@ export default function DefaultLayout({
                         </div>
                         <div>
                             {router.pathname !== "/arquivos/meus-arquivos" ? (
-                                <button
+                                <Link href={"/templates/cadastrar-template"}
                                     title="Criar novo template"
                                     className="flex justify-center items-center bg-green-500 text-white px-4 rounded-2xl pb-1 text-2xl font-black hover:bg-green-400 border-white border"
                                 >
                                     +
-                                </button> 
+                                </Link> 
                                 ) : ""
                             
                             }

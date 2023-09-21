@@ -1,3 +1,33 @@
+import { DownloadSimple, HandPointing } from "phosphor-react"
+
+const camposTemplate = ["Nome", "Formato", "Campos",  "Criado por", "Ativo"]
+const templateLista = [
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
+    {nome: "Loja B", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: false},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
+    {nome: "Quero-quero", formato: "csv",  campos: 6, criado_por: "Matheus", status: false},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
+    {nome: "VerdeCard", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: false},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: false},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: false},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: false},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
+    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: false},
+]
+
+
 export default function SelecaoTemplate() {
     return (
         <div className="flex flex-col overflow-hidden">
@@ -23,6 +53,27 @@ export default function SelecaoTemplate() {
                             <td className="w-1/4">Ações</td>
                         </tr>
                     </thead>
+                </table>
+            </div>
+            <div className="overflow-y-auto scrollbar-custom">
+                <table className="w-full text-center ">
+                    <tbody className="w-full ">
+                        {templateLista.map((item, index) => (
+                            <tr key={index} className="w-full font-semibold">
+                                <td className="w-1/4">{item.nome}</td>
+                                <td className="w-1/4">{item.formato}</td>
+                                <td className="w-1/4">{item.campos}</td>
+                                <td className="w-full flex justify-center gap-10 items-cente ">
+                                    <div title="Baixar template">
+                                        <DownloadSimple className="cursor-pointer w-8 h-8"/>
+                                    </div>
+                                    <div title="Selecionar template para validação">
+                                        <HandPointing className="cursor-pointer  w-8 h-8"/>
+                                    </div>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
                 </table>
             </div>
         </div>

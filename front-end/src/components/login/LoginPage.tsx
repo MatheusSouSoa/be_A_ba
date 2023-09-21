@@ -74,8 +74,6 @@ export default function PaginaLogin() {
                 user.email = usuario.email
                 usuario.isAdmin ? user.isAdmin = true : user.isAdmin = false;
                 usuario.isNew ? user.isNew = true : user.isNew = false;
-                user.permissions = usuario.permissions
-
 
                 localStorage.setItem("currentUser", JSON.stringify(user));
 
@@ -96,7 +94,7 @@ export default function PaginaLogin() {
     return (
         <>
             <Head>
-                <title>VerdeTemplates | Login</title>
+                <title>GreenLight | Login</title>
             </Head>
             <Header />
             <div className="bg-gray-300 bg-opacity-60 bg-[url(/bg-login.png)] bg-center bg-cover bg-no-repeat main-content">

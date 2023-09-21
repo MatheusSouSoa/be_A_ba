@@ -57,12 +57,15 @@ export default function AuthProvider({children} : AuthProviderProps) {
                 "/arquivos",
                 "/arquivos/meus-arquivos",
                 "/arquivos/validar-arquivo",
+                "/templates",
+                "/templates/cadastrar-template",
                 
             ]
         }
         else {
             usuario.permissions =  [
                 "/templates",
+                "/templates/cadastrar-template",
                 "/arquivos",
                 "/arquivos/meus-arquivos",
                 "/arquivos/validar-arquivo",
