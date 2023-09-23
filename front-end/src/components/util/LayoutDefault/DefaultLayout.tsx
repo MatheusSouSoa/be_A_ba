@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { MagnifyingGlass } from "phosphor-react";
 import { useState } from "react";
+import Modal from "../modal/Modal";
 
 interface ListagemProps {
   titulo: string;
@@ -20,6 +21,32 @@ export default function DefaultLayout({
     handleSearch
 }: ListagemProps) {
 
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const [inputModalErr, setInputModalErr] = useState("");
+    const [inputModalPlaceHolder, setInputModalPlaceHolder] = useState("Informe o nome do template aqui");
+
+    const openModal = () => {
+      setIsModalOpen(true);
+    };
+  
+    const closeModal = () => {
+        setInputModalPlaceHolder("Informe o nome do template aqui")
+        setInputModalErr("")
+        setTemplateModalInput("")
+        setIsModalOpen(false);
+    };
+
+    function sendToCreateTemplate(Nometemplate: string ) {
+        console.log("clicou")
+        if(templateModalInput == ""){
+            setInputModalPlaceHolder("Não pode estar vazio.")
+            setInputModalErr("border border-red-500")
+        }
+    }
+
+    const [templateModalInput, setTemplateModalInput] = useState("");
+
     const [inputValue, setInputValue] = useState("");
     const [selectValue, setSelectValue] = useState(listaCampos[0]);
     const [statuses, setStatuses] = useState(
@@ -27,6 +54,12 @@ export default function DefaultLayout({
     );
 
     const router = useRouter()
+
+    function handleModalTemplateInput(event: any) {
+        setInputModalPlaceHolder("")
+        setInputModalErr("")
+        setTemplateModalInput(event.target.value)
+    }
 
     function handleInputSearchValue(event: any) {
         handleSearch(event.target.value)
@@ -37,19 +70,6 @@ export default function DefaultLayout({
         setSelectValue(event.target.value);
     }
 
-    const handleStatusChange = (index: number, newStatus: boolean) => {
-        const updatedStatuses = [...statuses];
-        updatedStatuses[index] = newStatus;
-        setStatuses(updatedStatuses);
-
-        const updatedListaObj = [...listaObj];
-        updatedListaObj[index].status = newStatus;
-
-        // realizar alguma ação com a lista de objetos atualizada,
-        // como enviar os dados atualizados para o servidor.
-
-        console.log("status", index, " : ", newStatus);
-    };
 
     return (
         <div className="flex flex-col gap-4 w-full h-full p-5">
@@ -61,12 +81,44 @@ export default function DefaultLayout({
                         </div>
                         <div>
                             {router.pathname !== "/arquivos/meus-arquivos" ? (
-                                <Link href={"/templates/cadastrar-template"}
-                                    title="Criar novo template"
-                                    className="flex justify-center items-center bg-green-500 text-white px-4 rounded-2xl pb-1 text-2xl font-black hover:bg-green-400 border-white border"
-                                >
-                                    +
-                                </Link> 
+                                <>
+                                    <button
+                                        onClick={openModal}
+                                        title="Criar novo template"
+                                        className="flex justify-center items-center bg-green-500 text-white px-4 rounded-2xl pb-1 text-2xl font-black hover:bg-green-400 border-white border"
+                                    >
+                                        +
+                                    </button> 
+                                    <Modal isOpen={isModalOpen} onClose={closeModal}>
+                                        {/* Conteúdo do seu modal aqui */}
+                                        <h2 className="text-2xl mb-4">Nome do template:</h2>
+                                        <div className="flex flex-col gap-5">
+                                            <input
+                                                onChange={handleModalTemplateInput}
+                                                className={`
+                                                outline-none border border-gray-200 w-full rounded-3xl p-2
+                                                ${inputModalErr}
+                                                `} 
+                                                type="text" 
+                                                placeholder={inputModalPlaceHolder}
+                                                value={templateModalInput}
+                                            />
+                                            <div className="flex gap-4 justify-center items-center ">
+                                                <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline"
+                                                    onClick={() => sendToCreateTemplate(templateModalInput)}
+                                                >
+                                                    Confirmar
+                                                </button>
+                                                <button
+                                                    onClick={closeModal}
+                                                    className="modal-close bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline"
+                                                >
+                                                    Cancelar
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </Modal>
+                                </>
                                 ) : ""
                             
                             }
