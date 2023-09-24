@@ -41,47 +41,50 @@ export default function AuthProvider({children} : AuthProviderProps) {
     };
 
     useEffect(() => {
-        const storageData = localStorage.getItem("currentUser")
-        const usuario = storageData ? JSON.parse(storageData) : null
-        if(!usuario) {
-            router.push("/")
-            return
+        const storageData = localStorage.getItem("currentUser");
+        const usuario = storageData ? JSON.parse(storageData) : null;
+    
+        if (!usuario && router.asPath !== "/registrar") {
+            router.push("/");
+            return;
         }
-        if(usuario.isAdmin == true) {
-            usuario.permissions = [
-                "/admin/dashboard",
-                "/admin/templates",
-                "/admin/usuarios",
-                "/admin/usuarios/editar-usuario",
-                "/admin/usuarios/solicitacoes-cadastro",
-                "/arquivos",
-                "/arquivos/meus-arquivos",
-                "/arquivos/validar-arquivo",
-                "/templates",
-                "/templates/cadastrar-template",
-                
-            ]
+    
+        if (usuario) {
+            if (usuario.isAdmin === true) {
+                usuario.permissions = [
+                    "/admin/dashboard",
+                    "/admin/templates",
+                    "/admin/usuarios",
+                    "/admin/usuarios/editar-usuario",
+                    "/admin/usuarios/solicitacoes-cadastro",
+                    "/arquivos",
+                    "/arquivos/meus-arquivos",
+                    "/arquivos/validar-arquivo",
+                    "/templates",
+                    "/templates/cadastrar-template",
+                ];
+            } else {
+                usuario.permissions = [
+                    "/templates",
+                    "/templates/cadastrar-template",
+                    "/arquivos",
+                    "/arquivos/meus-arquivos",
+                    "/arquivos/validar-arquivo",
+                ];
+            }
+    
+            if (!usuario.permissions.includes(router.asPath)) {
+                router.push(usuario.permissions[0]);
+                return;
+            }
         }
-        else {
-            usuario.permissions =  [
-                "/templates",
-                "/templates/cadastrar-template",
-                "/arquivos",
-                "/arquivos/meus-arquivos",
-                "/arquivos/validar-arquivo",
-            ]
-        }
-
-        if (!usuario.permissions.includes(router.asPath)) {
-            router.push(usuario.permissions[0])
-            return
-        }
-        
-        setUser(usuario)
+    
+        setUser(usuario);
         setTimeout(() => {
-            setIsLoading(false)
-        }, 1000)
+            setIsLoading(false);
+        }, 1000);
     }, [router.asPath]);
+    
 
     if(isLoading && router.asPath != "/") {
         return (

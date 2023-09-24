@@ -4,9 +4,10 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import DefaultLayout from "@/components/util/LayoutDefault/DefaultLayout";
 import { useState } from "react";
+import CreateTemplate from "@/components/content/Templates/cadastrarTemplate/CadastrarTemplate";
 
 
-export default function AdminTemplates() {
+export default function Templates() {
  
   return (
     <>
@@ -17,7 +18,7 @@ export default function AdminTemplates() {
         <Header/>
         <div className="flex bg-zinc-300 h-full w-full main-content">
           <Side/>
-          asdads
+          <CreateTemplate/>
         </div>
       </div>
     </>

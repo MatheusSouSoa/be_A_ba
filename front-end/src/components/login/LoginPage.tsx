@@ -99,7 +99,7 @@ export default function PaginaLogin() {
             <Header />
             <div className="bg-gray-300 bg-opacity-60 bg-[url(/bg-login.png)] bg-center bg-cover bg-no-repeat main-content">
                 <div className="bg-gray-300 bg-opacity-60 h-full flex justify-center pt-20">
-                    <div className="w-[25%] h-[70%] bg-white rounded-3xl text-zinc-700 text-2xl">
+                    <div className="w-[25%] h-[70%] bg-white rounded-3xl text-zinc-700 text-xl">
                         <form action="" onSubmit={handleSubmit}>
                             <ul className="flex flex-col p-4 gap-4 justify-center items-center">
                                 <li className="flex flex-col gap-2">
@@ -110,7 +110,7 @@ export default function PaginaLogin() {
                                         type="text" 
                                         className="outline-none border-2 rounded-2xl bg-zinc-100 px-2" 
                                         placeholder="email" 
-                                        size={15} 
+                                        size={20} 
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
                                         required
@@ -122,7 +122,7 @@ export default function PaginaLogin() {
                                         type="password" 
                                         className="outline-none border-2 rounded-2xl bg-zinc-100 px-2" 
                                         placeholder="Sua senha" 
-                                        size={15} 
+                                        size={20} 
                                         value={senha}
                                         name="senha"
                                         onChange={(e) => setSenha(e.target.value)}

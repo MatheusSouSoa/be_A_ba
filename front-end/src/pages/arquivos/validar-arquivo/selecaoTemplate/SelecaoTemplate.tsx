@@ -65,10 +65,10 @@ export default function SelecaoTemplate() {
                                 <td className="w-1/4">{item.campos}</td>
                                 <td className="w-full flex justify-center gap-10 items-cente ">
                                     <div title="Baixar template">
-                                        <DownloadSimple className="cursor-pointer w-8 h-8"/>
+                                        <DownloadSimple className="cursor-pointer w-7 h-8"/>
                                     </div>
                                     <div title="Selecionar template para validação">
-                                        <HandPointing className="cursor-pointer  w-8 h-8"/>
+                                        <HandPointing className="cursor-pointer  w-7 h-7"/>
                                     </div>
                                 </td>
                             </tr>

@@ -78,7 +78,7 @@ export default function PaginaCriarConta() {
                 user.email = usuario.email
                 usuario.isAdmin ? user.isAdmin = true : user.isAdmin = false;
                 usuario.isNew ? user.isNew = true : user.isNew = false;
-                user.permissions = usuario.permissions
+                user.permissions = usuario.permissions || []
 
 
                 localStorage.setItem("currentUser", JSON.stringify(user));
@@ -105,7 +105,7 @@ export default function PaginaCriarConta() {
             <Header />
             <div className="bg-gray-300 bg-opacity-60 bg-[url(/bg-login.png)] bg-center bg-cover bg-no-repeat main-content">
                 <div className="bg-gray-300 bg-opacity-60 h-full flex justify-center items-center ">
-                    <div className=" bg-white w-[45%] h-[80%] rounded-3xl text-zinc-700 text-2xl">
+                    <div className=" bg-white w-[45%] h-[80%] rounded-3xl text-zinc-700 text-xl">
                         <form action="" >
                             <ul className="grid grid-cols-2 p-4 gap-4">
                                 <li className="flex flex-col gap-2">

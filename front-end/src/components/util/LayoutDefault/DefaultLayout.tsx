@@ -1,7 +1,6 @@
 import AdminTemplate from "@/components/content/AdminTemplate/AdminTemplate";
 import MeusArquivos from "@/components/content/Files/MyFiles/MeusArquivos";
 import TemplatesComponent from "@/components/content/Templates/TemplatesComponent";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { MagnifyingGlass } from "phosphor-react";
 import { useState } from "react";
@@ -20,6 +19,8 @@ export default function DefaultLayout({
     listaObj,
     handleSearch
 }: ListagemProps) {
+    
+    const router = useRouter()
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -37,12 +38,26 @@ export default function DefaultLayout({
         setIsModalOpen(false);
     };
 
-    function sendToCreateTemplate(Nometemplate: string ) {
-        console.log("clicou")
-        if(templateModalInput == ""){
-            setInputModalPlaceHolder("Não pode estar vazio.")
-            setInputModalErr("border border-red-500")
+    function handleKeyUp  (event: React.KeyboardEvent<HTMLInputElement>)  {
+        if (event.key === "Enter") {
+          // Lógica a ser executada quando a tecla Enter for pressionada
+          sendToCreateTemplate(templateModalInput)
         }
+        if(event.key === "Escape") {
+            closeModal()
+        }
+      };
+
+    function sendToCreateTemplate(templateName: string ) {
+        console.log("clicou")
+        if (templateName == "") {
+            setInputModalPlaceHolder("Não pode estar vazio.");
+            setInputModalErr("border border-red-500");
+            return
+        }
+        localStorage.setItem("NomeTemplate", templateName)
+        router.push(`/templates/cadastrar-template`);
+        
     }
 
     const [templateModalInput, setTemplateModalInput] = useState("");
@@ -52,8 +67,6 @@ export default function DefaultLayout({
     const [statuses, setStatuses] = useState(
         listaObj.map((item) => item.status)
     );
-
-    const router = useRouter()
 
     function handleModalTemplateInput(event: any) {
         setInputModalPlaceHolder("")
@@ -102,6 +115,7 @@ export default function DefaultLayout({
                                                 type="text" 
                                                 placeholder={inputModalPlaceHolder}
                                                 value={templateModalInput}
+                                                onKeyUp={handleKeyUp}
                                             />
                                             <div className="flex gap-4 justify-center items-center ">
                                                 <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline"

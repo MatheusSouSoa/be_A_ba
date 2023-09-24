@@ -51,7 +51,7 @@ export default function MeusArquivos({
                             //     <span className="text-green-500">ativo</span> : 
                             //     <span className="text-red-500">Inativo</span> 
                             <span className="flex justify-center items-center p-1">
-                                <DownloadSimple className="w-7 h-7 cursor-pointer"/>
+                                <DownloadSimple className="w-5 h-5 cursor-pointer"/>
                             </span>
                         ) : (
                         lista[lista2]
