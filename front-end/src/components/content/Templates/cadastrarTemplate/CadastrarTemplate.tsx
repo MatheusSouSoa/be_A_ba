@@ -90,6 +90,14 @@ export default function CreateTemplate() {
     }
   }
 
+  function removerColuna(index: number) {
+    const novasColunas = [...colunas];
+    novasColunas.splice(index, 1);
+    setColunas(novasColunas);
+    setNumColunas(numColunas - 1);
+  }
+  
+
   function salvarBtn() {
     const NovoTemplate: TemplateProps = {
       nome: NomeTemplate,
@@ -205,7 +213,6 @@ export default function CreateTemplate() {
         </div>
         <div className="flex-1 w-full grid grid-cols-2 place-items-center overflow-y-auto gap-5 p-6 scrollbar-custom">
           {colunas.map((coluna, i) => (
-            <>
               <div key={i} className="flex gap-2 justify-center items-center">
                 <div className="flex gap-2 p-1 w-full  text-white font-bold px-2 rounded-2xl bg-green-800 justify-around">
                   <span>{i + 1}.</span>
@@ -228,11 +235,13 @@ export default function CreateTemplate() {
                     <Pencil onClick={() => editarBtn(i)} className="w-7 h-7 cursor-pointer" />{" "}
                   </li>
                   <li title="excluir coluna">
-                    <Trash className="w-7 h-7 cursor-pointer" />{" "}
+                    <Trash 
+                      className="w-7 h-7 cursor-pointer" 
+                      onClick={() => removerColuna(i)}
+                    />
                   </li>
                 </ul>
               </div>
-            </>
           ))}
         </div>
         <div className="p-2">
