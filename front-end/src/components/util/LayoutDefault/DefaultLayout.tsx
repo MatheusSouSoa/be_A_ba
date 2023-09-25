@@ -82,6 +82,7 @@ export default function DefaultLayout({
     }
 
     function handleSelectValue(event: any) {
+        handleCampo(event.target.value)
         setSelectValue(event.target.value);
     }
 

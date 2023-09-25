@@ -7,59 +7,77 @@ import { useState } from "react";
 
 const camposTemplate = ["Nome", "Formato", "Campos",  "Criado por", "Ativo"]
 const templateLista: Template[] = [
-    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
-    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
-    {nome: "Loja B", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
-    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: false},
-    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
-    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
-    {nome: "Quero-quero", formato: "csv",  campos: 6, criado_por: "Matheus", status: false},
-    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
-    {nome: "VerdeCard", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
-    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: false},
-    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: false},
-    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: false},
-    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
-    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
-    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
-    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
-    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
-    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
-    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: false},
-    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
-    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
-    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
-    {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: false},
-]
-
+  { nome: "Quero-Quero", formato: "xlsx",  campos: 6, criado_por: "Matheus", status: true, isNew: false },
+  { nome: "VerdeCard", formato: "csv",  campos: 3, criado_por: "Allan", status: true, isNew: false },
+  { nome: "QQTech5", formato: "xlsx",  campos: 3, criado_por: "Allan", status: true, isNew: false },
+  { nome: "Loja A", formato: "csv", campos: 6, criado_por: "Matheus", status: true, isNew: true },
+  { nome: "Loja B", formato: "xlsx", campos: 4, criado_por: "Ana", status: true, isNew: true },
+  { nome: "TechZone", formato: "csv", campos: 5, criado_por: "Lucas", status: false, isNew: false },
+  { nome: "DataMaster", formato: "xlsx", campos: 2, criado_por: "Sophia", status: true, isNew: false },
+  { nome: "GreenTech", formato: "csv", campos: 7, criado_por: "Pedro", status: false, isNew: true },
+  { nome: "PlanMaster", formato: "xlsx", campos: 3, criado_por: "Mariana", status: true, isNew: false },
+  { nome: "EcoSolution", formato: "csv", campos: 6, criado_por: "Carlos", status: false, isNew: true },
+  { nome: "FutureData", formato: "xlsx", campos: 4, criado_por: "Larissa", status: true, isNew: false },
+  { nome: "DigitalWave", formato: "csv", campos: 5, criado_por: "Rafael", status: false, isNew: true },
+  { nome: "TechWorld", formato: "xlsx", campos: 3, criado_por: "Diana", status: true, isNew: false },
+  { nome: "InnoSoft", formato: "csv", campos: 4, criado_por: "Luciana", status: false, isNew: true },
+  { nome: "CodeMaster", formato: "xlsx", campos: 2, criado_por: "Eduardo", status: true, isNew: false },
+  { nome: "SmartData", formato: "csv", campos: 6, criado_por: "Isabella", status: true, isNew: true },
+  { nome: "TechXpress", formato: "xlsx", campos: 5, criado_por: "Felipe", status: false, isNew: true },
+  { nome: "DataGenius", formato: "csv", campos: 4, criado_por: "Camila", status: true, isNew: true },
+  { nome: "InnovaTech", formato: "xlsx", campos: 3, criado_por: "Gustavo", status: true, isNew: true },
+  { nome: "InfoTech", formato: "csv", campos: 7, criado_por: "Viviane", status: false, isNew: true },
+];
 interface Template {
   nome: string;
   formato: string;
   campos: number;
   criado_por: string;
   status: boolean;
+  isNew: boolean;
 }
-
 
 export default function AdminTemplates() {
   const [templateReq, setTemplateReq] = useState(templateLista)
   const [search, setSearch] = useState("")
-  const [campos, setCampo] = useState<keyof Template>("nome") 
+  const [campoSelecionado, setCampoSelecionado] = useState<keyof Template>("nome"); // Inicialize com o campo desejado
+
 
   function handleSearch (value: string) {
     setSearch(value)
   }
 
-  function handleCampos (value: string) {
-    setCampo(value)
-  }
+  const handleCampos = (value: keyof Template | string) => {
+    // Se o valor for uma string, use-o como o novo campo selecionado
+    if(value == "Nome"){
+      setCampoSelecionado("nome")
+    }
+    if(value == "Formato"){
+      setCampoSelecionado("formato")
+    }
+    if(value == "Campos"){
+      setCampoSelecionado("campos")
+    }
+    if(value == "Ativo"){
+      setCampoSelecionado("status")
+    }
+    if(value == "Criado por"){
+      setCampoSelecionado("criado_por")
+    }
 
+  };
+
+  
   const filtered = search ? templateReq.filter((item) => {
-    return item.nome.toLowerCase().includes(search.toLowerCase())
+    return String(item[campoSelecionado]).toLowerCase().includes(search.toLowerCase());
   }) : templateReq
+  
+  const sorted = filtered.sort((a, b) => {
+    const fieldA = String(a[campoSelecionado]).toLowerCase();
+    const fieldB = String(b[campoSelecionado]).toLowerCase();
 
-  console.log(filtered)
-  console.log(search)
+    return fieldA.localeCompare(fieldB);
+  });
 
   return (
     <>
@@ -74,8 +92,8 @@ export default function AdminTemplates() {
             handleCampo={handleCampos}
             handleSearch={handleSearch} 
             listaCampos={camposTemplate} 
-            listaObj={filtered.sort((a, b) => a["nome"].localeCompare(b["nome"]) )} 
-            titulo="Templates disponível:"
+            listaObj={sorted} 
+            titulo="Templates"
           />
         </div>
       </div>
