@@ -6,7 +6,7 @@ import DefaultLayout from "@/components/util/LayoutDefault/DefaultLayout";
 import { useState } from "react";
 
 const camposTemplate = ["Nome", "Formato", "Campos",  "Criado por", "Ativo"]
-const templateLista = [
+const templateLista: Template[] = [
     {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
     {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
     {nome: "Loja B", formato: "csv",  campos: 6, criado_por: "Matheus", status: true},
@@ -32,12 +32,26 @@ const templateLista = [
     {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: false},
 ]
 
+interface Template {
+  nome: string;
+  formato: string;
+  campos: number;
+  criado_por: string;
+  status: boolean;
+}
+
+
 export default function AdminTemplates() {
   const [templateReq, setTemplateReq] = useState(templateLista)
   const [search, setSearch] = useState("")
+  const [campos, setCampo] = useState<keyof Template>("nome") 
 
   function handleSearch (value: string) {
     setSearch(value)
+  }
+
+  function handleCampos (value: string) {
+    setCampo(value)
   }
 
   const filtered = search ? templateReq.filter((item) => {
@@ -46,8 +60,6 @@ export default function AdminTemplates() {
 
   console.log(filtered)
   console.log(search)
-
-  const campos = "nome"
 
   return (
     <>
@@ -59,9 +71,10 @@ export default function AdminTemplates() {
         <div className="flex bg-zinc-300 h-full w-full main-content">
           <Side/>
           <DefaultLayout 
+            handleCampo={handleCampos}
             handleSearch={handleSearch} 
             listaCampos={camposTemplate} 
-            listaObj={filtered.sort((a, b) => a[campos].localeCompare(b.nome) )} 
+            listaObj={filtered.sort((a, b) => a["nome"].localeCompare(b["nome"]) )} 
             titulo="Templates disponível:"
           />
         </div>

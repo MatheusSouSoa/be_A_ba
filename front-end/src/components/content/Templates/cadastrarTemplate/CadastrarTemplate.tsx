@@ -1,4 +1,6 @@
 import Modal from "@/components/util/modal/Modal";
+import { UseAuth } from "@/hooks/useAuth";
+import { useRouter } from "next/router";
 import { Check, Pencil, Trash, X } from "phosphor-react";
 import { useEffect, useState } from "react";
 
@@ -38,8 +40,11 @@ export default function CreateTemplate() {
   const [indexToEdit, setIndexToEdit] = useState(-1); // Inicialmente nenhum índice está sendo editado
   const [editedColuna, setEditedColuna] = useState<ColunasProps | null>(null); // Armazena os valores de edição
   const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  const {user} = UseAuth()
+  const router = useRouter()
 
-  const [modalClass, setModalClass] = useState("");
+  // const [modalClass, setModalClass] = useState("");
   const [ modalErrs, setModalErrs] = useState(false);
   const [ success, setSuccess] = useState(true);
 
@@ -48,7 +53,10 @@ export default function CreateTemplate() {
   };
 
   const closeModal = () => {
-      setIsModalOpen(false);
+    modalErrs == true && user && user.isAdmin == true ? router.push(user?.permissions[1]) : 
+    modalErrs == true && user && user.isAdmin == false ? router.push(user?.permissions[0]) :
+    null
+    setIsModalOpen(false);
   };
 
   function addColuna() {
@@ -126,14 +134,15 @@ export default function CreateTemplate() {
     
     if(colunas.length == 0) {
       console.log(colunas.length)
-      setModalClass("bg-red-500 hover:bg-red-600")
+      // setModalClass("bg-red-500 hover:bg-red-600")
       setModalErrs(false)
       openModal()
+      return
     }
 
     if(success) {
-      setModalClass("bg-green-500 hover:bg-green-600")
-      openModal()
+      // setModalClass("bg-green-500 hover:bg-green-600")
+      openModal() 
     }
   }
 
@@ -239,13 +248,13 @@ export default function CreateTemplate() {
             </div>
           </div>
         </div>
-        <div className="flex-1 w-full grid grid-cols-2 place-items-center overflow-y-auto gap-5 p-6 scrollbar-custom">
+        <div className="flex-1 w-full grid sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 place-items-center overflow-auto gap-5 p-6 scrollbar-custom">
           {colunas.map((coluna, i) => (
-              <div key={i} className="flex gap-2 justify-center items-center">
-                <div className="flex gap-2 p-1 w-full  text-white font-bold px-2 rounded-2xl bg-green-800 justify-around">
-                  <span>{i + 1}.</span>
-                  <div className="flex gap-5 ">
-                    <span> {coluna.nome_coluna}</span>
+            <div key={i} className="flex flex-col gap-1 justify-center items-center">
+                {/* <span>{i + 1}.</span> */}
+                <div className="flex flex-col gap-1 p-1 w-full  text-white font-bold px-2 pb-2 rounded-2xl bg-green-800 justify-around items-center">
+                  <div className="flex flex-col items-center gap-2 ">
+                    <span>{i+1}. {coluna.nome_coluna}</span>
                     <span className="bg-white rounded-2xl text-black px-2 flex gap-2 justify-center items-center">
                       {" "}
                       {coluna.nulo ? "Nulo" : "Não Nulo"}
@@ -281,7 +290,7 @@ export default function CreateTemplate() {
           </button>
                 <Modal isOpen={isModalOpen} onClose={closeModal}>
                   <div className="flex flex-col gap-5 justify-center items-center">
-                    <h2>{modalErrs == true ?
+                    <h2 className="text-2xl font-semibold">{modalErrs == true ?
                           "Solicitação de criação de template realizada com sucesso!" : 
                           "Erro ao criar template"}    
                     </h2>
@@ -296,7 +305,7 @@ export default function CreateTemplate() {
                     <button
                         onClick={closeModal}
                         className={`
-                        modal-close ${modalErrs ? "bg-green-500 hover:bg-green-600" : "bg-red-500 hover:bg-red-600"} text-white font-bold py-2 px-4 rounded-2xl focus:outline-none focus:shadow-outline
+                        modal-close ${modalErrs ? "bg-green-500 hover:bg-green-600" : "bg-red-500 hover:bg-red-600"} text-white font-bold py-2 px-4 rounded-2xl focus:outline-none focus:shadow-outline text-3xl
                         `}
                     >
                         {modalErrs ? "Ok" : "Fechar"}

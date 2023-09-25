@@ -8,35 +8,6 @@ import { useEffect, useState } from "react";
 
 export default function AdminDashboard() {
 
-//   const [isLoading, setIsLoading] = useState(true)
-  
-//   const router = useRouter();
-
-//  useEffect(() => {
-//   const storageData = localStorage.getItem("currentUser")
-//   const usuario = storageData ? JSON.parse(storageData) : null
-//     if(!usuario) {
-//       router.push("/")
-//       return
-//     }
-//     // Verifique se o usuário tem acesso à rota "/admin/dashboard"
-//     if (!usuario.permissions.includes("/admin/dashboard")) {
-//       // Redirecione para a rota "/templates" se o acesso não for concedido
-//       router.push("/templates")
-//       return
-//     }
-
-//     setIsLoading(false)
-//   }, []);
-
-//   if(isLoading) {
-//     return (
-//       <div className="w-screen h-screen grid place-items-center bg-white">
-//         <CircleNotch className="h-8 w-8 text-yellow-600 animate-spin"/>
-//       </div>
-//     )
-//   }
-
   return (
     <>
       <Head>

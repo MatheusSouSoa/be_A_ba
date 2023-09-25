@@ -11,13 +11,15 @@ interface ListagemProps {
   listaObj: { [key: string]: any }[];
   listaCampos: string[];
   handleSearch: (value: string) => void
+  handleCampo: (value: string) => void
 }
 
 export default function DefaultLayout({
     titulo,
     listaCampos,
     listaObj,
-    handleSearch
+    handleSearch,
+    handleCampo
 }: ListagemProps) {
     
     const router = useRouter()
@@ -195,7 +197,7 @@ export default function DefaultLayout({
                     <table className="w-full rounded-b-2xl">
                         <tbody className="text-center font-semibold text-zinc-600">
                         {router.pathname === "/admin/templates" ? (
-                            <AdminTemplate listaCampos={listaCampos} listaObj={listaObj} titulo={titulo} />
+                                <AdminTemplate listaCampos={listaCampos} listaObj={listaObj} titulo={titulo} />
                             ) : router.pathname === "/templates" ? (
                                 <TemplatesComponent listaCampos={listaCampos} listaObj={listaObj} titulo={titulo}/>
                             ) : router.pathname === "/arquivos/meus-arquivos" ? (

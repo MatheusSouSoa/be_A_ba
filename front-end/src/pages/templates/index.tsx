@@ -61,7 +61,11 @@ export default function Templates() {
         <Header/>
         <div className="flex bg-zinc-300 h-full w-full main-content">
           <Side/>
-          <DefaultLayout handleSearch={handleSearch} listaCampos={camposTemplate} listaObj={templateReq} titulo="Templates"/>
+          <DefaultLayout 
+            handleSearch={handleSearch} 
+            listaCampos={camposTemplate} 
+            listaObj={templateReq} 
+            titulo="Templates"/>
         </div>
       </div>
     </>

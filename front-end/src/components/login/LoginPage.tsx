@@ -4,6 +4,7 @@ import Head from "next/head";
 import {users} from "../../../test/users/Users"
 import { useRouter } from "next/router";
 import Link from "next/link";
+import Modal from "../util/modal/Modal";
 
 // const users = {
 //     user1: {
@@ -56,11 +57,14 @@ export default function PaginaLogin() {
     const [isLogged, setIsLogged] = useState(false)
     const [email, setEmail] = useState("")
     const [senha, setSenha] = useState("")
+    const [errs, setErrs] = useState(false)
 
     const router = useRouter();
 
+
     const handleSubmit = (e: any) => {
         e.preventDefault();
+        setErrs(false)
 
         if (email === "" || senha === "") return false;
 
@@ -86,8 +90,7 @@ export default function PaginaLogin() {
                 return;
             }
         }
-
-        console.log("Usuário não encontrado ou senha incorreta");
+        setErrs(true)
     };
 
 
@@ -101,6 +104,11 @@ export default function PaginaLogin() {
                 <div className="bg-gray-300 bg-opacity-60 h-full flex justify-center pt-20">
                     <div className="w-[25%] h-[70%] bg-white rounded-3xl text-zinc-700 text-xl">
                         <form action="" onSubmit={handleSubmit}>
+                            <span className={`
+                                flex justify-center items-center pt-2 text-red-500
+                            `}>
+                               { errs == true ? "Email ou senha invalido" : " "}
+                            </span>
                             <ul className="flex flex-col p-4 gap-4 justify-center items-center">
                                 <li className="flex flex-col gap-2">
                                     <span>Login:</span>
@@ -143,37 +151,3 @@ export default function PaginaLogin() {
         </>
     )
 }
-
-
-// const handleSubmit = (e: any) => {
-//     e.preventDefault(); 
-
-//     if(email == "" || senha == "" ) return false
-
-//     const usuarios = Object.values(users)
-
-//     let logged = false
-//     let user 
-
-//     for(const usuario of usuarios) {
-//         if(usuario.email == email){
-//             if(usuario.senha == senha){
-//                 logged = true
-//                 user = usuario
-//             }
-//             else {
-//                 console.log("senha errada")
-//             }
-//         }
-//         else {
-//             console.log("Usuario não encontrado")
-//         }
-//     }
-//     if(logged) {
-//         if(user?.isAdmin == true) {
-//             window.location.href = "/admin/dashboard"
-//             return
-//         }
-//         else if(user?.isAdmin == false )window.location.href = "/templates"
-//     }
-//   };
