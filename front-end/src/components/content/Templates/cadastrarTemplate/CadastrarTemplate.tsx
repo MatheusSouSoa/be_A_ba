@@ -1,4 +1,5 @@
-import { Pencil, Trash } from "phosphor-react";
+import Modal from "@/components/util/modal/Modal";
+import { Check, Pencil, Trash, X } from "phosphor-react";
 import { useEffect, useState } from "react";
 
 const tiposDados = ["texto", "data", "inteiro", "decimal", "booleano", "moeda"];
@@ -36,6 +37,19 @@ export default function CreateTemplate() {
   const [NomeColunaPH, setNomeColunaPH] = useState("Nome da Coluna");
   const [indexToEdit, setIndexToEdit] = useState(-1); // Inicialmente nenhum índice está sendo editado
   const [editedColuna, setEditedColuna] = useState<ColunasProps | null>(null); // Armazena os valores de edição
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const [modalClass, setModalClass] = useState("");
+  const [ modalErrs, setModalErrs] = useState(false);
+  const [ success, setSuccess] = useState(true);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+      setIsModalOpen(false);
+  };
 
   function addColuna() {
     if (NomeColuna === "") {
@@ -99,6 +113,7 @@ export default function CreateTemplate() {
   
 
   function salvarBtn() {
+    setModalErrs(true)
     const NovoTemplate: TemplateProps = {
       nome: NomeTemplate,
       numero_colunas: numColunas,
@@ -106,7 +121,20 @@ export default function CreateTemplate() {
       limite_linhas: limiteNumber > 0 ? limiteNumber : null,
       colunas: colunas,
     };
-    console.log(NovoTemplate);
+    console.log("Novo template: ",NovoTemplate);
+
+    
+    if(colunas.length == 0) {
+      console.log(colunas.length)
+      setModalClass("bg-red-500 hover:bg-red-600")
+      setModalErrs(false)
+      openModal()
+    }
+
+    if(success) {
+      setModalClass("bg-green-500 hover:bg-green-600")
+      openModal()
+    }
   }
 
   return (
@@ -251,6 +279,30 @@ export default function CreateTemplate() {
           >
             Salvar
           </button>
+                <Modal isOpen={isModalOpen} onClose={closeModal}>
+                  <div className="flex flex-col gap-5 justify-center items-center">
+                    <h2>{modalErrs == true ?
+                          "Solicitação de criação de template realizada com sucesso!" : 
+                          "Erro ao criar template"}    
+                    </h2>
+                    <div className={`h-36 w-36 rounded-full border flex justify-center items-center 
+                      ${modalErrs ? "border-green-500" : "border-red-500"}
+                    `}>
+                      {modalErrs ? 
+                        <Check className="text-green-500 h-32 w-32"/> :
+                        <X className="text-red-500 h-32 w-32"/>
+                      }
+                    </div>
+                    <button
+                        onClick={closeModal}
+                        className={`
+                        modal-close ${modalErrs ? "bg-green-500 hover:bg-green-600" : "bg-red-500 hover:bg-red-600"} text-white font-bold py-2 px-4 rounded-2xl focus:outline-none focus:shadow-outline
+                        `}
+                    >
+                        {modalErrs ? "Ok" : "Fechar"}
+                    </button>
+                  </div>
+                </Modal>
         </div>
       </div>
     </div>
