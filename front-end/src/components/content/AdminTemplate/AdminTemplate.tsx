@@ -7,6 +7,7 @@ interface ListagemProps {
     listaObj: { [key: string]: any }[];
     listaCampos: string[];
     pendente: boolean
+    handleListaObj?: () => void;
   }
 
 export default function AdminTemplate({
@@ -16,18 +17,29 @@ export default function AdminTemplate({
     pendente
 }: ListagemProps) {
 
+    let filteredListaObj = filter()
+
+    function filter() {
+        return listaObj.filter((item) => {
+            if (!pendente) {
+                return item.isNew === true;
+            } else {
+                return item.isNew === false;
+            }
+        });
+    }
+
     const [inputValue, setInputValue] = useState("");
     const [selectValue, setSelectValue] = useState(listaCampos[0]);
     const [statuses, setStatuses] = useState(
         listaObj.map((item) => item.status)
     );
 
-    function handleInputSearchValue(event: any) {
-        setInputValue(event.target.value);
-    }
-
-    function handleSelectValue(event: any) {
-        setSelectValue(event.target.value);
+    function aprovar(index: number) {
+        filteredListaObj[index].isNew = false;
+        filteredListaObj[index].status = true;
+        filteredListaObj = filter()
+        console.log(filteredListaObj[index])
     }
 
     const handleStatusChange = (index: number, newStatus: boolean) => {
@@ -45,7 +57,7 @@ export default function AdminTemplate({
     };
     return (
         <> 
-            {listaObj.map((lista: any, index: any) => (
+            {filteredListaObj.map((lista: any, index: any) => (
                 <tr key={index} className={`rounded-md`}>
                 {Object.keys(lista).map((lista2, innerIndex) => (
                     <td key={innerIndex} className={`w-1/5 p-1`}>
@@ -53,7 +65,7 @@ export default function AdminTemplate({
                         pendente != true ? (
                             <div className="flex gap-5 items-center justify-center">
                                 <span title="Aceitar solicitação">
-                                    <Check className="w-7 h-7 text-green-500 cursor-pointer"/>
+                                    <Check onClick={() => aprovar(index)} className="w-7 h-7 text-green-500 cursor-pointer"/>
                                 </span>
                                 <span title="Recusar solicitação">
                                     <X className="w-7 h-7 text-red-500 cursor-pointer"/>

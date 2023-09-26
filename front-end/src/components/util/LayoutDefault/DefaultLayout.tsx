@@ -145,7 +145,7 @@ export default function DefaultLayout({
                             <input
                                 type="text"
                                 className="outline-none rounded-l-2xl p-1 px-2"
-                                placeholder={selectValue === "Ativo" || selectValue == "Pendentes" ? "Buscar por nome" : "Buscar por "+selectValue}
+                                placeholder={selectValue === "Ativo" || selectValue == "Pendentes" ? "Campo de buscas" : "Buscar por "+selectValue}
                                 value={inputValue}
                                 onChange={handleInputSearchValue}
                             />

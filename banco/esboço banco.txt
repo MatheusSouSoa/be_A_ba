@@ -1,0 +1,40 @@
+tabela 1:
+cadastro de templates
+req 2, n vira tabela. é procedural/atirbuto de usuario
+req 3 tbm n vira tabela
+tabela de uploads/arquivos
+tabela de usuarios
+req 7/ campos pode ser atributo de template
+req 8/ flag templates: atributo de templates
+
+tabela templates:
+id_template: int pk
+nome: varchar
+extensao: varchar
+data: timestamp
+status: boolean/varchar
+qtd_linhas: int
+
+tabela campos:
+id_campo: int pk
+nome: varchar
+tipo: varchar
+nulo: boolean
+
+tabela uploads:
+id_uploads: int pk
+nome: varchar
+data: timestamp
+caminho: varchar
+
+tabela usuarios:
+id_user: int pk
+nome: varchar
+matricula: varchar
+email: varchar
+senha: varchar
+perfil: varchar
+data: timestamp
+
+
+
