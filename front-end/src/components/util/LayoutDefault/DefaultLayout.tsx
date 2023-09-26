@@ -137,7 +137,6 @@ export default function DefaultLayout({
                                     </Modal>
                                 </>
                                 ) : ""
-                            
                             }
                         </div>
                     </div>
@@ -146,7 +145,7 @@ export default function DefaultLayout({
                             <input
                                 type="text"
                                 className="outline-none rounded-l-2xl p-1 px-2"
-                                placeholder={"Buscar por " + selectValue}
+                                placeholder={selectValue === "Ativo" || selectValue == "Pendentes" ? "Buscar por nome" : "Buscar por "+selectValue}
                                 value={inputValue}
                                 onChange={handleInputSearchValue}
                             />
@@ -169,8 +168,9 @@ export default function DefaultLayout({
                                     className="outline-none border-2 rounded-2xl font-semibold bg-white overflow-hidden cursor-pointer"
                                 >
                                     {listaCampos.map((campo, index) => (
-                                    <option key={index} value={campo}>
-                                        {campo}
+                                    <option key={index} value={campo == "Ativo" ? "Pendentes" : campo}>
+                                        {campo == "Ativo" ? "Pendentes" : 
+                                        campo}
                                     </option>
                                     ))}
                                 </select>
@@ -185,7 +185,9 @@ export default function DefaultLayout({
                                 <tr className="">
                                     {listaCampos.map((campo, index) => (
                                     <th key={index} className=" w-1/5">
-                                        {campo}
+                                        {campo == "Ativo" ? 
+                                            selectValue == "Pendentes" ? "Solicitações" : campo
+                                        : campo}
                                     </th>
                                     ))}
                                 </tr>
@@ -198,7 +200,7 @@ export default function DefaultLayout({
                     <table className="w-full rounded-b-2xl">
                         <tbody className="text-center font-semibold text-zinc-600">
                         {router.pathname === "/admin/templates" ? (
-                                <AdminTemplate listaCampos={listaCampos} listaObj={listaObj} titulo={titulo} />
+                                <AdminTemplate pendente={selectValue == "Pendentes" ? false : true} listaCampos={listaCampos} listaObj={listaObj} titulo={titulo} />
                             ) : router.pathname === "/templates" ? (
                                 <TemplatesComponent listaCampos={listaCampos} listaObj={listaObj} titulo={titulo}/>
                             ) : router.pathname === "/arquivos/meus-arquivos" ? (

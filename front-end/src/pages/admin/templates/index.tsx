@@ -19,13 +19,13 @@ const templateLista: Template[] = [
   { nome: "EcoSolution", formato: "csv", campos: 6, criado_por: "Carlos", status: false, isNew: true },
   { nome: "FutureData", formato: "xlsx", campos: 4, criado_por: "Larissa", status: true, isNew: false },
   { nome: "DigitalWave", formato: "csv", campos: 5, criado_por: "Rafael", status: false, isNew: true },
-  { nome: "TechWorld", formato: "xlsx", campos: 3, criado_por: "Diana", status: true, isNew: false },
+  { nome: "TechWorld", formato: "xls", campos: 3, criado_por: "Diana", status: true, isNew: false },
   { nome: "InnoSoft", formato: "csv", campos: 4, criado_por: "Luciana", status: false, isNew: true },
   { nome: "CodeMaster", formato: "xlsx", campos: 2, criado_por: "Eduardo", status: true, isNew: false },
   { nome: "SmartData", formato: "csv", campos: 6, criado_por: "Isabella", status: true, isNew: true },
   { nome: "TechXpress", formato: "xlsx", campos: 5, criado_por: "Felipe", status: false, isNew: true },
   { nome: "DataGenius", formato: "csv", campos: 4, criado_por: "Camila", status: true, isNew: true },
-  { nome: "InnovaTech", formato: "xlsx", campos: 3, criado_por: "Gustavo", status: true, isNew: true },
+  { nome: "InnovaTech", formato: "xls", campos: 3, criado_por: "Gustavo", status: true, isNew: true },
   { nome: "InfoTech", formato: "csv", campos: 7, criado_por: "Viviane", status: false, isNew: true },
 ];
 interface Template {
@@ -35,6 +35,7 @@ interface Template {
   criado_por: string;
   status: boolean;
   isNew: boolean;
+  pendentes?: string
 }
 
 export default function AdminTemplates() {
@@ -59,7 +60,8 @@ export default function AdminTemplates() {
       setCampoSelecionado("campos")
     }
     if(value == "Ativo"){
-      setCampoSelecionado("status")
+      setCampoSelecionado("pendentes")
+      console.log("Pendentes rapaz")
     }
     if(value == "Criado por"){
       setCampoSelecionado("criado_por")

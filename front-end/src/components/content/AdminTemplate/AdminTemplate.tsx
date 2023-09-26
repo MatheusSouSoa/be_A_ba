@@ -1,16 +1,19 @@
 import SliderToggle from "@/components/util/slider/SliderToggle";
+import { Check, X } from "phosphor-react";
 import { useState } from "react";
 
 interface ListagemProps {
     titulo: string;
     listaObj: { [key: string]: any }[];
     listaCampos: string[];
+    pendente: boolean
   }
 
 export default function AdminTemplate({
     titulo,
     listaCampos,
     listaObj,
+    pendente
 }: ListagemProps) {
 
     const [inputValue, setInputValue] = useState("");
@@ -47,12 +50,22 @@ export default function AdminTemplate({
                 {Object.keys(lista).map((lista2, innerIndex) => (
                     <td key={innerIndex} className={`w-1/5 p-1`}>
                     {lista2 === "status" ? (
-                        <SliderToggle
-                        isChecked={statuses[index]}
-                        onChange={(newStatus) =>
-                            handleStatusChange(index, newStatus)
-                        }
-                        />
+                        pendente != true ? (
+                            <div className="flex gap-5 items-center justify-center">
+                                <span title="Aceitar solicitação">
+                                    <Check className="w-7 h-7 text-green-500 cursor-pointer"/>
+                                </span>
+                                <span title="Recusar solicitação">
+                                    <X className="w-7 h-7 text-red-500 cursor-pointer"/>
+                                </span>
+                            </div>
+                        ) :
+                            <SliderToggle
+                            isChecked={statuses[index]}
+                            onChange={(newStatus) =>
+                                handleStatusChange(index, newStatus)
+                            }
+                            />
                     ) : (
                         lista[lista2]
                     )}
