@@ -58,7 +58,7 @@ export default function AdminTemplate({
     return (
         <> 
             {filteredListaObj.map((lista: any, index: any) => (
-                <tr key={index} className={`rounded-md`}>
+                <tr key={index} className={`rounded-md border-y`}>
                 {Object.keys(lista).map((lista2, innerIndex) => (
                     <td key={innerIndex} className={`w-1/5 p-1`}>
                     {lista2 === "status" ? (

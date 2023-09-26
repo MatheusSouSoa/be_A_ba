@@ -12,6 +12,7 @@ interface TemplateProps {
   numero_colunas: number;
   tipo_arquivo: string;
   limite_linhas?: number | null;
+  data_criacao: Date;
   colunas: ColunasProps[];
 }
 interface ColunasProps {
@@ -128,6 +129,7 @@ export default function CreateTemplate() {
       tipo_arquivo: tipo,
       limite_linhas: limiteNumber > 0 ? limiteNumber : null,
       colunas: colunas,
+      data_criacao: new Date(Date.now()),
     };
     console.log("Novo template: ",NovoTemplate);
 

@@ -2,7 +2,7 @@ import Select from "@/components/util/select/Select";
 import { MagnifyingGlass } from "phosphor-react";
 import { useEffect, useState } from "react";
 
-const objetos = ["Arquivos", "Templates", "Usuários"]
+const objetos = ["Arquivos", "Templates"]
 
 const camposArquivo = ["Nome", "Template", "Linhas", "Data", "Criado por"]
 const arquivoLista = [

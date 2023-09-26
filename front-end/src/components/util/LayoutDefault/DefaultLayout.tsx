@@ -187,7 +187,8 @@ export default function DefaultLayout({
                                     <th key={index} className=" w-1/5">
                                         {campo == "Ativo" ? 
                                             selectValue == "Pendentes" ? "Solicitações" : campo
-                                        : campo}
+                                        : campo == "Download" ? "" :
+                                            campo}
                                     </th>
                                     ))}
                                 </tr>
@@ -200,11 +201,24 @@ export default function DefaultLayout({
                     <table className="w-full rounded-b-2xl">
                         <tbody className="text-center font-semibold text-zinc-600">
                         {router.pathname === "/admin/templates" ? (
-                                <AdminTemplate pendente={selectValue == "Pendentes" ? false : true} listaCampos={listaCampos} listaObj={listaObj} titulo={titulo} />
+                                <AdminTemplate 
+                                    pendente={selectValue == "Pendentes" ? false : true} 
+                                    listaCampos={listaCampos} 
+                                    listaObj={listaObj} 
+                                    titulo={titulo} 
+                                />
                             ) : router.pathname === "/templates" ? (
-                                <TemplatesComponent listaCampos={listaCampos} listaObj={listaObj} titulo={titulo}/>
+                                <TemplatesComponent  
+                                    listaCampos={listaCampos} 
+                                    listaObj={listaObj} 
+                                    titulo={titulo}
+                                />
                             ) : router.pathname === "/arquivos/meus-arquivos" ? (
-                                <MeusArquivos listaCampos={listaCampos} listaObj={listaObj} titulo={titulo} />
+                                <MeusArquivos 
+                                    listaCampos={listaCampos} 
+                                    listaObj={listaObj} 
+                                    titulo={titulo} 
+                                />
                             ) : 
                                 router.pathname === "/arquivos" ?
                             (

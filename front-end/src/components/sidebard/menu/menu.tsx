@@ -51,7 +51,6 @@ export default function Menu() {
     const [currentUser, setCurrentUser] = useState<any>(null);
 
     useEffect(() => {
-        // Recupere o usuário do localStorage
         const userString = localStorage.getItem("currentUser");
         
         if (userString) {
