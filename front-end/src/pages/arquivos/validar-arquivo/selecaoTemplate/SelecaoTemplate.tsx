@@ -28,11 +28,13 @@ const templateLista = [
     {nome: "Loja A", formato: "csv",  campos: 6, criado_por: "Matheus", status: false},
 ]
 
+interface SelecaoTemplateProps {
+    handleSelectedTemplate: (template: any) => void;
+}
 
+export default function SelecaoTemplate({handleSelectedTemplate}: SelecaoTemplateProps) {
 
-export default function SelecaoTemplate() {
-
-    const [selectedTemplate, setSelected] = useState("Não Selecionado")
+    
 
     return (
         <div className="flex flex-col overflow-hidden">
@@ -75,8 +77,7 @@ export default function SelecaoTemplate() {
                                     <div title="Selecionar template para validação">
                                         <HandPointing
                                             className="cursor-pointer  w-7 h-7"
-                                            // onClick={() => handleSelectedTemplate(item)}
-                                            onClick={() => console.log(item.nome)}
+                                            onClick={() => handleSelectedTemplate(item)}
                                         />
                                     </div>
                                 </td>

@@ -3,22 +3,24 @@ import { DropzoneState, useDropzone } from 'react-dropzone';
 import { CloseIcon } from "../../../../public/icons/CloseIcon"
 import { FileIcon } from "../../../../public/icons/FileIcon"
 import { UploadIcon } from "../../../../public/icons/UploadIcon"
-import { FileCsv, FileXls } from 'phosphor-react';
+import { Check, FileCsv, FileXls, WarningCircle, X } from 'phosphor-react';
+import Modal from '../modal/Modal';
 
 interface InputProps {
   dropzone: DropzoneState;
 }
 
 interface FileInputProps {
-    
+    template: any
 }
 
 interface HasFileProps {
   file?: File;
   removeFile: () => void;
+  template: any
 }
 
-export const FileInput = () => {
+export const FileInput = ({template} : FileInputProps) => {
   const [file, setFile] = useState<File | null>(null);
 
   const removeFile = useCallback(() => {
@@ -37,7 +39,7 @@ export const FileInput = () => {
     },
   });
 
-  if (file) return <HasFile file={file} removeFile={removeFile} />;
+  if (file) return <HasFile file={file} removeFile={removeFile} template={template}/>;
 
   return <Input dropzone={dropzone} />;
 };
@@ -73,7 +75,31 @@ const Input = ({ dropzone }: InputProps) => {
   );
 };
 
-const HasFile = ({ file, removeFile }: HasFileProps) => {
+const HasFile = ({ file, removeFile, template }: HasFileProps) => {
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [ modalErrs, setModalErrs] = useState(false);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+  
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+  
+  function validarTemplate(file: any, template: any) {
+    if(template.nome) {
+      setIsModalOpen(true)
+      setModalErrs(true)
+      console.log(template)
+      console.log(file)
+      return
+    }
+    setIsModalOpen(true)
+    setModalErrs(false)
+  }
+
   return (
     <div className="w-full h-full rounded-lg gap-5 border-dashedborder-2 hover:border-zinc-500 bg-white hover:bg-zinc-200 flex flex-col justify-center items-center">
       <div className="bg-white w-96 rounded-md shadow-md flex gap-3 items-center justify-center">
@@ -87,9 +113,38 @@ const HasFile = ({ file, removeFile }: HasFileProps) => {
         </button>
       </div>
       <div>
-        <button className='bg-green-500 px-5 p-2 rounded-xl font-black text-white hover:bg-green-600'>
+        <button 
+          className='bg-green-500 px-5 p-2 rounded-xl font-black text-white hover:bg-green-600'
+          onClick={() => validarTemplate(file, template)}  
+        >
             Validar
         </button>
+        <Modal isOpen={isModalOpen} onClose={closeModal}>
+          <div className="flex flex-col gap-5 justify-center items-center">
+              <h2 className="text-2xl font-semibold">
+                {modalErrs == true ?
+                  "Arquivo validado com sucesso" : 
+                  "Erro ao validar o arquivo. Por favor, selecione um template"
+                }    
+              </h2>
+              <div className={`w-44 h-44 rounded-full flex justify-center items-center 
+                ${modalErrs ? "border border-green-500" : ""}
+              `}>
+                {modalErrs ? 
+                  <Check className="text-green-500 h-32 w-32"/> :
+                  <WarningCircle className="text-red-500 h-44 w-44"/>
+                }
+              </div>
+              <button
+                  onClick={closeModal}
+                  className={`
+                  modal-close ${modalErrs ? "bg-green-500 hover:bg-green-600" : "bg-red-500 hover:bg-red-600"} text-white font-bold py-2 px-4 rounded-2xl focus:outline-none focus:shadow-outline text-3xl
+                  `}
+              >
+                  {modalErrs ? "Ok" : "Fechar"}
+              </button>
+            </div>
+        </Modal>
       </div>
     </div>
   );

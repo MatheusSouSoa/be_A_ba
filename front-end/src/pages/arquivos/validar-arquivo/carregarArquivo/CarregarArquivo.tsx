@@ -1,15 +1,14 @@
 import { FileInput } from "@/components/util/FileInput/FileInput"
 import { useState } from "react"
 
-export default function CarregarArquivo() {
+interface CarregarArquivoProps {
+    templateSelecionado: any
+}
+
+export default function CarregarArquivo({templateSelecionado} : CarregarArquivoProps) {
 
     const [fileName, setFileName] = useState("")
     const [selectedTemplate, setSelected] = useState<any | null>()
-
-    function handleSelectedTemplate(value: any) {
-        setSelected(value)
-    }
-
 
     return ( 
         <div className="flex flex-col h-full">
@@ -30,15 +29,17 @@ export default function CarregarArquivo() {
                         <span className="font-bold text-white cursor-default">
                             Template
                         </span>
-                        <div className="bg-white rounded-3xl px-2 font-semibold cursor-default">
-                            {/* {selectedTemplate.nome} */}
-                            template selecionado
+                        <div className="bg-white rounded-3xl w-56 overflow-y-hidden text-center px-2 font-semibold cursor-default">
+                            {templateSelecionado ? 
+                                templateSelecionado.nome :
+                                "Não selecionado"
+                            }
                         </div>
                     </div>
                 </div>
             </div>
             <div className=" h-full flex flex-col justify-center items-center">
-                <FileInput/>
+                <FileInput template={templateSelecionado}/>
             </div>
         </div>
     )
