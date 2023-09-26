@@ -1,4 +1,5 @@
 import { DownloadSimple, HandPointing } from "phosphor-react"
+import { useState } from "react"
 
 const camposTemplate = ["Nome", "Formato", "Campos",  "Criado por", "Ativo"]
 const templateLista = [
@@ -28,7 +29,11 @@ const templateLista = [
 ]
 
 
+
 export default function SelecaoTemplate() {
+
+    const [selectedTemplate, setSelected] = useState("Não Selecionado")
+
     return (
         <div className="flex flex-col overflow-hidden">
             <div className="flex justify-between px-10 py-3 items-center bg-green-800">
@@ -68,7 +73,11 @@ export default function SelecaoTemplate() {
                                         <DownloadSimple className="cursor-pointer w-7 h-8"/>
                                     </div>
                                     <div title="Selecionar template para validação">
-                                        <HandPointing className="cursor-pointer  w-7 h-7"/>
+                                        <HandPointing
+                                            className="cursor-pointer  w-7 h-7"
+                                            // onClick={() => handleSelectedTemplate(item)}
+                                            onClick={() => console.log(item.nome)}
+                                        />
                                     </div>
                                 </td>
                             </tr>
