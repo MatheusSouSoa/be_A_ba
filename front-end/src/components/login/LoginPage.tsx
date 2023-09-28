@@ -58,6 +58,7 @@ export default function PaginaLogin() {
     const [email, setEmail] = useState("")
     const [senha, setSenha] = useState("")
     const [errs, setErrs] = useState(false)
+    const [msgErr, setMsgErr] = useState("")
 
     const router = useRouter();
 
@@ -72,6 +73,13 @@ export default function PaginaLogin() {
 
         for (const usuario of usuarios) {
             if (usuario.email === email && usuario.senha === senha) {
+
+                if(usuario.isNew){
+                    setMsgErr("Acesso negado. Contate o administrador")
+                    setErrs(true)
+                    return
+                }
+
                 setIsLogged(true);
                 user.id = usuario.id
                 user.nome = usuario.nome
@@ -91,6 +99,7 @@ export default function PaginaLogin() {
             }
         }
         setErrs(true)
+        setMsgErr("Email ou senha invalidos")
     };
 
 
@@ -101,14 +110,9 @@ export default function PaginaLogin() {
             </Head>
             <Header />
             <div className="bg-gray-300 bg-opacity-60 bg-[url(/bg-login.png)] bg-center bg-cover bg-no-repeat main-content">
-                <div className="bg-gray-300 bg-opacity-60 h-full flex justify-center pt-20">
-                    <div className="w-[25%] h-[70%] bg-white rounded-3xl text-zinc-700 text-xl">
+                <div className="bg-gray-300 bg-opacity-60 h-full flex justify-center items-center pt-20">
+                    <div className="w-[25%] mb-20 h-auto bg-white rounded-3xl text-zinc-700 text-xl">
                         <form action="" onSubmit={handleSubmit}>
-                            <span className={`
-                                flex justify-center items-center pt-2 text-red-500
-                            `}>
-                               { errs == true ? "Email ou senha invalido" : " "}
-                            </span>
                             <ul className="flex flex-col p-4 gap-4 justify-center items-center">
                                 <li className="flex flex-col gap-2">
                                     <span>Login:</span>
@@ -142,6 +146,13 @@ export default function PaginaLogin() {
                                     type="submit"
                                     >Login</button>
                                     <Link href="/registrar" className="hover:underline mt-4">Criar conta</Link>
+                                </li>
+                                <li className="flex justify-center items-center w-full">
+                                    <span className={`
+                                        flex justify-center items-center pt-2 text-red-500 text-center
+                                    `}>
+                                    { errs == true ? msgErr : " "}
+                                    </span>
                                 </li>
                             </ul>
                         </form>

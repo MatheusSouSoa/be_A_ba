@@ -7,14 +7,15 @@ interface ListagemProps {
     listaObj: { [key: string]: any }[];
     listaCampos: string[];
     pendente: boolean
-    handleListaObj?: () => void;
+    handleListaObj?: (value: any) => void;
   }
 
 export default function AdminTemplate({
     titulo,
     listaCampos,
     listaObj,
-    pendente
+    pendente,
+    handleListaObj
 }: ListagemProps) {
 
     let filteredListaObj = filter()
@@ -36,10 +37,13 @@ export default function AdminTemplate({
     );
 
     function aprovar(index: number) {
-        filteredListaObj[index].isNew = false;
-        filteredListaObj[index].status = true;
-        filteredListaObj = filter()
-        console.log(filteredListaObj[index])
+        const updatedFilteredListaObj = [...filteredListaObj]; // Criar uma cópia
+        updatedFilteredListaObj[index].isNew = false;
+        updatedFilteredListaObj[index].status = true;
+        updatedFilteredListaObj.splice(index, 1); // Remover o objeto da lista
+        console.log(updatedFilteredListaObj)
+        if(handleListaObj)
+            handleListaObj(updatedFilteredListaObj)
     }
 
     const handleStatusChange = (index: number, newStatus: boolean) => {

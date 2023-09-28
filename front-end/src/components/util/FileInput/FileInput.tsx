@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { DropzoneState, useDropzone } from 'react-dropzone';
 import { CloseIcon } from "../../../../public/icons/CloseIcon"
 import { FileIcon } from "../../../../public/icons/FileIcon"

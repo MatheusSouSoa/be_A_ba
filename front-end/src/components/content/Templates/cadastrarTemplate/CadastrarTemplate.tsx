@@ -222,15 +222,6 @@ export default function CreateTemplate() {
       <div className="flex max-h-[65%] flex-col w-full h-full  items-center justify-between bg-white rounded-2xl   ">
         <div className="flex justify-between p-5 items-center w-full">
           <div className="font-bold text-xl">Colunas do template:</div>
-          <div className="flex gap-1 justify-center items-center">
-            <span>Limite de linhas?</span>
-            <input
-              value={limiteNumber}
-              onChange={(event) => setLimiteNumber(+event.target.value)}
-              type="number"
-              className="outline-none rounded-2xl border pl-3 w-20 h-8"
-            />
-          </div>
           <div className="flex gap-2 justify-center items-center">
             <div>Tipo de Arquivo:</div>
             <div>

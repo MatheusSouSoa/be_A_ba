@@ -1,59 +1,7 @@
 import { useState } from "react";
 import CardUsuario from "../card-usuario/CardUsuario";
 import {users} from "../../../../../test/users/Users"
-
-// const users = [
-//     {
-//         id: 1,
-//         email: "email@example.com",
-//         senha: "senha",
-//         nome: "Null",
-//         isNew: true,
-//         permissions: [
-//             "/templates",
-//             "/arquivos"
-//         ]
-//     },
-//     {
-//         id: 2,
-//         email: "user@example.com",
-//         senha: "senha",
-//         nome: "Matheus",
-//         isAdmin: false,
-//         isNew: false,
-//         permissions: [
-//             "/templates",
-//             "/arquivos"
-//         ]
-//     },
-//     {
-//         id: 3,
-//         email: "matheus@email.com",
-//         senha: "senha123",
-//         nome: "Matheus",
-//         isAdmin: true,
-//         isNew: false,
-//         permissions: [
-//             "/admin/templates",
-//             "/admin/usuarios",
-//             "/admin/dashboard",
-//             "/arquivos"
-//         ]
-//     },
-//     {
-//         id: 4,
-//         email: "matheus@email.com",
-//         senha: "senha123",
-//         nome: "Undefined",
-//         isNew: true,
-//         permissions: [
-//             "/admin/templates",
-//             "/admin/usuarios",
-//             "/admin/dashboard",
-//             "/arquivos"
-//         ]
-//     },
-// ]
+import { MagnifyingGlass } from "phosphor-react";
 
 export default function PaginaEditarUsuarios() {
 
@@ -82,7 +30,7 @@ export default function PaginaEditarUsuarios() {
                             Ordenar por: 
                             <select
                                 value={selectValue}
-                                onChange={handleCampoChange} // Corrigido aqui
+                                onChange={handleCampoChange}
                                 className="outline-none border-2 rounded-2xl font-semibold bg-zinc-200 overflow-hidden cursor-pointer"
                             >
                                 <option className="font-semibold" value="nome">
@@ -101,8 +49,8 @@ export default function PaginaEditarUsuarios() {
                                 placeholder={"pesuisar por " + selectValue} 
                                 className="outline-none border text-zinc-500 border-zinc-500 px-2 rounded-l-full  bg-gray-200"
                             />
-                            <div className="border-zinc-500 px-2 bg-gray-500 rounded-r-full border hover:bg-zinc-400 cursor-pointer">
-                                a
+                           <div className="border-zinc-500 px-2 bg-gray-500 rounded-r-full border hover:bg-zinc-400 cursor-pointer flex justify-center items-center">
+                                <MagnifyingGlass/>
                             </div>
                         </li>
                     </ul>

@@ -65,7 +65,7 @@ export default function Menu() {
 
     return (
         <div className="pt-5">
-            <ul className="flex flex-col gap-2 p-2">
+            <ul className="flex flex-col justify-center items-center sm:items-stretch gap-2 p-2">
                 {currentUser?.isAdmin === true ? 
                     adminMenu.map(({name, icon, url}, index) => (
                         <MenuItem key={index} nome={name} icon={icon} url={url} />

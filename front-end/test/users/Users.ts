@@ -1,14 +1,10 @@
 export const users = [
     {
         id: 1,
-        email: "email1@example.com",
+        email: "user@email.com",
         senha: "senha1",
-        nome: "novo2",
+        nome: "Laura Coxinha",
         isNew: true,
-        permissions: [
-            "/templates",
-            "/arquivos"
-        ]
     },
     {
         id: 2,

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import CardUsuario from "../card-usuario/CardUsuario";
 import {users} from "../../../../../test/users/Users"
+import { MagnifyingGlass } from "phosphor-react";
 
 // const users = [
 //     {
@@ -102,8 +103,8 @@ export default function PaginaSolicitacoesUsuarios() {
                                 placeholder={"pesuisar por " + selectValue} 
                                 className="outline-none border text-zinc-500 border-zinc-500 px-2 rounded-l-full  bg-gray-200"
                             />
-                            <div className="border-zinc-500 px-2 bg-gray-500 rounded-r-full border hover:bg-zinc-400 cursor-pointer">
-                                a
+                            <div className="border-zinc-500 px-2 bg-gray-500 rounded-r-full border hover:bg-zinc-400 cursor-pointer flex justify-center items-center">
+                                <MagnifyingGlass/>
                             </div>
                         </li>
                     </ul>

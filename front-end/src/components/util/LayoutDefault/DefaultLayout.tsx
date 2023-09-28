@@ -187,7 +187,7 @@ export default function DefaultLayout({
                                     <th key={index} className=" w-1/5">
                                         {campo == "Ativo" ? 
                                             selectValue == "Pendentes" ? "Solicitações" : campo
-                                        : campo == "Download" ? "" :
+                                            :
                                             campo}
                                     </th>
                                     ))}

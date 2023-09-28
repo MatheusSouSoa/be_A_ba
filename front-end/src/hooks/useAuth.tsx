@@ -30,11 +30,8 @@ export default function AuthProvider({children} : AuthProviderProps) {
     const router = useRouter();
 
     const handleLogout = () => {
-        // Remova o currentUser do localStorage
         localStorage.removeItem('currentUser');
 
-        
-        // Redirecione para a página de login
         router.push('/').then(() => {
             setUser(null)
         })
