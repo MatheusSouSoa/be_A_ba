@@ -10,7 +10,7 @@ export class Usuario {
   @Column({type: "text", nullable: false })
   nome: string;
 
-  @Column({type: "text", nullable: false })
+  @Column({type: "text", nullable: false, unique: true })
   matricula: string;
 
   @Column({ nullable: false })
@@ -19,7 +19,7 @@ export class Usuario {
   @Column({ nullable: false })
   isNew: boolean;
 
-  @Column({type: "text", nullable: false })
+  @Column({type: "text", nullable: false, unique: true})
   email: string;
 
   @Column({type: "text", nullable: false })

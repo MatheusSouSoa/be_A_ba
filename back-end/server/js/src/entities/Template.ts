@@ -28,9 +28,6 @@ import {
     @Column({ nullable: false })
     isNew: boolean;
   
-    @Column({ nullable: true })
-    limite_linhas: number;
-  
     @Column({ nullable: false })
     data: Date;
   
