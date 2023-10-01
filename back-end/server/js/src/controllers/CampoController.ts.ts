@@ -1,17 +1,22 @@
 import { Request, Response } from "express";
 import { campoRepository } from "../repositories/CampoRepository";
+import { templateRepository } from "../repositories/TemplateRepository";
 
 export class campoController {
     async create(req: Request, res: Response) {
 
-        const {nome, tipo, nulo, template} = req.body
+        const {nome, tipo, nulo, templateReq} = req.body
 
+        const template = await templateRepository.findOneBy({id: Number(templateReq)})
+        if(!template){
+            return res.status(404).json({message: "No template found"})
+        }
 
         try {
             
             const novoCampo = campoRepository.create({nome, tipo, nulo, template})
 
-            return res.status(201).json(novoCampo)
+            return (novoCampo)
 
         } catch (error) {
             console.log(error)

@@ -1,44 +1,49 @@
 import { Request, Response } from "express";
 import { templateRepository } from "../repositories/TemplateRepository";
 import { campoRepository } from "../repositories/CampoRepository";
+import { UsuarioRepository } from "../repositories/UsuariosRepository";
+import { Campo } from "../entities/Campo";
 
 export class TemplateController {
     async create(req: Request, res: Response) {
 
-        const { nome, extensao, campos } = req.body;
+        const {usuarioId ,nome, extensao, campos } = req.body;
+
+        console.log("Usuario req: ", usuarioId)
+
+        const userId = Number(usuarioId)
+
+        const usuario = await UsuarioRepository.findOneBy({id: userId})
+
+        if(!usuario){
+            return res.status(404).json({message: "Usuario not found"})
+        }
 
         const data = new Date(Date.now());
         const status = false;
         const isNew = true;
 
         try {
-            const novoTemplate = templateRepository.create({ nome, extensao, status, data, isNew });
+            const novoTemplate = templateRepository.create({ nome, extensao, campos, status, data, isNew, usuario });
             
             novoTemplate.campos = [];
             const templateSalvo = await templateRepository.save(novoTemplate);
             
-            // Agora, vamos adicionar os campos ao template
             if (campos && Array.isArray(campos)) {
                 campos.forEach(async (element: any) => {
-                    // Você pode criar e adicionar os campos aqui
                     const campo = campoRepository.create({
                         nome: element.nome,
                         tipo: element.Tipo,
                         nulo: element.Nulo === "Sim" ? true : false,
+                        template: templateSalvo
                     });
-            
-                    // Associe o campo ao template
-                    campo.template = templateSalvo;
-            
-                    // Salve o campo no banco de dados
+
                     await campoRepository.save(campo);
-            
-                    // Adicione o campo ao template
-                    templateSalvo.campos.push(campo);
                 });
             }
-
-            return res.status(201).json(novoTemplate);
+            // novoTemplate.campos = campos;
+            
+            return res.status(201).json(templateSalvo);
 
         } catch (error) {
             console.error(error);
