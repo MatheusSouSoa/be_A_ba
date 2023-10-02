@@ -4,7 +4,9 @@ import { TemplateController } from "./controllers/TemplateController";
 
 const routes = Router();
 
-routes.post('/usuario', new UsuarioController().create)
-routes.post('/template', new TemplateController().create)
+routes.post('/api/usuario', new UsuarioController().create)
+routes.post('/api/template', new TemplateController().create)
+routes.get("/api/usuario/novos", new UsuarioController().listNewUsers);
+routes.post("/api/usuario/login", new UsuarioController().login);
 
 export default routes

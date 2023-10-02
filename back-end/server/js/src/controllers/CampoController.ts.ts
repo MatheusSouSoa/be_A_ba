@@ -16,7 +16,7 @@ export class campoController {
             
             const novoCampo = campoRepository.create({nome, tipo, nulo, template})
 
-            return (novoCampo)
+            return res.status(201).json(novoCampo)
 
         } catch (error) {
             console.log(error)

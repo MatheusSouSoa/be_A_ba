@@ -5,11 +5,10 @@ import { UsuarioRepository } from "../repositories/UsuariosRepository";
 import { Campo } from "../entities/Campo";
 
 export class TemplateController {
+
     async create(req: Request, res: Response) {
 
         const {usuarioId ,nome, extensao, campos } = req.body;
-
-        console.log("Usuario req: ", usuarioId)
 
         const userId = Number(usuarioId)
 
@@ -41,9 +40,9 @@ export class TemplateController {
                     await campoRepository.save(campo);
                 });
             }
-            // novoTemplate.campos = campos;
+            novoTemplate.campos = campos;
             
-            return res.status(201).json(templateSalvo);
+            return res.status(201).json(novoTemplate);
 
         } catch (error) {
             console.error(error);
