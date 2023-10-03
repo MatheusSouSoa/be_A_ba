@@ -4,41 +4,8 @@ import Head from "next/head";
 import {users} from "../../../test/users/Users"
 import { useRouter } from "next/router";
 import Link from "next/link";
-
-// const users = {
-//     user1: {
-//         email: "email@example.com",
-//         senha: "senha",
-//         nome: "Matheus",
-//         isAdmin: false,
-//         permissions: [
-//             "/templates",
-//             "/arquivos"
-//         ]
-//     },
-//     user2: {
-//         email: "user@example.com",
-//         senha: "senha",
-//         nome: "Matheus",
-//         isAdmin: false,
-//         permissions: [
-//             "/templates",
-//             "/arquivos"
-//         ]
-//     },
-//     user3: {
-//         email: "matheus@email.com",
-//         senha: "senha123",
-//         nome: "Matheus",
-//         isAdmin: true,
-//         permissions: [
-//             "/admin/templates",
-//             "/admin/usuarios",
-//             "/admin/dashboard",
-//             "/arquivos"
-//         ]
-//     },
-// }
+import axios, { AxiosError } from "axios";
+import 'dotenv/config'
 
 const user = {
     id: null as number | null,
@@ -54,48 +21,49 @@ const user = {
 export default function PaginaCriarConta() {
 
     const [isLogged, setIsLogged] = useState(false)
-    const [email, setEmail] = useState("")
-    const [senha, setSenha] = useState("")
     const [rSenha, setRSenha] = useState("")
-    const [matricula, setMatricula] = useState("")
-    const [nome, setNome] = useState("")
+    const [error, setError] = useState("");
+    const [formData, setFormData] = useState({
+        nome: "",
+        email: "",
+        senha: "",
+        matricula: "",
+      });
+    
+      const handleChange = (e:any) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+        setError("")
+      };
+    
+      const handleSubmit = async (e:any) => {
+        e.preventDefault();
+        if (formData.senha !== rSenha) {
+            setError("As senhas não correspondem.");
+            return;
+        }
+    
+        const ip = process.env.NEXT_PUBLIC_IP || "localhost"
+        console.log(ip)
+        try {
+            const response = await axios.post(`http://${ip}:8080/api/usuario`, formData); 
+            console.log("Resposta do servidor:", response.data);
+            router.push("/")
+        } catch (error) {
+            if ((error as AxiosError).isAxiosError) {
+                const axiosError = error as AxiosError;
+                console.error(axiosError);
+                if (axiosError.response && axiosError.response.status === 409) {
+                setError("Email ou matricula já está em uso.");
+                } else {
+                setError("Erro ao registrar usuário. Tente novamente mais tarde.");
+                }
+            }
+          }
+      };
 
 
     const router = useRouter();
-
-    const handleSubmit = (e: any) => {
-        e.preventDefault();
-
-        if (email === "" || senha === "") return false;
-
-        const usuarios = Object.values(users);
-
-        for (const usuario of usuarios) {
-            if (usuario.email === email && usuario.senha === senha) {
-                setIsLogged(true);
-                user.id = usuario.id
-                user.nome = usuario.nome
-                user.email = usuario.email
-                usuario.isAdmin ? user.isAdmin = true : user.isAdmin = false;
-                usuario.isNew ? user.isNew = true : user.isNew = false;
-                user.permissions = usuario.permissions || []
-
-
-                localStorage.setItem("currentUser", JSON.stringify(user));
-
-                if (usuario.isAdmin) {
-                    window.location.href = "/admin/dashboard";
-                } else {
-                    window.location.href = "/templates";
-                }
-
-                return;
-            }
-        }
-
-        console.log("Usuário não encontrado ou senha incorreta");
-    };
-
 
     return (
         <>
@@ -104,9 +72,9 @@ export default function PaginaCriarConta() {
             </Head>
             <Header />
             <div className="bg-gray-300 bg-opacity-60 bg-[url(/bg-login.png)] bg-center bg-cover bg-no-repeat main-content">
-                <div className="bg-gray-300 bg-opacity-60 h-full flex justify-center items-center ">
-                    <div className=" bg-white w-[45%] h-[80%] rounded-3xl text-zinc-700 text-xl">
-                        <form action="" >
+                <div className="bg-gray-300 p-2 bg-opacity-60 h-full flex justify-center items-center ">
+                    <div className=" bg-white pb-5 rounded-3xl text-zinc-700 text-xl">
+                        <form onSubmit={handleSubmit} >
                             <ul className="grid grid-cols-2 p-4 gap-4">
                                 <li className="flex flex-col gap-2">
                                     <span>Nome:</span>
@@ -117,8 +85,8 @@ export default function PaginaCriarConta() {
                                         className="outline-none border-2 rounded-2xl bg-zinc-100 px-2" 
                                         placeholder="nome completo" 
                                         size={15} 
-                                        value={nome}
-                                        onChange={(e) => setNome(e.target.value)}
+                                        value={formData.nome}
+                                        onChange={handleChange}
                                         required
                                     />
                                 </li>
@@ -129,9 +97,9 @@ export default function PaginaCriarConta() {
                                         className="outline-none border-2 rounded-2xl bg-zinc-100 px-2" 
                                         placeholder="Sua senha" 
                                         size={15} 
-                                        value={senha}
+                                        value={formData.senha}
                                         name="senha"
-                                        onChange={(e) => setSenha(e.target.value)}
+                                        onChange={handleChange}
                                         required
                                     />
                                 </li>
@@ -144,8 +112,8 @@ export default function PaginaCriarConta() {
                                         className="outline-none border-2 rounded-2xl bg-zinc-100 px-2" 
                                         placeholder="email" 
                                         size={15} 
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
+                                        value={formData.email}
+                                        onChange={handleChange}
                                         required
                                     />
                                 </li>
@@ -153,8 +121,9 @@ export default function PaginaCriarConta() {
                                     <span>Repetir Senha:</span>
                                     <input 
                                         type="password" 
-                                        className="outline-none border-2 rounded-2xl bg-zinc-100 px-2" 
-                                        placeholder="Repita sua senha" 
+                                        className={`outline-none border-2 rounded-2xl bg-zinc-100 px-2
+                                        `} 
+                                        placeholder={error !=  "" ? "As senhas precisam ser iguais" : "Repita sua senha " }
                                         size={15} 
                                         value={rSenha}
                                         name="senha"
@@ -171,15 +140,15 @@ export default function PaginaCriarConta() {
                                         className="outline-none border-2 rounded-2xl bg-zinc-100 px-2" 
                                         placeholder="sua matricula" 
                                         size={15} 
-                                        value={matricula}
-                                        onChange={(e) => setMatricula(e.target.value)}
+                                        value={formData.matricula}
+                                        onChange={handleChange}
                                         required
                                     />
                                 </li>
                             </ul>
                             <ul className="flex justify-center items-center flex-col gap-5">
-                                <li>
-
+                                <li className={` ${error ==  "" ? "" : "block"} text-red-500 `}>
+                                    {error == "" ? " " : error }
                                 </li>
                                 <li className="flex justify-center items-center gap-5">
                                     <button className="px-7 py-2 mt-3 bg-green-800 rounded-2xl text-white font-bold hover:bg-green-600"
@@ -202,36 +171,3 @@ export default function PaginaCriarConta() {
     )
 }
 
-
-// const handleSubmit = (e: any) => {
-//     e.preventDefault(); 
-
-//     if(email == "" || senha == "" ) return false
-
-//     const usuarios = Object.values(users)
-
-//     let logged = false
-//     let user 
-
-//     for(const usuario of usuarios) {
-//         if(usuario.email == email){
-//             if(usuario.senha == senha){
-//                 logged = true
-//                 user = usuario
-//             }
-//             else {
-//                 console.log("senha errada")
-//             }
-//         }
-//         else {
-//             console.log("Usuario não encontrado")
-//         }
-//     }
-//     if(logged) {
-//         if(user?.isAdmin == true) {
-//             window.location.href = "/admin/dashboard"
-//             return
-//         }
-//         else if(user?.isAdmin == false )window.location.href = "/templates"
-//     }
-//   };

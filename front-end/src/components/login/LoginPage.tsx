@@ -4,42 +4,8 @@ import Head from "next/head";
 import {users} from "../../../test/users/Users"
 import { useRouter } from "next/router";
 import Link from "next/link";
-import Modal from "../util/modal/Modal";
-
-// const users = {
-//     user1: {
-//         email: "email@example.com",
-//         senha: "senha",
-//         nome: "Matheus",
-//         isAdmin: false,
-//         permissions: [
-//             "/templates",
-//             "/arquivos"
-//         ]
-//     },
-//     user2: {
-//         email: "user@example.com",
-//         senha: "senha",
-//         nome: "Matheus",
-//         isAdmin: false,
-//         permissions: [
-//             "/templates",
-//             "/arquivos"
-//         ]
-//     },
-//     user3: {
-//         email: "matheus@email.com",
-//         senha: "senha123",
-//         nome: "Matheus",
-//         isAdmin: true,
-//         permissions: [
-//             "/admin/templates",
-//             "/admin/usuarios",
-//             "/admin/dashboard",
-//             "/arquivos"
-//         ]
-//     },
-// }
+import axios from "axios";
+import 'dotenv/config'
 
 const user = {
     id: null as number | null,
@@ -59,48 +25,102 @@ export default function PaginaLogin() {
     const [senha, setSenha] = useState("")
     const [errs, setErrs] = useState(false)
     const [msgErr, setMsgErr] = useState("")
+    const [error, setError] = useState("")
 
     const router = useRouter();
 
+    const [formData, setFormData] = useState({
+        email: "",
+        senha: "",
+    });
 
-    const handleSubmit = (e: any) => {
-        e.preventDefault();
-        setErrs(false)
-
-        if (email === "" || senha === "") return false;
-
-        const usuarios = Object.values(users);
-
-        for (const usuario of usuarios) {
-            if (usuario.email === email && usuario.senha === senha) {
-
-                if(usuario.isNew){
-                    setMsgErr("Acesso negado. Contate o administrador")
-                    setErrs(true)
-                    return
-                }
-
-                setIsLogged(true);
-                user.id = usuario.id
-                user.nome = usuario.nome
-                user.email = usuario.email
-                usuario.isAdmin ? user.isAdmin = true : user.isAdmin = false;
-                usuario.isNew ? user.isNew = true : user.isNew = false;
-
-                localStorage.setItem("currentUser", JSON.stringify(user));
-
-                if (usuario.isAdmin) {
-                    window.location.href = "/admin/dashboard";
-                } else {
-                    window.location.href = "/templates";
-                }
-
-                return;
-            }
-        }
-        setErrs(true)
-        setMsgErr("Email ou senha invalidos")
+    const handleChange = (e:any) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+        setError("")
     };
+
+    const handleSubmit = async (e:any) => {
+        e.preventDefault();
+        const ip = process.env.NEXT_PUBLIC_IP || "localhost"
+        console.log(ip);
+        try {
+            const response = await axios.post(`http://${ip}:8080/api/usuario/login`, {
+            email: formData.email,
+            senha: formData.senha,
+          });
+    
+          if (response.status === 200) {
+            const usuario = response.data.user;
+            if(usuario.isNew){
+                setMsgErr("Acesso negado. Contate o administrador")
+                setErrs(true)
+                return
+            }
+
+            setIsLogged(true);
+            user.id = usuario.id
+            user.nome = usuario.nome
+            usuario.isAdmin ? user.isAdmin = true : user.isAdmin = false;
+            usuario.isNew ? user.isNew = true : user.isNew = false;
+
+            localStorage.setItem("currentUser", JSON.stringify(user));
+
+            console.log(usuario.isAdmin)
+            if (usuario.isAdmin) {
+                window.location.href = "/admin/dashboard";
+            } else {
+                window.location.href = "/templates";
+            }
+          } else {
+            setError("Erro ao fazer login. Tente novamente mais tarde.");
+          }
+        } catch (error:any) {
+          if (error.response && error.response.status === 401) {
+            setError("Email ou senha incorretos.");
+          } else {
+            setError("Erro ao fazer login. Tente novamente mais tarde.");
+          }
+          console.error(error);
+        }
+      };
+
+
+
+    // const handleSubmit1 = (e: any) => {
+    //     e.preventDefault();
+    //     setErrs(false)
+
+    //     if (email === "" || senha === "") return false;
+
+    //     const usuarios = Object.values(users);
+
+    //     for (const usuario of usuarios) {
+    //         if (usuario.email === email && usuario.senha === senha) {
+
+    //             if(usuario.isNew){
+    //                 setMsgErr("Acesso negado. Contate o administrador")
+    //                 setErrs(true)
+    //                 return
+    //             }
+
+    //             setIsLogged(true);
+    //             usuario.isAdmin ? user.isAdmin = true : user.isAdmin = false;
+
+    //             localStorage.setItem("currentUser", JSON.stringify(user));
+
+    //             if (usuario.isAdmin) {
+    //                 window.location.href = "/admin/dashboard";
+    //             } else {
+    //                 window.location.href = "/templates";
+    //             }
+
+    //             return;
+    //         }
+    //     }
+    //     setErrs(true)
+    //     setMsgErr("Email ou senha invalidos")
+    // };
 
 
     return (
@@ -111,7 +131,7 @@ export default function PaginaLogin() {
             <Header />
             <div className="bg-gray-300 bg-opacity-60 bg-[url(/bg-login.png)] bg-center bg-cover bg-no-repeat main-content">
                 <div className="bg-gray-300 bg-opacity-60 h-full flex justify-center items-center pt-20">
-                    <div className="w-[25%] mb-20 h-auto bg-white rounded-3xl text-zinc-700 text-xl">
+                    <div className=" mb-20 h-auto bg-white rounded-3xl text-zinc-700 text-xl">
                         <form action="" onSubmit={handleSubmit}>
                             <ul className="flex flex-col p-4 gap-4 justify-center items-center">
                                 <li className="flex flex-col gap-2">
@@ -123,8 +143,8 @@ export default function PaginaLogin() {
                                         className="outline-none border-2 rounded-2xl bg-zinc-100 px-2" 
                                         placeholder="email" 
                                         size={20} 
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
+                                        value={formData.email}
+                                        onChange={handleChange}
                                         required
                                     />
                                 </li>
@@ -135,9 +155,9 @@ export default function PaginaLogin() {
                                         className="outline-none border-2 rounded-2xl bg-zinc-100 px-2" 
                                         placeholder="Sua senha" 
                                         size={20} 
-                                        value={senha}
+                                        value={formData.senha}
                                         name="senha"
-                                        onChange={(e) => setSenha(e.target.value)}
+                                        onChange={handleChange}
                                         required
                                     />
                                 </li>
