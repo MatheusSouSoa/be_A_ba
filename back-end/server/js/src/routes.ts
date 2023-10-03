@@ -8,5 +8,6 @@ routes.post('/api/usuario', new UsuarioController().create)
 routes.post('/api/template', new TemplateController().create)
 routes.get("/api/usuario/novos", new UsuarioController().listNewUsers);
 routes.post("/api/usuario/login", new UsuarioController().login);
+routes.get("/api/usuario/:id", new UsuarioController().getUserById)
 
 export default routes

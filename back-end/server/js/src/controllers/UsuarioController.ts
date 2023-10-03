@@ -47,24 +47,19 @@ export class UsuarioController {
 
     async login(req: Request, res: Response) {
         const { email, senha } = req.body;
-        console.log(email, senha);
 
         try {
             const user = await UsuarioRepository.findOne({ where: { email:email } });
-            // Verifique se o usuário com o email fornecido existe no banco de dados
 
             if (!user) {
                 return res.status(401).json({ message: "Usuario nao existe.", email:email, senha });
             }
 
-            // Verifique se a senha fornecida corresponde à senha no banco de dados
             const isPasswordValid = await bcrypt.compare(senha, user.senha);
-            console.log(isPasswordValid)
             if (!isPasswordValid) {
                 return res.status(401).json({ message: "Credenciais inválidas." });
             }
 
-            // Autenticação bem-sucedida, retorne uma resposta de sucesso
             res.status(200).json({ message: "Autenticação bem-sucedida.", user });
         } catch (error) {
             console.error(error);
@@ -82,4 +77,15 @@ export class UsuarioController {
         }
     }
     
+    async getUserById(req: Request, res: Response) {
+        const { id } = req.params
+        try {
+            const usuario = await UsuarioRepository.findOne({where: {id: parseInt(id)}})
+            console.log(usuario)
+            res.status(200).json(usuario)
+        } catch (err) {
+            console.error(err)
+            res.status(404).send()
+        }
+    }
 }
