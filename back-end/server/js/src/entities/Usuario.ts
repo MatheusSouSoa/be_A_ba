@@ -27,4 +27,5 @@ export class Usuario {
 
   @OneToMany(() => Template, (template) => template.usuario)
   templates: Template[];
+  
 }

@@ -1,0 +1,15 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const UsuarioController_1 = require("./controllers/UsuarioController");
+const TemplateController_1 = require("./controllers/TemplateController");
+const routes = (0, express_1.Router)();
+routes.post('/api/usuario', new UsuarioController_1.UsuarioController().create);
+routes.post('/api/template', new TemplateController_1.TemplateController().create);
+routes.get("/api/usuario/novos", new UsuarioController_1.UsuarioController().listNewUsers);
+routes.get("/api/usuario/velhos", new UsuarioController_1.UsuarioController().listOldUsers);
+routes.post("/api/usuario/login", new UsuarioController_1.UsuarioController().login);
+routes.get("/api/usuario/:id", new UsuarioController_1.UsuarioController().getUserById);
+routes.put("/api/usuario/:id/update-isnew/:isNewParam", new UsuarioController_1.UsuarioController().changePermissions);
+routes.delete("/api/usuario/:id/delete/:isAdminParam", new UsuarioController_1.UsuarioController().deleteUser);
+exports.default = routes;

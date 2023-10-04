@@ -47,24 +47,19 @@ export class UsuarioController {
 
     async login(req: Request, res: Response) {
         const { email, senha } = req.body;
-        console.log(email, senha);
 
         try {
             const user = await UsuarioRepository.findOne({ where: { email:email } });
-            // Verifique se o usuário com o email fornecido existe no banco de dados
 
             if (!user) {
                 return res.status(401).json({ message: "Usuario nao existe.", email:email, senha });
             }
 
-            // Verifique se a senha fornecida corresponde à senha no banco de dados
             const isPasswordValid = await bcrypt.compare(senha, user.senha);
-            console.log(isPasswordValid)
             if (!isPasswordValid) {
                 return res.status(401).json({ message: "Credenciais inválidas." });
             }
 
-            // Autenticação bem-sucedida, retorne uma resposta de sucesso
             res.status(200).json({ message: "Autenticação bem-sucedida.", user });
         } catch (error) {
             console.error(error);
@@ -81,5 +76,71 @@ export class UsuarioController {
             res.status(500).json({ message: "Internal server error." });
         }
     }
+
+    async listOldUsers(req: Request, res: Response) {
+        try {
+            const newUsers = await UsuarioRepository.find({ where: { isNew: false } });
+            res.status(200).json(newUsers);
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: "Internal server error." });
+        }
+    }
     
+    async getUserById(req: Request, res: Response) {
+        const { id } = req.params
+        try {
+            const usuario = await UsuarioRepository.findOne({where: {id: parseInt(id)}})
+            console.log(usuario)
+            res.status(200).json(usuario)
+        } catch (err) {
+            console.error(err)
+            res.status(404).send()
+        }
+    }
+
+    async changePermissions(req: Request, res: Response) {
+        const { id, isNewParam } = req.params;
+        const isNew = isNewParam === "true"; // Converte a string para um valor booleano
+        
+        try {
+            const usuario = await UsuarioRepository.findOne({ where: { id: parseInt(id) } });
+            
+            if (!usuario) {
+                return res.status(404).json({ message: "Usuário não encontrado." });
+            }
+            
+            usuario.isNew = isNew;
+            await UsuarioRepository.save(usuario);
+            
+            return res.status(200).json({ message: `isNew atualizado para ${isNew} com sucesso.` });
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({ message: "Erro interno do servidor." });
+        }
+    }
+
+    async aproveUser(req: Request, res: Response) {
+        const  {id, isAdmin} = req.body;
+    }
+
+    async deleteUser(req: Request, res: Response) {
+        const { id } = req.params;
+        
+        try {
+            const usuario = await UsuarioRepository.findOne({ where: { id: parseInt(id) } });
+            
+            if (!usuario) {
+                return res.status(404).json({ message: "Usuário não encontrado." });
+            }
+            
+            
+            await UsuarioRepository.remove(usuario);
+            
+            return res.status(200).json({ message: `Usuário excluído com sucesso.` });
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({ message: "Erro interno do servidor." });
+        }
+    }
 }

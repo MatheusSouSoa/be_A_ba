@@ -8,11 +8,10 @@ AppDataSource.initialize().then(() => {
 
     app.use(express.json())
 
-    // Configuração personalizada do CORS para permitir solicitações do localhost:3000
     const corsOptions = {
         origin: 'http://localhost:3000',
         methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-        credentials: true, // Permite o uso de cookies, se aplicável
+        credentials: true, 
     }
 
     app.use(cors(corsOptions))
