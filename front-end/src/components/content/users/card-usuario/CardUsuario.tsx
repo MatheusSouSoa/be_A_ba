@@ -16,17 +16,11 @@ interface UsuariosCardProps {
 export default function CardUsuario({ id, nome, email, isadmin, buttons, isNew, pagina, matricula, onDelete} : UsuariosCardProps): any {
 
     const [isAdmin, setIsAdmin] = useState(isadmin || false);
-    const [param, setParam] = useState(true);
-    const [display, setDisplay] = useState(true)
 
     function handleRadioChange(event:any) {
         const novoStatus = event.target.value === "admin";
         setIsAdmin(novoStatus);
     }
-    console.log("pagina: ",pagina)
-    console.log("isNew: ", isNew)
-    console.log("id: ", id)
-    console.log("admin?: ", isAdmin)
 
     async function  mudarPermissao(acao:string | undefined){
 
@@ -35,7 +29,7 @@ export default function CardUsuario({ id, nome, email, isadmin, buttons, isNew, 
         if(acao && acao.toLocaleLowerCase() == "salvar"){
             console.log("salvar")
             try {
-                const response = await axios.put(`http://${ip}:8080/api/usuario/${id}/${isAdmin}`)
+                const response = await axios.put(`http://${ip}:8080/api/usuario/${id}/update-isnew/${isNew}/${isAdmin}`)
                 
                 if(response.status === 200){
                     return console.log(response.data)
@@ -48,7 +42,7 @@ export default function CardUsuario({ id, nome, email, isadmin, buttons, isNew, 
         }
         else if(acao && acao.toLocaleLowerCase() == "aprovar"){
             try {
-                const response = await axios.put(`http://${ip}:8080/api/usuario/${id}/update-isnew/${isAdmin}`)
+                const response = await axios.put(`http://${ip}:8080/api/usuario/${id}/update-isnew/false/${isAdmin}`)
                 
                 if(response.status === 200){
                     onDelete(response.data.id)
@@ -62,20 +56,35 @@ export default function CardUsuario({ id, nome, email, isadmin, buttons, isNew, 
         }
     }
 
-    async function deletarUsuario(){
+    async function deletarUsuario(acao: string | undefined){
         const ip = process.env.NEXT_PUBLIC_IP || "localhost"
 
-        try {
-            const response = await axios.delete(`http://${ip}:8080/api/usuario/${id}/delete/${isAdmin}`)
-                    
-            if(response.status === 200){
-                onDelete(response.data.id)
+        if(acao && acao?.toLocaleLowerCase() == "bloquear"){
+            try {
+                const response = await axios.put(`http://${ip}:8080/api/usuario/${id}/update-isnew/true/${isAdmin}`)
+                console.log(response.data.id)
+                if(response.status === 200){
+                    onDelete(response.data.id)
+                    return console.log(response.data)
+                }
                 return console.log(response.data)
+            } catch (error) {
+                console.error(error)
+                console.log(error)
             }
-            return console.log(response.data)
-        } catch (error) {
-            console.error(error)
-            console.log(error)
+        }
+        else {
+            try {
+                const response = await axios.delete(`http://${ip}:8080/api/usuario/${id}/delete/${isAdmin}`)
+                
+                if(response.status === 200){
+                    return console.log(response.data)
+                }
+                return console.log(response.data)
+            } catch (error) {
+                console.error(error)
+                console.log(error)
+            }   
         }
     }
 
@@ -92,7 +101,6 @@ export default function CardUsuario({ id, nome, email, isadmin, buttons, isNew, 
 
     return  (
         <div className={`
-            ${display ? "block" : "hidden"}
             w-full p-4 bg-zinc-100 text-zinc-700 rounded-3xl flex justify-around items-center text-md font-semibold
         `}>
             <div className="flex flex-col justify-around items-start gap-2">
@@ -144,7 +152,7 @@ export default function CardUsuario({ id, nome, email, isadmin, buttons, isNew, 
                 <div>
                     <button 
                         className="p-2 px-5 bg-zinc-600 rounded-2xl font-bold text-white hover:bg-zinc-400"
-                        onClick={deletarUsuario}
+                        onClick={() => deletarUsuario(buttons?.at(1))}
                     >
                         {buttons?.at(1)}
                     </button>

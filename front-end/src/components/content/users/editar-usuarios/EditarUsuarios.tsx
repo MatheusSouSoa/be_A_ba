@@ -27,7 +27,7 @@ export default function PaginaEditarUsuarios() {
         fetchUsers();
     }, []);
 
-    const buttons = ["Salvar", "Excluir"]
+    const buttons = ["Salvar", "Bloquear"]
     const [selectValue, setSelectValue] = useState("nome");
     const [inputValue, setInputValue] = useState("")
 
