@@ -98,12 +98,12 @@ export class UsuarioController {
             res.status(404).send()
         }
     }
-<<<<<<< HEAD
 
     async changePermissions(req: Request, res: Response) {
-        const { id, isNewParam } = req.params;
-        const isNew = isNewParam === "true"; // Converte a string para um valor booleano
-        
+        const { id, isNewParam, isAdminParam } = req.params;
+        const isNew = isNewParam === "true"; 
+        const isAdmin = isAdminParam === "true"
+
         try {
             const usuario = await UsuarioRepository.findOne({ where: { id: parseInt(id) } });
             
@@ -112,9 +112,10 @@ export class UsuarioController {
             }
             
             usuario.isNew = isNew;
+            usuario.isAdmin = isAdmin;
             await UsuarioRepository.save(usuario);
             
-            return res.status(200).json({ message: `isNew atualizado para ${isNew} com sucesso.` });
+            return res.status(200).json({ message: `isNew atualizado para ${isNew} com sucesso.`, id: usuario.id });
         } catch (error) {
             console.error(error);
             return res.status(500).json({ message: "Erro interno do servidor." });
@@ -138,12 +139,10 @@ export class UsuarioController {
             
             await UsuarioRepository.remove(usuario);
             
-            return res.status(200).json({ message: `Usuário excluído com sucesso.` });
+            return res.status(200).json({ message: `Usuário excluído com sucesso.`, id: usuario.id});
         } catch (error) {
             console.error(error);
             return res.status(500).json({ message: "Erro interno do servidor." });
         }
     }
-=======
->>>>>>> 44829ab5a2d8955a09fd00176e30b19761fd2d89
 }

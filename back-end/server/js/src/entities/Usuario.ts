@@ -25,7 +25,7 @@ export class Usuario {
   @Column({type: "text", nullable: false })
   senha: string
 
-  @OneToMany(() => Template, (template) => template.usuario)
+  @OneToMany(() => Template, (template) => template.usuario, {onDelete: "CASCADE"})
   templates: Template[];
   
 }

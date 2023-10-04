@@ -35,7 +35,7 @@ import {
     @JoinColumn({name: 'id_usuario'})
     usuario: Usuario;
   
-    @OneToMany(() => Upload, (upload) => upload.template)
+    @OneToMany(() => Upload, (upload) => upload.template, {onDelete: "CASCADE"})
     uploads: Upload[];
   
     @OneToMany(() => Campo, (campo) => campo.template)
