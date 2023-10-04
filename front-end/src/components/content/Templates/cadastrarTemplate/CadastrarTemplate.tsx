@@ -1,5 +1,6 @@
 import Modal from "@/components/util/modal/Modal";
 import { UseAuth } from "@/hooks/useAuth";
+import axios from "axios";
 import { useRouter } from "next/router";
 import { Check, Pencil, Trash, X } from "phosphor-react";
 import { useEffect, useState } from "react";
@@ -13,11 +14,11 @@ interface TemplateProps {
   tipo_arquivo: string;
   limite_linhas?: number | null;
   data_criacao: Date;
-  colunas: ColunasProps[];
+  campos: ColunasProps[];
 }
 interface ColunasProps {
-  nome_coluna: string;
-  tipo_dado: string;
+  nome: string;
+  tipo: string;
   nulo?: boolean;
 }
 
@@ -46,7 +47,6 @@ export default function CreateTemplate() {
   const router = useRouter()
 
   const [ modalErrs, setModalErrs] = useState(false);
-  const [ success, setSuccess] = useState(true);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -67,8 +67,8 @@ export default function CreateTemplate() {
     }
 
     const novaColuna: ColunasProps = {
-      nome_coluna: NomeColuna,
-      tipo_dado: selectValueDado,
+      nome: NomeColuna,
+      tipo: selectValueDado,
       nulo: isNull,
     };
 
@@ -87,16 +87,16 @@ export default function CreateTemplate() {
     const coluna = colunas[index];
     setIndexToEdit(index);
     setEditedColuna(coluna);
-    setNomeColuna(coluna.nome_coluna);
+    setNomeColuna(coluna.nome);
     setIsNull(coluna.nulo ? true : false);
-    setSelectValueDado(coluna.tipo_dado);
+    setSelectValueDado(coluna.tipo);
   }
 
   function saveEditBtn() {
     if (indexToEdit !== -1 && editedColuna) {
       colunas[indexToEdit] = {
-        nome_coluna: NomeColuna,
-        tipo_dado: selectValueDado,
+        nome: NomeColuna,
+        tipo: selectValueDado,
         nulo: isNull,
       };
 
@@ -116,14 +116,14 @@ export default function CreateTemplate() {
   }
   
 
-  function salvarBtn() {
+  async function salvarBtn() {
     setModalErrs(true)
     const NovoTemplate: TemplateProps = {
       nome: NomeTemplate,
       numero_colunas: numColunas,
       tipo_arquivo: tipo,
       limite_linhas: limiteNumber > 0 ? limiteNumber : null,
-      colunas: colunas,
+      campos: colunas,
       data_criacao: new Date(Date.now()),
     };
     console.log("Novo template: ",NovoTemplate);
@@ -137,10 +137,31 @@ export default function CreateTemplate() {
       return
     }
 
-    if(success) {
-      // setModalClass("bg-green-500 hover:bg-green-600")
-      openModal() 
+    try {
+      const storageData = localStorage.getItem("currentUser");
+      const usuario = storageData ? JSON.parse(storageData) : null
+
+      if(usuario && templateNome){
+        const ip = process.env.NEXT_PUBLIC_IP || "localhost"
+        const response = await axios.post(`http://${ip}:8080/api/template`, {
+          usuarioId: usuario.id,
+          nome: String(templateNome),
+          extensao: tipo,
+          campos: colunas
+        })
+
+        openModal()
+
+        if(response.status === 200) {
+          openModal() 
+        }
+      }
+      
+    } catch (error) {
+      console.log(error)
+      console.error(error)
     }
+
   }
 
   return (
@@ -242,7 +263,7 @@ export default function CreateTemplate() {
                 {/* <span>{i + 1}.</span> */}
                 <div className="flex flex-col gap-1 p-1 w-full  text-white font-bold px-2 pb-2 rounded-2xl bg-green-800 justify-around items-center">
                   <div className="flex flex-col items-center gap-2 ">
-                    <span>{i+1}. {coluna.nome_coluna}</span>
+                    <span>{i+1}. {coluna.nome}</span>
                     <span className="bg-white rounded-2xl text-black px-2 flex gap-2 justify-center items-center">
                       {" "}
                       {coluna.nulo ? "Nulo" : "Não Nulo"}
@@ -250,7 +271,7 @@ export default function CreateTemplate() {
                     </span>
                     <span className="bg-white rounded-2xl text-black px-2 flex gap-2 justify-center items-center">
                       {" "}
-                      {coluna.tipo_dado}
+                      {coluna.tipo}
                       <div className="p-1 w-1 h-1 rounded-full bg-yellow-500"></div>
                     </span>
                   </div>
