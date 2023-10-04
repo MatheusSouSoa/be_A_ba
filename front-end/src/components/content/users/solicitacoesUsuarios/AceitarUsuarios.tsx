@@ -6,7 +6,11 @@ import axios from "axios";
 
 export default function PaginaSolicitacoesUsuarios() {
 
+<<<<<<< HEAD
     const [users, setUsers] = useState<any[]>([]);
+=======
+    const [users, setUsers] = useState([]);
+>>>>>>> 44829ab5a2d8955a09fd00176e30b19761fd2d89
 
     async function fetchUsers() {
         try {
@@ -19,11 +23,14 @@ export default function PaginaSolicitacoesUsuarios() {
         }
     }
 
+<<<<<<< HEAD
     function onDelete(id: number){
         const updateUsers = users.filter((item) => item.id !== id)
         setUsers(updateUsers)
     }
 
+=======
+>>>>>>> 44829ab5a2d8955a09fd00176e30b19761fd2d89
     useEffect(() => {
         fetchUsers();
     }, []);

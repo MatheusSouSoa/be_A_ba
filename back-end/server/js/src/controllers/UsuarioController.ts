@@ -98,6 +98,7 @@ export class UsuarioController {
             res.status(404).send()
         }
     }
+<<<<<<< HEAD
 
     async changePermissions(req: Request, res: Response) {
         const { id, isNewParam } = req.params;
@@ -143,4 +144,6 @@ export class UsuarioController {
             return res.status(500).json({ message: "Erro interno do servidor." });
         }
     }
+=======
+>>>>>>> 44829ab5a2d8955a09fd00176e30b19761fd2d89
 }
