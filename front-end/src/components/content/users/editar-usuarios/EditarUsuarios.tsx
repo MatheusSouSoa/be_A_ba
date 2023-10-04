@@ -1,9 +1,31 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CardUsuario from "../card-usuario/CardUsuario";
-import {users} from "../../../../../test/users/Users"
 import { MagnifyingGlass } from "phosphor-react";
+import axios from "axios";
 
 export default function PaginaEditarUsuarios() {
+
+    const [users, setUsers] = useState<any[]>([]);
+
+    async function fetchUsers() {
+        try {
+            const ip = process.env.NEXT_PUBLIC_IP || "localhost";
+            const response = await axios.get(`http://${ip}:8080/api/usuario/velhos`);
+            setUsers(response.data);
+        } catch (err) {
+            console.error(err);
+            console.log(err);
+        }
+    }
+
+    function onDelete(id: number){
+        const updateUsers = users.filter((item) => item.id !== id)
+        setUsers(updateUsers)
+    }
+
+    useEffect(() => {
+        fetchUsers();
+    }, []);
 
     const buttons = ["Salvar", "Excluir"]
     const [selectValue, setSelectValue] = useState("nome");
@@ -57,8 +79,19 @@ export default function PaginaEditarUsuarios() {
                 </div>
             </div>
             <div className="h-full w-full flex flex-col overflow-y-auto scrollbar-custom px-10 p-5 gap-5">
-                {users.map((user, index) => (
-                    <CardUsuario email={user.email} id={user.id} nome={user.nome} isadmin={user.isAdmin} key={index} isNew={user.isNew} pagina="edit" buttons={buttons} />
+                {users.map((user:any, index:number) => (
+                    <CardUsuario 
+                        onDelete={()=>onDelete(index)}
+                        email={user.email} 
+                        id={user.id} 
+                        nome={user.nome} 
+                        isadmin={user.isAdmin} 
+                        matricula={user.matricula}
+                        key={index} 
+                        isNew={user.isNew} 
+                        pagina="edit" 
+                        buttons={buttons}
+                    />
                 ))}
             </div>
         </div>

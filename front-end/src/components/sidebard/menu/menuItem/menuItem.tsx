@@ -27,6 +27,3 @@ export default function MenuItem( { nome, url, icon:Icon}: MenuItemProps) {
         </li>
     )
 }
-
-// ${path == nome.toLowerCase() ? "text-white" : "text-zinc-500"}
-// {path == nome.toLowerCase() ? "bg-green-800 text-white" : "hover:bg-green-200"}

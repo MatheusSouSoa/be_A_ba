@@ -1,62 +1,32 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CardUsuario from "../card-usuario/CardUsuario";
-import {users} from "../../../../../test/users/Users"
 import { MagnifyingGlass } from "phosphor-react";
+import axios from "axios";
 
-// const users = [
-//     {
-//         id: 1,
-//         email: "email@example.com",
-//         senha: "senha",
-//         nome: "novo2",
-//         isNew: true,
-//         permissions: [
-//             "/templates",
-//             "/arquivos"
-//         ]
-//     },
-//     {
-//         id: 2,
-//         email: "user@example.com",
-//         senha: "senha",
-//         nome: "Matheus",
-//         isAdmin: false,
-//         isNew: false,
-//         permissions: [
-//             "/templates",
-//             "/arquivos"
-//         ]
-//     },
-//     {
-//         id: 3,
-//         email: "matheus@email.com",
-//         senha: "senha123",
-//         nome: "Matheus",
-//         isAdmin: true,
-//         isNew: false,
-//         permissions: [
-//             "/admin/templates",
-//             "/admin/usuarios",
-//             "/admin/dashboard",
-//             "/arquivos"
-//         ]
-//     },
-//     {
-//         id: 4,
-//         email: "matheus@email.com",
-//         senha: "senha123",
-//         nome: "novo1",
-//         isNew: true,
-//         permissions: [
-//             "/admin/templates",
-//             "/admin/usuarios",
-//             "/admin/dashboard",
-//             "/arquivos"
-//         ]
-//     },
-// ]
 
 export default function PaginaSolicitacoesUsuarios() {
+
+    const [users, setUsers] = useState<any[]>([]);
+
+    async function fetchUsers() {
+        try {
+            const ip = process.env.NEXT_PUBLIC_IP || "localhost";
+            const response = await axios.get(`http://${ip}:8080/api/usuario/novos`);
+            setUsers(response.data);
+        } catch (err) {
+            console.error(err);
+            console.log(err);
+        }
+    }
+
+    function onDelete(id: number){
+        const updateUsers = users.filter((item) => item.id !== id)
+        setUsers(updateUsers)
+    }
+
+    useEffect(() => {
+        fetchUsers();
+    }, []);
 
     const buttons = ["Aprovar", "Recusar"]
 
@@ -111,16 +81,18 @@ export default function PaginaSolicitacoesUsuarios() {
                 </div>
             </div>
             <div className="h-full w-full flex flex-col overflow-y-auto scrollbar-custom px-10 p-5 gap-5">
-                {users.map((user, index) => (
+                {users.map((user:any , index:number) => (
                     <CardUsuario
                         email={user.email}
                         id={user.id}
                         nome={user.nome}
+                        matricula={user.matricula}
                         isadmin={user.isAdmin}
                         key={index}
                         pagina="cad"
                         buttons={buttons}
                         isNew={user.isNew !== undefined ? user.isNew : false}
+                        onDelete={() => onDelete(index)}
                     />
                 ))}
             </div>
