@@ -45,7 +45,6 @@ export default function CreateTemplate() {
   const {user} = UseAuth()
   const router = useRouter()
 
-  // const [modalClass, setModalClass] = useState("");
   const [ modalErrs, setModalErrs] = useState(false);
   const [ success, setSuccess] = useState(true);
 
@@ -85,7 +84,6 @@ export default function CreateTemplate() {
   }
 
   function editarBtn(index: number) {
-    // Configura o índice da coluna que está sendo editada e os valores de edição
     const coluna = colunas[index];
     setIndexToEdit(index);
     setEditedColuna(coluna);
@@ -95,16 +93,13 @@ export default function CreateTemplate() {
   }
 
   function saveEditBtn() {
-    // Verifica se algo foi editado
     if (indexToEdit !== -1 && editedColuna) {
-      // Aplica as alterações à coluna
       colunas[indexToEdit] = {
         nome_coluna: NomeColuna,
         tipo_dado: selectValueDado,
         nulo: isNull,
       };
 
-      // Limpa os valores de edição
       setIndexToEdit(-1);
       setEditedColuna(null);
       setNomeColuna("");

@@ -46,9 +46,9 @@ export default function CardUsuario({ id, nome, email, isadmin, buttons, isNew, 
                 
                 if(response.status === 200){
                     onDelete(response.data.id)
-                    return console.log(response.data.id)
+                    return (response.data.id)
                 }
-                return console.log(response.data)
+                return (response.data)
             } catch (error) {
                 console.error(error)
                 console.log(error)
@@ -78,6 +78,7 @@ export default function CardUsuario({ id, nome, email, isadmin, buttons, isNew, 
                 const response = await axios.delete(`http://${ip}:8080/api/usuario/${id}/delete/${isAdmin}`)
                 
                 if(response.status === 200){
+                    onDelete(response.data.id)
                     return console.log(response.data)
                 }
                 return console.log(response.data)
@@ -85,17 +86,6 @@ export default function CardUsuario({ id, nome, email, isadmin, buttons, isNew, 
                 console.error(error)
                 console.log(error)
             }   
-        }
-    }
-
-    if(pagina == "cad") {
-        if(isNew == false) {
-            return console.log("cad: ", isNew)
-        }
-    }
-    if(pagina == "edit") {
-        if(isNew == true) {
-            return console.log("edit: ", isNew)
         }
     }
 

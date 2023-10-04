@@ -19,7 +19,8 @@ export default function PaginaEditarUsuarios() {
     }
 
     function onDelete(id: number){
-        const updateUsers = users.filter((item) => item.id !== id)
+        const updateUsers = [...users]
+        updateUsers.splice(id, 1)
         setUsers(updateUsers)
     }
 
