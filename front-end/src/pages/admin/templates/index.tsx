@@ -48,7 +48,22 @@ export default function AdminTemplates() {
   }
 
   const handleCampos = (value: keyof Template | string) => {
-    // Resto do seu código de manipulação de campos...
+    if(value == "Nome"){
+      setCampoSelecionado("nome")
+    }
+    if(value == "Formato"){
+      setCampoSelecionado("formato")
+    }
+    if(value == "Campos"){
+      setCampoSelecionado("campos")
+    }
+    if(value == "Ativo"){
+      setCampoSelecionado("pendentes")
+      console.log("Pendentes rapaz")
+    }
+    if(value == "Criado por"){
+      setCampoSelecionado("criado_por")
+    }
   };
 
   // Renderiza o componente apenas quando os dados estiverem prontos

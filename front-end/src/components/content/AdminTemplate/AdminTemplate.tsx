@@ -1,4 +1,5 @@
 import SliderToggle from "@/components/util/slider/SliderToggle";
+import axios from "axios";
 import { Check, X } from "phosphor-react";
 import { useState } from "react";
 
@@ -30,10 +31,9 @@ export default function AdminTemplate({
         });
     }
 
-    const [inputValue, setInputValue] = useState("");
-    const [selectValue, setSelectValue] = useState(listaCampos[0]);
+    const [currentId, setCurrentId] = useState<any>(-1)
     const [statuses, setStatuses] = useState(
-        listaObj.map((item) => item.status)
+        filteredListaObj.map((item) => item.status)
     );
 
     function aprovar(index: number) {
@@ -46,18 +46,34 @@ export default function AdminTemplate({
             handleListaObj(updatedFilteredListaObj)
     }
 
-    const handleStatusChange = (index: number, newStatus: boolean) => {
+    async function handleStatusChange  (index: number, newStatus: boolean, template: any) {
+        
+        // realizar alguma ação com a lista de objetos atualizada,
+        // como enviar os dados atualizados para o servidor.
+        const ip = process.env.NEXT_PUBLIC_IP || "localhost"
+        
         const updatedStatuses = [...statuses];
         updatedStatuses[index] = newStatus;
         setStatuses(updatedStatuses);
 
         const updatedListaObj = [...listaObj];
         updatedListaObj[index].status = newStatus;
-
-        // realizar alguma ação com a lista de objetos atualizada,
-        // como enviar os dados atualizados para o servidor.
-
-        console.log("status", index, " : ", newStatus);
+        
+        console.log(template.id)
+        try {
+            const response = await axios.put(`http://${ip}:8080/api/template/changeStatus/${template.id}`)
+            if(response.status === 200) {
+                return console.log(response.data)
+            }
+            else{
+                return console.log(response.data)
+            }
+            
+        } catch (error) {
+            console.error(error)
+        }
+        
+        console.log("status", template.id, " : ", newStatus);
     };
 
     console.log("admiTemplate: ",filteredListaObj)
@@ -67,7 +83,7 @@ export default function AdminTemplate({
                 <tr key={index} className={`rounded-md border-y`}>
                 {Object.keys(lista).map((lista2, innerIndex) => (
                     <td key={innerIndex} className={`w-1/5 p-1`}>
-                    {lista2 === "id" ? "" : lista2 === "status" ? (
+                    {lista2 === "id" ? "" &&  setCurrentId(lista2) : lista2 === "status" ? (
                         pendente != true ? (
                             <div className="flex gap-5 items-center justify-center">
                                 <span title="Aceitar solicitação">
@@ -78,14 +94,14 @@ export default function AdminTemplate({
                                 </span>
                             </div>
                         ) :
-                            <SliderToggle
+                        <SliderToggle
                             isChecked={statuses[index]}
                             onChange={(newStatus) =>
-                                handleStatusChange(index, newStatus)
+                                handleStatusChange(index, newStatus, lista)
                             }
                             />
                     ) : (
-                        lista[lista2]
+                        <span className="cursor-pointer">{lista[lista2]}</span>
                     )}
                     </td>
                 ))}
