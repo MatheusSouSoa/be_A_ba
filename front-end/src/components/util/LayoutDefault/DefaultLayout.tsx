@@ -90,12 +90,12 @@ export default function DefaultLayout({
 
 
     return (
-        <div className="flex flex-col gap-4 w-full h-full p-5">
+        <div className="flex flex-col gap-4 w-full h-full p-2 sm:p-5">
             <div className="bg-white h-full w-full rounded-3xl overflow-hidden">
                 <div className="flex flex-col text-zinc-800 rounded-2xl overflow-hidden">
-                    <div className="bg-green-800 flex justify-between items-center px-20 p-5">
+                    <div className="bg-green-800 flex justify-between items-center px-10 p-5">
                         <div>
-                            <h1 className="font-black text-3xl text-white">{titulo}</h1>
+                            <h1 className="font-black text-xl md:text-2xl lg:text-3xl text-white">{titulo}</h1>
                         </div>
                         <div>
                             {router.pathname !== "/arquivos/meus-arquivos" ? (
@@ -142,11 +142,11 @@ export default function DefaultLayout({
                             }
                         </div>
                     </div>
-                    <div className="bg-green-600 flex justify-between px-20 items-center p-5">
-                        <div className="flex">
+                    <div className="bg-green-600 flex justify-between lg:px-10 items-center px-3 py-5 md:p-5">
+                        <div className="flex text-xs sm:text-md md:text-lg lg:text-xl">
                             <input
                                 type="text"
-                                className="outline-none rounded-l-2xl p-1 px-2"
+                                className="outline-none w-20 sm:w-44 md:w-56 rounded-l-2xl p-1 px-2"
                                 placeholder={selectValue === "Ativo" || selectValue == "Pendentes" ? "Campo de buscas" : "Buscar por "+selectValue}
                                 value={inputValue}
                                 onChange={handleInputSearchValue}
@@ -159,8 +159,8 @@ export default function DefaultLayout({
                             </div>
                         </div>
                         <div>
-                            <ul className="flex gap-3">
-                                <li className="font-bold text-white">Ordenar por: </li>
+                            <ul className="flex gap-1 lg:gap-3 text-xs sm:text-md md:text-lg lg:text-xl">
+                                <li className="font-bold  text-white">Ordenar por: </li>
                                 <li>
                                 <select
                                     name="campos"
@@ -182,7 +182,7 @@ export default function DefaultLayout({
                     </div>
                     <div className="bg-zinc-400 flex justify-around items-center p-2 rounded-b-3xl">
                         <div className="flex flex-col flex-1 max-h-[100%] ">
-                            <table className="w-full bg-gray-400 rounded-t-2xl overflow-hidden">
+                            <table className="w-full bg-gray-400 rounded-t-2xl overflow-hidden text-xs md:text-sm lg:text-md">
                                 <thead>
                                 <tr className="">
                                     {listaCampos.map((campo, index) => (
