@@ -86,6 +86,8 @@ export default function DefaultLayout({
         setSelectValue(event.target.value);
     }
 
+    // console.log("default: ",listaObj)
+
 
     return (
         <div className="flex flex-col gap-4 w-full h-full p-5">

@@ -64,6 +64,9 @@ export default function PaginaSolicitacoesUsuarios() {
                                 <option className="font-semibold" value="email">
                                     Email
                                 </option>
+                                <option className="font-semibold" value="matricula">
+                                    Matrícula
+                                </option>
                             </select>
                         </li>
                         <li className="flex border-zinc-500">

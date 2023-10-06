@@ -152,9 +152,6 @@ export default function CreateTemplate() {
 
         openModal()
 
-        if(response.status === 200) {
-          openModal() 
-        }
       }
       
     } catch (error) {

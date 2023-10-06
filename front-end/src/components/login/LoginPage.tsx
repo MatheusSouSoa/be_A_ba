@@ -37,7 +37,8 @@ export default function PaginaLogin() {
     const handleChange = (e:any) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
-        setError("")
+        setMsgErr("")
+        setErrs(false)
     };
 
     const handleSubmit = async (e:any) => {
@@ -73,13 +74,16 @@ export default function PaginaLogin() {
                 window.location.href = "/templates";
             }
           } else {
-            setError("Erro ao fazer login. Tente novamente mais tarde.");
+            setMsgErr("Erro ao fazer login. Tente novamente mais tarde.");
+            setErrs(true)
           }
         } catch (error:any) {
           if (error.response && error.response.status === 401) {
-            setError("Email ou senha incorretos.");
+            setMsgErr("Email ou senha incorretos.");
+            setErrs(true)
           } else {
-            setError("Erro ao fazer login. Tente novamente mais tarde.");
+            setMsgErr("Erro ao fazer login. Tente novamente mais tarde.");
+            setErrs(true)
           }
           console.error(error);
         }
@@ -169,7 +173,7 @@ export default function PaginaLogin() {
                                 </li>
                                 <li className="flex justify-center items-center w-full">
                                     <span className={`
-                                        flex justify-center items-center pt-2 text-red-500 text-center
+                                        flex justify-center items-center pt-2 text-red-500 text-center text-sm
                                     `}>
                                     { errs == true ? msgErr : " "}
                                     </span>

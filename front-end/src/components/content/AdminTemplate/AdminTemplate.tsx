@@ -59,13 +59,15 @@ export default function AdminTemplate({
 
         console.log("status", index, " : ", newStatus);
     };
+
+    console.log("admiTemplate: ",filteredListaObj)
     return (
         <> 
             {filteredListaObj.map((lista: any, index: any) => (
                 <tr key={index} className={`rounded-md border-y`}>
                 {Object.keys(lista).map((lista2, innerIndex) => (
                     <td key={innerIndex} className={`w-1/5 p-1`}>
-                    {lista2 === "status" ? (
+                    {lista2 === "id" ? "" : lista2 === "status" ? (
                         pendente != true ? (
                             <div className="flex gap-5 items-center justify-center">
                                 <span title="Aceitar solicitação">
