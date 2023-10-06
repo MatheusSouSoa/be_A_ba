@@ -18,6 +18,6 @@ AppDataSource.initialize().then(() => {
 
     app.use(routes)
 
-    console.log(`Servidor rodando em: localhost:${process.env.PORT}`)
+    console.log(`Servidor rodando em: http://localhost:${process.env.PORT}`)
     return app.listen(process.env.PORT)
 })

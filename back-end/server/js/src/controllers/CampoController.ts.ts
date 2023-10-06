@@ -23,4 +23,12 @@ export class campoController {
             res.status(500).json({message: "Internal Server Error"})
         }
     }
+
+    async findByTemplateId(id_template: number): Promise<any> {
+
+        const templateToFind = await templateRepository.findOneBy({id: id_template})
+        if(templateToFind)
+            return campoRepository.count({where: {template: templateToFind}})
+        return 0
+    }
 }

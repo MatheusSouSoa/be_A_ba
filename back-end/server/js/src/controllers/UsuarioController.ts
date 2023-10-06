@@ -136,7 +136,6 @@ export class UsuarioController {
                 return res.status(404).json({ message: "Usuário não encontrado." });
             }
             
-            
             await UsuarioRepository.remove(usuario);
             
             return res.status(200).json({ message: `Usuário excluído com sucesso.`, id: usuario.id});
