@@ -31,4 +31,20 @@ export class campoController {
             return campoRepository.count({where: {template: templateToFind}})
         return 0
     }
+
+    async deleteCampoByTemplateId(id_template: number): Promise<boolean> {
+        const templateToFind = await templateRepository.findOneBy({ id: id_template });
+      
+        if (templateToFind) {
+          try {
+            await campoRepository.delete({ template: templateToFind });
+            return true;
+          } catch (error) {
+            console.error(error);
+            return false;
+          }
+        }
+      
+        return false;
+      }
 }

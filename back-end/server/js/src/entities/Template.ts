@@ -38,7 +38,7 @@ import {
     @OneToMany(() => Upload, (upload) => upload.template, {onDelete: "CASCADE"})
     uploads: Upload[];
   
-    @OneToMany(() => Campo, (campo) => campo.template)
+    @OneToMany(() => Campo, (campo) => campo.template, {cascade: true, onDelete: "CASCADE"})
     campos: Campo[];
   }
   
