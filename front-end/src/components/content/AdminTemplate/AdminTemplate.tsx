@@ -68,14 +68,12 @@ export default function AdminTemplate({
         
         const ip = process.env.NEXT_PUBLIC_IP || "localhost"
         
-        console.log(template.id)
         try {
             const response = await axios.put(`http://${ip}:8080/api/template/aprove/${template.id}`)
             if(response.status === 200) {
                 if(handleForceUpdate)
                     handleForceUpdate()
                 statuses.push(true)
-                console.log(statuses)
                 return console.log(response.data)
             }
             else{
@@ -86,7 +84,27 @@ export default function AdminTemplate({
             console.error(error)
         }
         
-        console.log("status", template.id);
+    };
+
+    async function denieTemplate  (index: number, template: any) {
+        
+        const ip = process.env.NEXT_PUBLIC_IP || "localhost"
+
+        try {
+            const response = await axios.delete(`http://${ip}:8080/api/template/denie/${template.id}`)
+            if(response.status === 200) {
+                if(handleForceUpdate)
+                    handleForceUpdate()
+                return console.log(response.data)
+            }
+            else{
+                return console.log(response.data)
+            }
+            
+        } catch (error) {
+            console.error(error)
+        }
+        
     };
 
     return (
@@ -102,7 +120,7 @@ export default function AdminTemplate({
                                     <Check onClick={() => aproveTemplate(index, lista)} className="w-7 h-7 text-green-500 cursor-pointer"/>
                                 </span>
                                 <span title="Recusar solicitação">
-                                    <X className="w-7 h-7 text-red-500 cursor-pointer"/>
+                                    <X onClick={() => denieTemplate(index, lista)} className="w-7 h-7 text-red-500 cursor-pointer"/>
                                 </span>
                             </div>
                         ) :
