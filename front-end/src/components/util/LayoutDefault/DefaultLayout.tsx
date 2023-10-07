@@ -12,6 +12,7 @@ interface ListagemProps {
   listaCampos: string[];
   handleSearch: (value: string) => void
   handleCampo: (value: string) => void
+  handleForceUpdate?: () => void
 }
 
 export default function DefaultLayout({
@@ -19,7 +20,8 @@ export default function DefaultLayout({
     listaCampos,
     listaObj,
     handleSearch,
-    handleCampo
+    handleCampo,
+    handleForceUpdate
 }: ListagemProps) {
     
     const router = useRouter()
@@ -146,7 +148,7 @@ export default function DefaultLayout({
                         <div className="flex text-xs sm:text-md md:text-lg lg:text-xl">
                             <input
                                 type="text"
-                                className="outline-none w-20 sm:w-44 md:w-56 rounded-l-2xl p-1 px-2"
+                                className="outline-none w-20 sm:w-44 md:w-56 lg:w-auto rounded-l-2xl p-1 px-2"
                                 placeholder={selectValue === "Ativo" || selectValue == "Pendentes" ? "Campo de buscas" : "Buscar por "+selectValue}
                                 value={inputValue}
                                 onChange={handleInputSearchValue}
@@ -208,6 +210,7 @@ export default function DefaultLayout({
                                     listaCampos={listaCampos} 
                                     listaObj={listaObj} 
                                     titulo={titulo} 
+                                    handleForceUpdate={handleForceUpdate}
                                 />
                             ) : router.pathname === "/templates" ? (
                                 <TemplatesComponent  

@@ -9,6 +9,7 @@ interface ListagemProps {
     listaCampos: string[];
     pendente: boolean
     handleListaObj?: (value: any) => void;
+    handleForceUpdate?: () => void;
   }
 
 export default function AdminTemplate({
@@ -16,7 +17,8 @@ export default function AdminTemplate({
     listaCampos,
     listaObj,
     pendente,
-    handleListaObj
+    handleListaObj,
+    handleForceUpdate
 }: ListagemProps) {
 
     let filteredListaObj = filter()
@@ -36,20 +38,8 @@ export default function AdminTemplate({
         filteredListaObj.map((item) => item.status)
     );
 
-    function aprovar(index: number) {
-        const updatedFilteredListaObj = [...filteredListaObj]; // Criar uma cópia
-        updatedFilteredListaObj[index].isNew = false;
-        updatedFilteredListaObj[index].status = true;
-        updatedFilteredListaObj.splice(index, 1); // Remover o objeto da lista
-        console.log(updatedFilteredListaObj)
-        if(handleListaObj)
-            handleListaObj(updatedFilteredListaObj)
-    }
-
     async function handleStatusChange  (index: number, newStatus: boolean, template: any) {
         
-        // realizar alguma ação com a lista de objetos atualizada,
-        // como enviar os dados atualizados para o servidor.
         const ip = process.env.NEXT_PUBLIC_IP || "localhost"
         
         const updatedStatuses = [...statuses];
@@ -59,7 +49,6 @@ export default function AdminTemplate({
         const updatedListaObj = [...listaObj];
         updatedListaObj[index].status = newStatus;
         
-        console.log(template.id)
         try {
             const response = await axios.put(`http://${ip}:8080/api/template/changeStatus/${template.id}`)
             if(response.status === 200) {
@@ -73,10 +62,33 @@ export default function AdminTemplate({
             console.error(error)
         }
         
-        console.log("status", template.id, " : ", newStatus);
+    };
+    
+    async function aproveTemplate  (index: number, template: any) {
+        
+        const ip = process.env.NEXT_PUBLIC_IP || "localhost"
+        
+        console.log(template.id)
+        try {
+            const response = await axios.put(`http://${ip}:8080/api/template/aprove/${template.id}`)
+            if(response.status === 200) {
+                if(handleForceUpdate)
+                    handleForceUpdate()
+                statuses.push(true)
+                console.log(statuses)
+                return console.log(response.data)
+            }
+            else{
+                return console.log(response.data)
+            }
+            
+        } catch (error) {
+            console.error(error)
+        }
+        
+        console.log("status", template.id);
     };
 
-    console.log("admiTemplate: ",filteredListaObj)
     return (
         <> 
             {filteredListaObj.map((lista: any, index: any) => (
@@ -87,7 +99,7 @@ export default function AdminTemplate({
                         pendente != true ? (
                             <div className="flex gap-5 items-center justify-center">
                                 <span title="Aceitar solicitação">
-                                    <Check onClick={() => aprovar(index)} className="w-7 h-7 text-green-500 cursor-pointer"/>
+                                    <Check onClick={() => aproveTemplate(index, lista)} className="w-7 h-7 text-green-500 cursor-pointer"/>
                                 </span>
                                 <span title="Recusar solicitação">
                                     <X className="w-7 h-7 text-red-500 cursor-pointer"/>

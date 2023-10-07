@@ -23,6 +23,8 @@ export default function AdminTemplates() {
   const [search, setSearch] = useState("");
   const [campoSelecionado, setCampoSelecionado] = useState<keyof Template>("nome");
   const [loading, setLoading] = useState(true); // Estado para controlar o carregamento
+  const [forceUpdate, setForceUpdate] = useState(false);
+
 
   useEffect(() => {
     async function fetchTemplates() {
@@ -40,8 +42,14 @@ export default function AdminTemplates() {
       }
     }
 
+    setForceUpdate(false)
     fetchTemplates();
-  }, []);
+  }, [forceUpdate]);
+
+  const handleForceUpdate = () => {
+    console.log("Atualizando front")
+    setForceUpdate(true);
+  };
 
   function handleSearch(value: string) {
     setSearch(value);
@@ -105,6 +113,7 @@ export default function AdminTemplates() {
             listaCampos={camposTemplate}
             listaObj={sorted}
             titulo="Templates"
+            handleForceUpdate={handleForceUpdate}
           />
         </div>
       </div>
