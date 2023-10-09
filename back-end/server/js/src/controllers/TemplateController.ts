@@ -55,7 +55,7 @@ export class TemplateController {
   }
 
 
-  async listAllTemplates(req: Request, res: Response) {
+  async listAllTemplatesAdmin(req: Request, res: Response) {
     try {
   
       const templates = await templateRepository.find({relations: ["usuario"]});
@@ -79,10 +79,55 @@ export class TemplateController {
               nome: template.nome,
               formato: template.extensao,
               campos: campos,
-              criado_por: template.usuario.nome, // Substitua pelo atributo correto do usuário
+              criado_por: template.usuario.nome,
               status: template.status,
               id: template.id,
               isNew: template.isNew,
+            };
+
+            return templateOrdenado
+          })
+      );
+  
+      if (templatesComContagem) return res.status(200).json(templatesComContagem);
+    } catch (error) {
+      return res.status(500).json({ error: error });
+    }
+  }
+
+  async listAllTemplates(req: Request, res: Response) {
+    try {
+  
+      const templates = await templateRepository.find({
+        relations: ["usuario"],
+        where: {isNew: false}
+      });
+  
+      const templatesComContagem = await Promise.all(
+        templates.map(async (template: {
+          status: any;
+          usuario: any;
+          nome: any;
+          extensao: any;
+          campos: any; 
+          id: any;
+          isNew: any,
+          data: any
+          }) => {
+            
+            const controladorCampos = new campoController()
+            const campos = await controladorCampos.findByTemplateId(template.id)
+            template.campos = campos
+            
+            const templateOrdenado = {
+              nome: template.nome,
+              formato: template.extensao,
+              campos: campos,
+              criado_por: template.usuario.nome,
+              status: template.status,
+              id: template.id,
+              isNew: template.isNew,
+              data: template.data
             };
 
             return templateOrdenado
