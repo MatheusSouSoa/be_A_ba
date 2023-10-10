@@ -16,7 +16,7 @@ export default function MeusArquivos({
     return (
         <> 
             {listaObj.map((lista: any, index: any) => (
-                <tr key={index} className={`rounded-md border-y`}>
+                <tr key={index} className={`rounded-md border-y-2`}>
                     {Object.keys(lista).map((lista2, innerIndex) => (
                     <td key={innerIndex} className={`w-1/5`}>
                         {lista2 === "status" ? (

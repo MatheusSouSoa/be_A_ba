@@ -22,7 +22,7 @@ export default function AdminTemplates() {
   const [templateReq, setTemplateReq] = useState<Template[]>([]);
   const [search, setSearch] = useState("");
   const [campoSelecionado, setCampoSelecionado] = useState<keyof Template>("nome");
-  const [loading, setLoading] = useState(true); // Estado para controlar o carregamento
+  const [loading, setLoading] = useState(true); 
   const [forceUpdate, setForceUpdate] = useState(false);
 
 
@@ -31,7 +31,7 @@ export default function AdminTemplates() {
       const ip = process.env.NEXT_PUBLIC_IP || "localhost";
 
       try {
-        const response = await axios.get(`http://${ip}:8080/api/template/getAll`);
+        const response = await axios.get(`http://${ip}:8080/api/template/getAllAdmin`);
         if (response.status === 200) {
           setTemplateReq(response.data);
         }

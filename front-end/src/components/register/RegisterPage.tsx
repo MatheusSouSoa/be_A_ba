@@ -28,15 +28,15 @@ export default function PaginaCriarConta() {
         email: "",
         senha: "",
         matricula: "",
-      });
+    });
     
-      const handleChange = (e:any) => {
+    const handleChange = (e:any) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
         setError("")
-      };
+    };
     
-      const handleSubmit = async (e:any) => {
+    const handleSubmit = async (e:any) => {
         e.preventDefault();
         if (formData.senha !== rSenha) {
             setError("As senhas não correspondem.");
