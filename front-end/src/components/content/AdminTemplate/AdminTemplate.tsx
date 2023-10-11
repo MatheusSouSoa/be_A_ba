@@ -110,9 +110,9 @@ export default function AdminTemplate({
     return (
         <> 
             {filteredListaObj.map((lista: any, index: any) => (
-                <tr key={index} className={`rounded-md border-y-2 text-xs md:text-md lg:text-lg`}>
+                <tr key={index} className={`rounded-md border-y-2 text-xs md:text-md lg:text-lg hover:bg-green-100`}>
                 {Object.keys(lista).map((lista2, innerIndex) => (
-                    <td key={innerIndex} className={`w-1/5 p-1`}>
+                    <td key={innerIndex} className={`w-1/5 p-1 cursor-pointer`}>
                     {lista2 === "id" ? "" &&  setCurrentId(lista2) : lista2 === "status" ? (
                         pendente != true ? (
                             <div className="flex gap-5 items-center justify-center">

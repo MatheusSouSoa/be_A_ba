@@ -6,6 +6,12 @@ import axios from "axios";
 export default function PaginaEditarUsuarios() {
 
     const [users, setUsers] = useState<any[]>([]);
+    const [campoSelecionado, setCampoSelecionado] = useState<any>("nome");
+    const [search, setSearch] = useState("");
+    
+    function handleSearch(value: string) {
+        setSearch(value);
+    }
 
     async function fetchUsers() {
         try {
@@ -28,7 +34,20 @@ export default function PaginaEditarUsuarios() {
         fetchUsers();
     }, []);
 
+    const handleCampos = (value: string) => {
+        if(value == "nome"){
+          setCampoSelecionado("nome")
+        }
+        if(value == "email"){
+          setCampoSelecionado("email")
+        }
+        if(value == "matricula"){
+          setCampoSelecionado("matricula")
+        }
+    };
+
     const buttons = ["Salvar", "Bloquear"]
+    
     const [selectValue, setSelectValue] = useState("nome");
     const [inputValue, setInputValue] = useState("")
 
@@ -36,6 +55,20 @@ export default function PaginaEditarUsuarios() {
         const novoValor = event.target.value;
         setSelectValue(novoValor);
     }
+
+    const filtered = search
+        ? users.filter((item: { [x: string]: any }) => {
+            console.log(item, campoSelecionado)
+            return String(item[campoSelecionado]).toLowerCase().includes(search.toLowerCase());
+            })
+        : users;
+
+    const sorted = filtered.sort((a: { [x: string]: any; }, b: { [x: string]: any; }) => {
+        const fieldA = String(a[campoSelecionado]).toLowerCase();
+        const fieldB = String(b[campoSelecionado]).toLowerCase();
+
+        return fieldA.localeCompare(fieldB);
+    });
 
     function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
         setInputValue(event.target.value);
@@ -52,8 +85,8 @@ export default function PaginaEditarUsuarios() {
                         <li>
                             Ordenar por: 
                             <select
-                                value={selectValue}
-                                onChange={handleCampoChange}
+                                value={campoSelecionado}
+                                onChange={(e:any) => handleCampos(e.target.value)}
                                 className="outline-none border-2 rounded-2xl font-semibold bg-zinc-200 overflow-hidden cursor-pointer"
                             >
                                 <option className="font-semibold" value="nome">
@@ -70,8 +103,8 @@ export default function PaginaEditarUsuarios() {
                         <li className="flex border-zinc-500">
                             <input 
                                 type="text" 
-                                value={inputValue}
-                                onChange={handleInputChange}
+                                value={search}
+                                onChange={(e: any) => handleSearch(e.target.value)}
                                 placeholder={"pesuisar por " + selectValue} 
                                 className="outline-none border text-zinc-500 border-zinc-500 px-2 rounded-l-full  bg-gray-200"
                             />
@@ -83,7 +116,7 @@ export default function PaginaEditarUsuarios() {
                 </div>
             </div>
             <div className="h-full w-full flex flex-col overflow-y-auto scrollbar-custom px-10 p-5 gap-5">
-                {users.map((user:any, index:number) => (
+                {sorted.map((user:any, index:number) => (
                     <CardUsuario 
                         onDelete={()=>onDelete(index)}
                         email={user.email} 
