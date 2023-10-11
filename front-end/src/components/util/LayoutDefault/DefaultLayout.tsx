@@ -2,9 +2,11 @@ import AdminTemplate from "@/components/content/AdminTemplate/AdminTemplate";
 import MeusArquivos from "@/components/content/Files/MyFiles/MeusArquivos";
 import TemplatesComponent from "@/components/content/Templates/TemplatesComponent";
 import { useRouter } from "next/router";
-import { MagnifyingGlass } from "phosphor-react";
+import { DownloadSimple, MagnifyingGlass, X } from "phosphor-react";
 import { useState } from "react";
 import Modal from "../modal/Modal";
+import { ArrowBigLeft, ArrowBigRight } from "lucide-react";
+import axios from "axios";
 
 interface ListagemProps {
   titulo: string;
@@ -87,7 +89,38 @@ export default function DefaultLayout({
         setSelectValue(event.target.value);
     }
 
-    // console.log("default: ",listaObj)
+    const [modalCampos, setModalCampos] = useState<any>()
+    const [isModalOpen2, setIsModalOpen2] = useState(false);
+    const [modalContent, setModalContent] = useState<any>()
+    const [modalCamposIndex, setModalCamposIndex] = useState(0)
+
+    const closeModal2 = () => {
+        setModalCamposIndex(0)
+        setIsModalOpen2(false);
+    };
+
+    const openModal2 = (value: number, obj: any) => {
+        setModalContent(obj)
+        setIsModalOpen2(true);
+        setModalContent(listaObj[value]);
+        fetchModalCampos(listaObj[value].id);
+        console.log(modalContent)
+    };
+
+    const fetchModalCampos= async (id: number) => {
+        const ip = process.env.NEXT_PUBLIC_IP || "localhost";
+
+        try {
+            const response = await axios.get(`http://${ip}:8080/api/campos/${id}`)
+
+            if(response.status === 200) {
+                setModalCampos(response.data)
+                console.log(response.data)
+            }
+        } catch (error) {
+          console.error(error);
+        }
+    }
 
 
     return (
@@ -215,6 +248,7 @@ export default function DefaultLayout({
                                     listaCampos={listaCampos} 
                                     listaObj={listaObj} 
                                     titulo={titulo}
+                                    handleModal={openModal2}
                                 />
                             ) : router.pathname === "/arquivos/meus-arquivos" ? (
                                 <MeusArquivos 
@@ -232,6 +266,77 @@ export default function DefaultLayout({
                     </table>
                 </div>
             </div>
+            <Modal isOpen={isModalOpen2} onClose={closeModal2}>
+                <div className="p-5 text-black select-none ">
+                    <div className="flex justify-between">
+                        <h2 className=" font-black text-2xl">
+                            {modalContent ? modalContent.nome : ""}
+                        </h2>
+                        <X onClick={closeModal2} className="text-3xl text-red-500 cursor-pointer" />
+                    </div>
+                    <div className="flex justify-around items-center gap-4 pr-0">
+                        <div className="flex flex-col w-full">
+                            <div className="flex flex-col">
+                                <span className="font-bold">Data de criação:</span><span> {modalContent ? new Date(modalContent.data).toLocaleString() : ""}</span>
+                                <span className="font-bold">Criado por:</span><span> {modalContent ? modalContent.criado_por : ""}</span>
+                            </div>
+                        </div>
+                        <div className="flex flex-col w-full">
+                            <div className="flex flex-col">
+                                <span className="font-bold">Número de colunas:</span>
+                                <span> {modalContent && modalContent.campos}</span>
+                                <span className="font-bold">Formato:</span>
+                                <span> {modalContent && modalContent.formato}</span>
+                                <span className="font-bold">Status:</span>
+                                <span> {modalContent && modalContent.status == true ? "Ativo" : "Inativo"}</span>
+                            </div>
+                        </div>
+                        <div className="flex flex-col justify-center items-center gap-2 flex-1">
+                            <div>
+                                {modalCampos && modalCampos.length > 1 ?
+                                    <div className="flex justify-between items-center gap-5">
+                                        <span>
+                                            <ArrowBigLeft
+                                                className=" h-16 w-16 cursor-pointer"
+                                                onClick={() => {
+                                                    modalCamposIndex > 0 ? setModalCamposIndex(modalCamposIndex - 1) :
+                                                        setModalCamposIndex(modalCampos.length - 1);
+                                                } } />
+                                        </span>
+                                        {modalCamposIndex + 1}/{modalCampos.length}
+                                        <span>
+                                            <ArrowBigRight
+                                                className=" h-16 w-16 cursor-pointer"
+                                                onClick={() => {
+                                                    modalCamposIndex < modalCampos.length - 1 ? setModalCamposIndex(modalCamposIndex + 1) :
+                                                        setModalCamposIndex(0);
+                                                } } />
+                                        </span>
+                                    </div>
+                                    : ""}
+                            </div>
+                            <div className="bg-green-700 rounded-xl">
+                                <div className="flex flex-col h-full justify-center items-center w-28 p-3 gap-3">
+                                    <div className="bg-white font-semibold w-full text-center rounded-xl px-2 overflow-hidden">
+                                        {modalCampos && modalCampos[modalCamposIndex].nome}
+                                    </div>
+                                    <div className=" font-semibold bg-white w-full text-center rounded-xl px-2 overflow-hidden">
+                                        {modalCampos && modalCampos[modalCamposIndex].tipo}
+                                    </div>
+                                    <div className=" font-semibold bg-white w-full text-center rounded-xl px-2 overflow-hidden">
+                                        {modalCampos && modalCampos[modalCamposIndex].nulo == true ? "Nulo" : "Não nulo"}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="flex gap-5 justify-center items-center w-full pt-5">
+                        <button className=" flex justify-center items-center gap-2 rounded-2xl text-white bg-green-800 hover:bg-green-600 p-2 px-4 font-semibold text-xl">
+                            Baixar <DownloadSimple className="text-white text-2xl" />
+                        </button>
+                    </div>
+                </div>
+            </Modal>
         </div>
     );
 }

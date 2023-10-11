@@ -119,11 +119,12 @@ export default function SelecaoTemplate({handleSelectedTemplate}: SelecaoTemplat
                                 <td className="w-1/4">{item.nome}</td>
                                 <td className="w-1/4">{item.formato}</td>
                                 <td className="w-1/4">{item.campos}</td>
-                                <td className="w-full flex justify-center gap-10 items-cente ">
-                                    <div title="Baixar template">
-                                        <DownloadSimple className="cursor-pointer w-7 h-8"/>
-                                    </div>
-                                    <div title="Selecionar template para validação">
+                                <td className="w-full flex justify-center gap-10 items-cente p-1 ">
+                                    <div 
+                                        className="bg-green-800 flex gap-2 rounded-xl px-2 font-semibold text-white cursor-pointer hover:bg-green-600"
+                                        title="Selecionar template para validação"
+                                    >
+                                        selecionar
                                         <HandPointing
                                             className="cursor-pointer  w-7 h-7"
                                             onClick={() => handleSelectedTemplate(item)}

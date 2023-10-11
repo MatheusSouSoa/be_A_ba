@@ -1,3 +1,4 @@
+import { format } from "date-fns";
 import { DownloadSimple } from "phosphor-react";
 import { useState } from "react";
 
@@ -19,7 +20,9 @@ export default function MeusArquivos({
                 <tr key={index} className={`rounded-md border-y-2 hover:bg-green-200`}>
                     {Object.keys(lista).map((lista2, innerIndex) => (
                     <td key={innerIndex} className={`w-1/5`}>
-                        {lista2 === "status" ? (
+                        {lista2 == "data" ? 
+                            <span>{new Date(lista[lista2]).toLocaleDateString()}</span>
+                        :lista2 === "status" ?  (
                             // JSON.parse(lista[lista2]) ? 
                             //     <span className="text-green-500">ativo</span> : 
                             //     <span className="text-red-500">Inativo</span> 

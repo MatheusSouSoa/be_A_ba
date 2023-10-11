@@ -112,7 +112,7 @@ export default function AdminTemplate({
             {filteredListaObj.map((lista: any, index: any) => (
                 <tr key={index} className={`rounded-md border-y-2 text-xs md:text-md lg:text-lg hover:bg-green-100`}>
                 {Object.keys(lista).map((lista2, innerIndex) => (
-                    <td key={innerIndex} className={`w-1/5 p-1 cursor-pointer`}>
+                    <td key={innerIndex} className={`w-1/5 p-1 `}>
                     {lista2 === "id" ? "" &&  setCurrentId(lista2) : lista2 === "status" ? (
                         pendente != true ? (
                             <div className="flex gap-5 items-center justify-center">
@@ -131,7 +131,7 @@ export default function AdminTemplate({
                             }
                             />
                     ) : (
-                        <span className="cursor-pointer">{lista[lista2]}</span>
+                        <span className="cursor-default">{lista[lista2]}</span>
                     )}
                     </td>
                 ))}

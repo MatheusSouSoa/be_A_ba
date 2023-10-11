@@ -1,7 +1,8 @@
 import Modal from "@/components/util/modal/Modal";
 import Select from "@/components/util/select/Select";
 import axios from "axios";
-import { MagnifyingGlass, X } from "phosphor-react";
+import { ArrowBigLeft, ArrowBigRight } from "lucide-react";
+import { DownloadSimple, MagnifyingGlass, Trash, X } from "phosphor-react";
 import { useEffect, useState } from "react";
 
 const objetos = ["Arquivos", "Templates"]
@@ -53,10 +54,12 @@ export default function TabelaDashboard() {
     const [listaAtiva, setListaAtiva]: any[]= useState(arquivoLista)
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalContent, setModalContent] = useState<any>()
+    const [modalCamposIndex, setModalCamposIndex] = useState(0)
 
     const [templateReq, setTemplateReq] = useState<Template[]>([]);
     const [loading, setLoading] = useState(true); 
     const [search, setSearch] = useState("");
+    const [modalCampos, setModalCampos] = useState<any>()
   
     useEffect(() => {
         async function fetchTemplates() {
@@ -77,6 +80,23 @@ export default function TabelaDashboard() {
 
         fetchTemplates();
     }, []);
+
+    const fetchModalCampos= async (id: number) => {
+        const ip = process.env.NEXT_PUBLIC_IP || "localhost";
+
+        try {
+            const response = await axios.get(`http://${ip}:8080/api/campos/${id}`)
+
+            if(response.status === 200) {
+                setModalCampos(response.data)
+                console.log(response.data)
+            }
+        } catch (error) {
+          console.error(error);
+        } finally {
+            setLoading(false);
+        }
+    }
     
     const filteredTemp = search
         ? templateReq.filter((item: { [x: string]: any }) => {
@@ -124,9 +144,11 @@ export default function TabelaDashboard() {
     const openModal = (value: number) => {
         setIsModalOpen(true);
         setModalContent(listaAtiva[value]);
+        fetchModalCampos(listaAtiva[value].id);
     };
     
     const closeModal = () => {
+        setModalCamposIndex(0)
         setIsModalOpen(false);
     };
 
@@ -158,7 +180,6 @@ export default function TabelaDashboard() {
         
         console.log(novoTotal);
     };
-
     
     return (
         <div className="flex max-h-[50%] flex-col w-full h-full items-cente bg-white rounded-2xl gap-4  ">
@@ -245,35 +266,86 @@ export default function TabelaDashboard() {
                                 ))}
                             </tbody>
                         </table>
+                        {objetoSelecionado == "Templates" ?
                         <Modal isOpen={isModalOpen} onClose={closeModal}>
-                            <div>
-                                <div className="flex justify-end" onClick={closeModal}>
-                                    <X className="text-3xl text-red-500 cursor-pointer"/>
+                            <div className="p-5 select-none">
+                                {objetoSelecionado == "Templates"}
+                                <div className="flex justify-between">
+                                    <h2 className=" font-bold text-2xl">
+                                        {modalContent ? modalContent.nome : ""}
+                                    </h2>
+                                    <X onClick={closeModal} className="text-3xl text-red-500 cursor-pointer"/>
                                 </div>
-                                <div className="flex justify-between pr-10">
+                                <div className="flex justify-around items-center gap-4 pr-0">
                                     <div className="flex flex-col w-full">
-                                        <h2 className=" font-bold text-2xl">
-                                            {modalContent ? modalContent.nome : ""}
-                                        </h2>
                                         <div className="flex flex-col">
                                             <span className="font-semibold">Data de criação:</span><span> {modalContent ? new Date(modalContent.data).toLocaleString() : ""}</span>
                                             <span className="font-semibold">Criado por:</span><span> {modalContent ? modalContent.criado_por : ""}</span>
-                                            {/* <span className="font-semibold">Número de colunas:</span><span> {modalContent && modalContent.campos ? modalContent.campos[0].nome : ""}</span> */}
-                                            
                                         </div>
                                     </div>
-                                    <div className="flex flex-col gap-5 justify-center items-center w-full">
-                                        <button className="rounded-2xl text-white bg-green-800 hover:bg-green-600 p-2 px-4 font-semibold text-xl">
-                                            Baixar
-                                        </button>
-                                        <button className="rounded-2xl text-white bg-red-800 hover:bg-red-600 p-2 px-4 font-semibold text-xl">
-                                            Excluir
-                                        </button>
-
+                                    <div className="flex flex-col w-full">
+                                        <div className="flex flex-col">
+                                        <span className="font-semibold">Número de colunas:</span>
+                                            <span> {modalContent && modalContent.campos}</span>
+                                            <span className="font-semibold">Formato:</span>
+                                            <span> {modalContent && modalContent.formato}</span>
+                                            <span className="font-semibold">Status:</span>
+                                            <span> {modalContent && modalContent.status == true ? "Ativo" : "Inativo"}</span>
+                                        </div>
+                                    </div>
+                                    <div className="flex flex-col justify-center items-center gap-2 flex-1">
+                                        <div>
+                                            {modalCampos && modalCampos.length > 1 ? 
+                                            <div className="flex justify-between items-center gap-5">
+                                                <span>
+                                                    <ArrowBigLeft
+                                                        className=" h-16 w-16 cursor-pointer"
+                                                        onClick={() => {
+                                                            modalCamposIndex > 0 ? setModalCamposIndex(modalCamposIndex - 1) :
+                                                            setModalCamposIndex(modalCampos.length - 1)
+                                                        }}
+                                                    />
+                                                </span>
+                                                {modalCamposIndex + 1}/{modalCampos.length}
+                                                <span>
+                                                    <ArrowBigRight 
+                                                        className=" h-16 w-16 cursor-pointer"
+                                                        onClick={() => {
+                                                            modalCamposIndex < modalCampos.length - 1 ? setModalCamposIndex(modalCamposIndex + 1) :
+                                                            setModalCamposIndex(0)
+                                                        }}
+                                                    />
+                                                </span>
+                                            </div>
+                                            : ""}
+                                        </div>
+                                        <div className="bg-green-700 rounded-xl">
+                                                <div className="flex flex-col h-full justify-center items-center w-28 p-3 gap-3">
+                                                    <div className="bg-white w-full text-center rounded-xl px-2 overflow-hidden">
+                                                        {modalCampos && modalCampos[modalCamposIndex].nome }
+                                                    </div>
+                                                    <div className="bg-white w-full text-center rounded-xl px-2 overflow-hidden">
+                                                        {modalCampos && modalCampos[modalCamposIndex].tipo }
+                                                    </div>
+                                                    <div className="bg-white w-full text-center rounded-xl px-2 overflow-hidden">
+                                                        {modalCampos && modalCampos[modalCamposIndex].nulo == true? "Nulo" : "Não nulo" }
+                                                    </div>
+                                                </div>
+                                        </div>
                                     </div>
                                 </div>
+                                <div className="flex gap-5 justify-center items-center w-full pt-5">
+                                    <button className=" flex justify-center items-center gap-2 rounded-2xl text-white bg-green-800 hover:bg-green-600 p-2 px-4 font-semibold text-xl">
+                                        Baixar <DownloadSimple className="text-white text-2xl"/>
+                                    </button>
+                                    <button className="flex justify-center items-center gap-2 rounded-2xl text-white bg-red-800 hover:bg-red-600 p-2 px-4 font-semibold text-xl">
+                                        Excluir<Trash className="text-white text-2xl"/>
+                                    </button>
+                                </div>
                             </div>
-                        </Modal>
+                        </Modal> :
+                        ""
+                        }
                     </div>
                 </div>
             </div>
