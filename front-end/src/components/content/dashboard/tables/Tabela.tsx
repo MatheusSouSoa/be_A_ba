@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 const objetos = ["Arquivos", "Templates"]
 
 interface Template {
+    data: string | number | Date;
     nome: string;
     formato: string;
     campos: number;
@@ -16,7 +17,7 @@ interface Template {
     pendentes?: string;
   }
 
-const camposArquivo = ["Nome", "Template", "Linhas", "Criado por", "Data"]
+const camposArquivo = ["Nome", "Template", "Linhas", "Data", "Criado por"]
 const arquivoLista = [
     {nome: "Loja 01", template: "Loja A", linhas: 67, data: "2023-05-05", criado_por: "Matheus"},
     {nome: "Loja 01", template: "Loja A", linhas: 67, data: "2023-05-05", criado_por: "Matheus"},
@@ -78,41 +79,46 @@ export default function TabelaDashboard() {
     }, []);
     
     const filteredTemp = search
-        ? listaAtiva.filter((item: { [x: string]: any }) => {
-            return String(item[campoSelecionado]).toLowerCase().includes(search.toLowerCase());
+        ? templateReq.filter((item: { [x: string]: any }) => {
+            console.log(search, item)
+            if (campoSelecionado.toLowerCase() === "nome") {
+                return String(item["nome"]).toLowerCase().includes(search.toLowerCase());      
+            }
+            if (campoSelecionado.toLowerCase() === "campos") {
+                return String(item["nome"]).toLowerCase().includes(search.toLowerCase());      
+            }
+            if (campoSelecionado.toLowerCase() === "criado por") {
+                return String(item["nome"]).toLowerCase().includes(search.toLowerCase()); 
+            }     
+            if (campoSelecionado.toLowerCase() === "formato") {
+                return String(item["nome"]).toLowerCase().includes(search.toLowerCase());      
+            }
+            if (campoSelecionado.toLowerCase() === "data") {
+                return String(item["nome"]).toLowerCase().includes(search.toLowerCase());      
+            }
+            return 0; 
         })
         : templateReq;
 
-    const sortedTemp = filteredTemp.sort((a: { [x: string]: any; }, b: { [x: string]: any; }) => {
-
-        if(campoSelecionado.toLowerCase() == "nome"){
-            const fieldA = String(a["nome"]).toLowerCase();
-            const fieldB = String(b["nome"]).toLowerCase();
-            return fieldA.localeCompare(fieldB);
-        }
-        if(campoSelecionado.toLowerCase() == "campos"){
-            const fieldA = String(a["campos"]).toLowerCase();
-            const fieldB = String(b["campos"]).toLowerCase();
-            return fieldA.localeCompare(fieldB);
-        }
-        if(campoSelecionado.toLowerCase() == "criado por"){
-            const fieldA = String(a["criado_por"]).toLowerCase();
-            const fieldB = String(b["criado_por"]).toLowerCase();
-            return fieldA.localeCompare(fieldB);
-        }
-        if(campoSelecionado.toLowerCase() == "formato"){
-            const fieldA = String(a["formato"]).toLowerCase();
-            const fieldB = String(b["formato"]).toLowerCase();
-            return fieldA.localeCompare(fieldB);
-        }
-        if(campoSelecionado.toLowerCase() == "data"){
-            const fieldA = String(b["data"]).toLowerCase();
-            const fieldB = String(a["data"]).toLowerCase();
-            return fieldA.localeCompare(fieldB);
-        }
-        
-        return 
-    });
+        const sortedTemp = filteredTemp.sort((a, b) => {
+            if (campoSelecionado.toLowerCase() === "nome") {
+              return String(a.nome).localeCompare(b.nome);
+            }
+            if (campoSelecionado.toLowerCase() === "campos") {
+              return a.campos - b.campos;
+            }
+            if (campoSelecionado.toLowerCase() === "criado por") {
+              return String(a.criado_por).localeCompare(b.criado_por);
+            }
+            if (campoSelecionado.toLowerCase() === "formato") {
+              return String(a.formato).localeCompare(b.formato);
+            }
+            if (campoSelecionado.toLowerCase() === "data") {
+              return new Date(b.data).getTime() - new Date(a.data).getTime();
+            }
+            return 0; 
+          });
+          
 
 
     const openModal = (value: number) => {
@@ -186,7 +192,10 @@ export default function TabelaDashboard() {
                                 className="w-8 h-8 bg-zinc-200 rounded-r-2xl flex justify-center items-center"
                                 title="Pesquisar"
                             >
-                                <MagnifyingGlass className="cursor-pointer" />
+                                <MagnifyingGlass 
+                                    className="cursor-pointer" 
+                                    onClick={() => filteredTemp}
+                                />
                             </div>
                         </div>
                     </div>
@@ -247,7 +256,7 @@ export default function TabelaDashboard() {
                                             {modalContent ? modalContent.nome : ""}
                                         </h2>
                                         <div className="flex flex-col">
-                                            <span className="font-semibold">Data de criação:</span><span> {modalContent ? modalContent.data : ""}</span>
+                                            <span className="font-semibold">Data de criação:</span><span> {modalContent ? new Date(modalContent.data).toLocaleString() : ""}</span>
                                             <span className="font-semibold">Criado por:</span><span> {modalContent ? modalContent.criado_por : ""}</span>
                                             {/* <span className="font-semibold">Número de colunas:</span><span> {modalContent && modalContent.campos ? modalContent.campos[0].nome : ""}</span> */}
                                             
