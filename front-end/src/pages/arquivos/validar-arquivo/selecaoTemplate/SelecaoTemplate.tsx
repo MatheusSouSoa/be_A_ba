@@ -1,5 +1,6 @@
+import axios from "axios";
 import { DownloadSimple, HandPointing } from "phosphor-react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 const camposTemplate = ["Nome", "Formato", "Campos",  "Criado por", "Ativo"]
 const templateLista = [
@@ -32,9 +33,55 @@ interface SelecaoTemplateProps {
     handleSelectedTemplate: (template: any) => void;
 }
 
+interface Template {
+    nome: string;
+    formato: string;
+    campos: number;
+    criado_por: string;
+    status: boolean;
+    isNew: boolean;
+    pendentes?: string;
+}
+
 export default function SelecaoTemplate({handleSelectedTemplate}: SelecaoTemplateProps) {
 
+    const [templateReq, setTemplateReq] = useState<Template[]>([]);
+    const [loading, setLoading] = useState(true); 
+    const [search, setSearch] = useState("");
+    const [campoSelecionado, setCampoSelecionado] = useState<keyof Template>("nome");
+  
+    useEffect(() => {
+        async function fetchTemplates() {
+        const ip = process.env.NEXT_PUBLIC_IP || "localhost";
+
+        try {
+            const response = await axios.get(`http://${ip}:8080/api/template/getAll`);
+            if (response.status === 200) {
+            console.log(response.data)
+            setTemplateReq(response.data.filter((template: { status: boolean; }) => template.status === true));
+            }
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
+        }
+
+        fetchTemplates();
+    }, []);
     
+    const filtered = search
+        ? templateReq.filter((item: { [x: string]: any }) => {
+            return String(item["nome"]).toLowerCase().includes(search.toLowerCase());
+        })
+        : templateReq;
+
+    const sorted = filtered.sort((a, b) => {
+        const fieldA = String(a["nome"]).toLowerCase();
+        const fieldB = String(b["nome"]).toLowerCase();
+
+        return fieldA.localeCompare(fieldB);
+    });
 
     return (
         <div className="flex flex-col overflow-hidden">
@@ -47,6 +94,8 @@ export default function SelecaoTemplate({handleSelectedTemplate}: SelecaoTemplat
                         type="text" 
                         className="pl-4 rounded-3xl outline-none"
                         placeholder="Campo de busca"
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
                     />
                 </div>
             </div>
@@ -65,8 +114,8 @@ export default function SelecaoTemplate({handleSelectedTemplate}: SelecaoTemplat
             <div className="overflow-y-auto scrollbar-custom">
                 <table className="w-full text-center ">
                     <tbody className="w-full ">
-                        {templateLista.map((item, index) => (
-                            <tr key={index} className="w-full font-semibold">
+                        {sorted.map((item, index) => (
+                            <tr key={index} className="w-full hover:bg-green-100">
                                 <td className="w-1/4">{item.nome}</td>
                                 <td className="w-1/4">{item.formato}</td>
                                 <td className="w-1/4">{item.campos}</td>

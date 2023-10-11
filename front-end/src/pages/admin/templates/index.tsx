@@ -38,7 +38,7 @@ export default function AdminTemplates() {
       } catch (error) {
         console.error(error);
       } finally {
-        setLoading(false); // Marca o carregamento como concluído
+        setLoading(false);
       }
     }
 
@@ -74,7 +74,6 @@ export default function AdminTemplates() {
     }
   };
 
-  // Renderiza o componente apenas quando os dados estiverem prontos
   if (loading) {
     return (
       <div className="w-screen h-screen grid place-items-center bg-white">

@@ -5,7 +5,7 @@ import axios from "axios";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 
-const camposTemplate = ["Nome", "Formato", "Campos", "Criado por", "Status"]
+const camposTemplate = ["Nome", "Formato", "Campos", "Criado por", "Data Criação"]
 const templateLista: Template[] = [];
 
 interface Template {
@@ -15,7 +15,8 @@ interface Template {
   criado_por: string;
   status: boolean;
   isNew: boolean;
-  pendentes?: string
+  pendentes?: string;
+  data: Date
 }
 
 export default function Templates() {
@@ -60,8 +61,8 @@ export default function Templates() {
     if(value == "Campos"){
       setCampoSelecionado("campos")
     }
-    if(value == "status"){
-      setCampoSelecionado("status")
+    if(value == "Data Criação"){
+      setCampoSelecionado("data")
       console.log("Pendentes rapaz: ",value)
     }
     if(value == "Criado por"){

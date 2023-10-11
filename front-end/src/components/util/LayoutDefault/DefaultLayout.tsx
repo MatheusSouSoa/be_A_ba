@@ -44,7 +44,6 @@ export default function DefaultLayout({
 
     function handleKeyUp  (event: React.KeyboardEvent<HTMLInputElement>)  {
         if (event.key === "Enter") {
-          // Lógica a ser executada quando a tecla Enter for pressionada
           sendToCreateTemplate(templateModalInput)
         }
         if(event.key === "Escape") {
@@ -110,7 +109,6 @@ export default function DefaultLayout({
                                         +
                                     </button> 
                                     <Modal isOpen={isModalOpen} onClose={closeModal}>
-                                        {/* Conteúdo do seu modal aqui */}
                                         <h2 className="text-2xl mb-4">Nome do template:</h2>
                                         <div className="flex flex-col gap-5">
                                             <input
