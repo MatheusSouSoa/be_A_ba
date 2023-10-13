@@ -24,27 +24,45 @@ export class campoController {
         }
     }
 
-    async findByTemplateId(id_template: number): Promise<any> {
+  async findByTemplateId(id_template: number): Promise<any> {
 
-        const templateToFind = await templateRepository.findOneBy({id: id_template})
-        if(templateToFind)
-            return campoRepository.count({where: {template: templateToFind}})
-        return 0
+      const templateToFind = await templateRepository.findOneBy({id: id_template})
+      if(templateToFind)
+          return campoRepository.count({where: {template: templateToFind}})
+      return 0
+  }
+
+  async findByAllTemplateId(req: Request, res: Response): Promise<any> {
+    const { id_template } = req.params;
+
+    try {
+      const templateToFind = await templateRepository.findOneBy({ id: parseInt(id_template) });
+      
+      if (templateToFind) {
+          const campos = await campoRepository.find({ where: { template: templateToFind } });
+          return res.json(campos); 
+      } else {
+          return res.status(404).json({ message: "Template não encontrado" });
+      }
+    } catch (error) {
+      console.log(error);
     }
+  }
 
-    async deleteCampoByTemplateId(id_template: number): Promise<boolean> {
-        const templateToFind = await templateRepository.findOneBy({ id: id_template });
-      
-        if (templateToFind) {
-          try {
-            await campoRepository.delete({ template: templateToFind });
-            return true;
-          } catch (error) {
-            console.error(error);
-            return false;
-          }
-        }
-      
+
+  async deleteCampoByTemplateId(id_template: number): Promise<boolean> {
+    const templateToFind = await templateRepository.findOneBy({ id: id_template });
+  
+    if (templateToFind) {
+      try {
+        await campoRepository.delete({ template: templateToFind });
+        return true;
+      } catch (error) {
+        console.error(error);
         return false;
       }
+    }
+  
+    return false;
+  }
 }

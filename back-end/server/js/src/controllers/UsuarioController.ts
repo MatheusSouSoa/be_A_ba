@@ -33,12 +33,20 @@ export class UsuarioController {
 
             const novoUsuario:Usuario = UsuarioRepository.create({nome, email, senha: hashedSenha, isAdmin, isNew, matricula})
 
-            const usuario = await UsuarioRepository.save(novoUsuario)
+            await UsuarioRepository.save(novoUsuario)
 
+            const usuarioResponse = {
+                id: novoUsuario.id,
+                nome: novoUsuario.nome,
+                email: novoUsuario.email,
+                matricula: novoUsuario.matricula,
+                isAdmin: novoUsuario.isAdmin,
+                isNew: novoUsuario.isAdmin
+            }
             // usuario.matricula = "000" + String(usuario.id + 5000)
             // await UsuarioRepository.save(usuario)
 
-            return res.status(201).json({ message: "Usuário criado com sucesso.", usuario: novoUsuario});
+            return res.status(201).json({ message: "Usuário criado com sucesso.", usuario: usuarioResponse});
         } catch (error) {
             console.log(error)
             return res.status(500).json({message: "Internal server error."})

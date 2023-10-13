@@ -54,7 +54,6 @@ export class TemplateController {
       }
   }
 
-
   async listAllTemplatesAdmin(req: Request, res: Response) {
     try {
   
@@ -105,7 +104,6 @@ export class TemplateController {
   
       const templatesComContagem = await Promise.all(
         templates.map(async (template: {
-          status: any;
           usuario: any;
           nome: any;
           extensao: any;
@@ -113,6 +111,7 @@ export class TemplateController {
           id: any;
           isNew: any,
           data: any
+          status: any;
           }) => {
             
             const controladorCampos = new campoController()
@@ -124,12 +123,12 @@ export class TemplateController {
               formato: template.extensao,
               campos: campos,
               criado_por: template.usuario.nome,
-              status: template.status,
-              id: template.id,
+              data: template.data,
               isNew: template.isNew,
-              data: template.data
+              id: template.id,
+              status: template.status,
             };
-
+            console.log(templateOrdenado)
             return templateOrdenado
           })
       );

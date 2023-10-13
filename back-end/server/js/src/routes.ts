@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { UsuarioController } from "./controllers/UsuarioController";
 import { TemplateController } from "./controllers/TemplateController";
+import { campoController } from "./controllers/CampoController.ts";
 
 const routes = Router();
 
@@ -15,10 +16,12 @@ routes.delete("/api/usuario/:id/delete/:isNewParam", new UsuarioController().del
 
 routes.post('/api/template', new TemplateController().create)
 routes.get('/api/template/getAllAdmin', new TemplateController().listAllTemplatesAdmin)
-routes.get('/api/template/getAll', new TemplateController().listAllTemplatesAdmin)
+routes.get('/api/template/getAll', new TemplateController().listAllTemplates)
 routes.put('/api/template/changeStatus/:id', new TemplateController().changeStatus)
 routes.put('/api/template/aprove/:id', new TemplateController().aproveTemplate)
 routes.delete('/api/template/denie/:id', new TemplateController().denieTemplate)
+
+routes.get("/api/campos/:id_template", new campoController().findByAllTemplateId)
 
 
 export default routes
