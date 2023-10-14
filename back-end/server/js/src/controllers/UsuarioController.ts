@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import { UsuarioRepository } from "../repositories/UsuariosRepository";
 import { Usuario } from "../entities/Usuario";
 const bcrypt = require("bcrypt");
+import jwt from 'jsonwebtoken'
+
 
 export class UsuarioController {
 
@@ -60,7 +62,7 @@ export class UsuarioController {
             const user = await UsuarioRepository.findOne({ where: { email:email } });
 
             if (!user) {
-                return res.status(401).json({ message: "Usuario nao existe.", email:email, senha });
+                return res.status(404).json({ message: "Usuario nao existe.", email:email, senha });
             }
 
             const isPasswordValid = await bcrypt.compare(senha, user.senha);
@@ -68,7 +70,22 @@ export class UsuarioController {
                 return res.status(401).json({ message: "Credenciais inválidas." });
             }
 
-            res.status(200).json({ message: "Autenticação bem-sucedida.", user });
+            const token = jwt.sign({
+                id: user.id,
+                isAdmin: user.isAdmin
+            }, process.env.JWT_PASS ?? "",{
+                expiresIn: '3h'
+            })
+
+            console.log(token)
+
+            const {senha:_, ...userLogin} = user 
+
+            res.status(200).json({ 
+                message: "Autenticação bem-sucedida.", 
+                user: userLogin,
+                token: token 
+            });
         } catch (error) {
             console.error(error);
             res.status(500).json({ message: "Internal server error." });
