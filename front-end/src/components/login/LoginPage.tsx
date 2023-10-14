@@ -1,26 +1,27 @@
 import { useEffect, useState } from "react";
 import Header from "../header/header";
 import Head from "next/head";
-import {users} from "../../../test/users/Users"
 import { useRouter } from "next/router";
 import Link from "next/link";
 import axios from "axios";
 import 'dotenv/config'
+import { UseAuth } from "@/hooks/useAuth";
+import Cookies from 'js-cookie'
 
-const user = {
-    id: null as number | null,
-    email: null as string | null,
-    senha: null as string | null,
-    nome: null as string | null,
-    isAdmin: null as boolean | null,
-    isNew: null as boolean | null,
-    permissions: [] as string[],
-};
+
+// const user = {
+//     id: null as number | null,
+//     email: null as string | null,
+//     nome: null as string | null,
+//     permissions: [] as string[],
+// };
 
 
 export default function PaginaLogin() {
 
-    const [isLogged, setIsLogged] = useState(false)
+    const {user} = UseAuth() 
+
+    // const [isLogged, setIsLogged] = useState(false)
     const [email, setEmail] = useState("")
     const [senha, setSenha] = useState("")
     const [errs, setErrs] = useState(false)
@@ -59,15 +60,15 @@ export default function PaginaLogin() {
                 return
             }
 
-            setIsLogged(true);
-            user.id = usuario.id
-            user.nome = usuario.nome
-            usuario.isAdmin ? user.isAdmin = true : user.isAdmin = false;
-            usuario.isNew ? user.isNew = true : user.isNew = false;
+            // setIsLogged(true);
+            if(user){
+                user.id = usuario.id
+                user.nome = usuario.nome
+                user.isAdmin = usuario.isAdmin
+            }
 
-            localStorage.setItem("currentUser", JSON.stringify(user));
+            Cookies.set('token', response.data.token)
 
-            console.log(usuario.isAdmin)
             if (usuario.isAdmin) {
                 window.location.href = "/admin/dashboard";
             } else {

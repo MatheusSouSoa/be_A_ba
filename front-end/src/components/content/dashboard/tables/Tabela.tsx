@@ -142,6 +142,7 @@ export default function TabelaDashboard() {
 
 
     const openModal = (value: number) => {
+        if(objetoSelecionado.toLowerCase() != "templates") return 
         setIsModalOpen(true);
         setModalContent(listaAtiva[value]);
         fetchModalCampos(listaAtiva[value].id);

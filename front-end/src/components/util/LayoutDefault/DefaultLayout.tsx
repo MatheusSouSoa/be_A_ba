@@ -267,9 +267,9 @@ export default function DefaultLayout({
                 </div>
             </div>
             <Modal isOpen={isModalOpen2} onClose={closeModal2}>
-                <div className="p-5 text-black select-none ">
+                <div className="py-5 text-black select-none ">
                     <div className="flex justify-between">
-                        <h2 className=" font-black text-2xl">
+                        <h2 className=" font-bold pb-2 text-2xl">
                             {modalContent ? modalContent.nome : ""}
                         </h2>
                         <X onClick={closeModal2} className="text-3xl text-red-500 cursor-pointer" />
@@ -316,7 +316,7 @@ export default function DefaultLayout({
                                     : ""}
                             </div>
                             <div className="bg-green-700 rounded-xl">
-                                <div className="flex flex-col h-full justify-center items-center w-28 p-3 gap-3">
+                                <div className="flex flex-col h-full justify-center items-center w-44 p-3 gap-3">
                                     <div className="bg-white font-semibold w-full text-center rounded-xl px-2 overflow-hidden">
                                         {modalCampos && modalCampos[modalCamposIndex].nome}
                                     </div>
