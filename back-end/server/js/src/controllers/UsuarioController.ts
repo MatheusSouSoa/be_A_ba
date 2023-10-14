@@ -117,7 +117,21 @@ export class UsuarioController {
         try {
             const usuario = await UsuarioRepository.findOne({where: {id: parseInt(id)}})
             console.log(usuario)
-            res.status(200).json(usuario)
+
+            if(usuario){
+                const user = {
+                    email: usuario.email,
+                    nome: usuario.nome,
+                    id: usuario.id,
+                    isAdmin: usuario.isAdmin,
+                    isNew: usuario.isNew,
+                    matricula: usuario.matricula,
+                }
+                res.status(200).json(user)
+            }
+            else {
+                res.status(404).json({message: 'Usuario não existe'})
+            }
         } catch (err) {
             console.error(err)
             res.status(404).send()

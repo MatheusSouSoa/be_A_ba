@@ -128,7 +128,6 @@ export class TemplateController {
               id: template.id,
               status: template.status,
             };
-            console.log(templateOrdenado)
             return templateOrdenado
           })
       );
