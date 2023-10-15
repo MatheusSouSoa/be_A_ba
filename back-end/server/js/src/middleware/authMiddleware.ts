@@ -12,7 +12,9 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
 
     try {
         const { authorization } = req.headers
-        if(!authorization) return res.status(401).json({message: "Usuario não autenticado"})
+        if(!authorization){
+            return res.status(401).json({message: "Usuario não autenticado"})
+        } 
         
         const token = authorization.split(" ")[1]
         try {
