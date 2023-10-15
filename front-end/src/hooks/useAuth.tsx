@@ -103,7 +103,36 @@ export default function AuthProvider({children} : AuthProviderProps) {
                 console.log(user)
                 
                 if(user.status === 200) {
-                    usuario.isAdmin = user.data.isAdmin == true ? true : false
+                    if (usuario) {
+                        if (user.data.isAdmin === true) {
+                            usuario.permissions = [
+                                "/admin/dashboard",
+                                "/admin/templates",
+                                "/admin/usuarios",
+                                "/admin/usuarios/editar-usuario",
+                                "/admin/usuarios/solicitacoes-cadastro",
+                                "/arquivos",
+                                "/arquivos/meus-arquivos",
+                                "/arquivos/validar-arquivo",
+                                "/templates",
+                                "/templates/cadastrar-template",
+                            ];
+                        } else {
+                            usuario.permissions = [
+                                "/templates",
+                                "/templates/cadastrar-template",
+                                "/arquivos",
+                                "/arquivos/meus-arquivos",
+                                "/arquivos/validar-arquivo",
+                            ];
+                        }
+                
+                        if (!usuario.permissions.includes(router.asPath)) {
+                            router.push(usuario.permissions[0]);
+                            return;
+                        }
+                    }
+
                 }
             } catch (error) {
                 console.error(error)
@@ -120,36 +149,9 @@ export default function AuthProvider({children} : AuthProviderProps) {
         }
 
         fetchUser()
+
+        console.log(userIsAdmin)
     
-        // if (usuario) {
-        //     if (usuario.isAdmin === true) {
-        //         usuario.permissions = [
-        //             "/admin/dashboard",
-        //             "/admin/templates",
-        //             "/admin/usuarios",
-        //             "/admin/usuarios/editar-usuario",
-        //             "/admin/usuarios/solicitacoes-cadastro",
-        //             "/arquivos",
-        //             "/arquivos/meus-arquivos",
-        //             "/arquivos/validar-arquivo",
-        //             "/templates",
-        //             "/templates/cadastrar-template",
-        //         ];
-        //     } else {
-        //         usuario.permissions = [
-        //             "/templates",
-        //             "/templates/cadastrar-template",
-        //             "/arquivos",
-        //             "/arquivos/meus-arquivos",
-        //             "/arquivos/validar-arquivo",
-        //         ];
-        //     }
-    
-        //     if (!usuario.permissions.includes(router.asPath)) {
-        //         router.push(usuario.permissions[0]);
-        //         return;
-        //     }
-        // }
     
         setUser(usuario);
         setTimeout(() => {
