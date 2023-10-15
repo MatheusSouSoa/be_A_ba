@@ -2,12 +2,14 @@ import { useEffect, useState } from "react";
 import CardUsuario from "../card-usuario/CardUsuario";
 import { MagnifyingGlass } from "phosphor-react";
 import axios from "axios";
+import { UseAuth } from "@/hooks/useAuth";
 
 export default function PaginaEditarUsuarios() {
 
     const [users, setUsers] = useState<any[]>([]);
     const [campoSelecionado, setCampoSelecionado] = useState<any>("nome");
     const [search, setSearch] = useState("");
+    const {config} = UseAuth()
     
     function handleSearch(value: string) {
         setSearch(value);
@@ -16,7 +18,7 @@ export default function PaginaEditarUsuarios() {
     async function fetchUsers() {
         try {
             const ip = process.env.NEXT_PUBLIC_IP || "localhost";
-            const response = await axios.get(`http://${ip}:8080/api/usuario/velhos`);
+            const response = await axios.get(`http://${ip}:8080/api/admin/usuario/velhos`, config);
             setUsers(response.data);
         } catch (err) {
             console.error(err);

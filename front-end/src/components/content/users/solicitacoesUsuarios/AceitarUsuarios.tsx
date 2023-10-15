@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import CardUsuario from "../card-usuario/CardUsuario";
 import { MagnifyingGlass } from "phosphor-react";
 import axios from "axios";
+import { UseAuth } from "@/hooks/useAuth";
 
 
 export default function PaginaSolicitacoesUsuarios() {
@@ -9,6 +10,7 @@ export default function PaginaSolicitacoesUsuarios() {
     const [users, setUsers] = useState<any[]>([]);
     const [campoSelecionado, setCampoSelecionado] = useState<any>("nome");
     const [search, setSearch] = useState("");
+    const {config} = UseAuth()
     
     function handleSearch(value: string) {
         setSearch(value);
@@ -17,7 +19,7 @@ export default function PaginaSolicitacoesUsuarios() {
     async function fetchUsers() {
         try {
             const ip = process.env.NEXT_PUBLIC_IP || "localhost";
-            const response = await axios.get(`http://${ip}:8080/api/usuario/novos`);
+            const response = await axios.get(`http://${ip}:8080/api/admin/usuario/novos`, config);
             setUsers(response.data);
         } catch (err) {
             console.error(err);

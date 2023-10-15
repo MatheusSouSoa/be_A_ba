@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { format } from "date-fns"; // Importe a função de formatação de data do date-fns
+import { format } from "date-fns";
 import Modal from "@/components/util/modal/Modal";
 import { DownloadSimple, Trash, X } from "phosphor-react";
 import { ArrowBigLeft, ArrowBigRight } from "lucide-react";

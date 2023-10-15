@@ -19,7 +19,7 @@ import Cookies from 'js-cookie'
 
 export default function PaginaLogin() {
 
-    const {user} = UseAuth() 
+    const {user, handleUser, config} = UseAuth() 
 
     // const [isLogged, setIsLogged] = useState(false)
     const [email, setEmail] = useState("")
@@ -54,13 +54,24 @@ export default function PaginaLogin() {
     
           if (response.status === 200) {
             const usuario = response.data.user;
+
+            const userObj = {
+                nome: usuario.nome,
+                id: usuario.id,
+            }
+
+            const userJSON = JSON.stringify(userObj);
+
+            localStorage.setItem("currentUser", userJSON);
+
+            handleUser(usuario.id, usuario.nome, usuario.email, usuario.matricula, usuario.isAdmin, usuario.isNew)
+
             if(usuario.isNew){
                 setMsgErr("Acesso negado. Contate o administrador")
                 setErrs(true)
                 return
             }
 
-            // setIsLogged(true);
             if(user){
                 user.id = usuario.id
                 user.nome = usuario.nome
@@ -89,8 +100,6 @@ export default function PaginaLogin() {
           console.error(error);
         }
       };
-
-
 
     // const handleSubmit1 = (e: any) => {
     //     e.preventDefault();
@@ -126,7 +135,6 @@ export default function PaginaLogin() {
     //     setErrs(true)
     //     setMsgErr("Email ou senha invalidos")
     // };
-
 
     return (
         <>

@@ -1,6 +1,8 @@
 import { useRouter } from "next/router"
-import { CircleNotch } from "phosphor-react"
+import { CircleNotch, Cookie } from "phosphor-react"
 import { ReactNode, createContext, useContext, useEffect, useState} from "react"
+import Cookies from "js-cookie"
+import axios from "axios"
 
 const authContext = createContext({} as AuthProps) 
 
@@ -9,28 +11,33 @@ interface AuthProviderProps {
 }
 
 interface AuthProps {
-    user: {
-        nome: string
-        id: number
-        email: string,
-        senha: string,
-        isNew: boolean,
-        isAdmin: boolean,
-        permissions: string[]
-    } | null,
+    user: any,
     handleLogout: () => void
+    handleUser: (id: number, nome: string, email: string, matricula: string, isAdmin:boolean, isNew: boolean) => void
+    config: {},
+    userIsAdmin: boolean | null,
+    userId: number | null
 }
 
 export default function AuthProvider({children} : AuthProviderProps) {
 
     const [isLoading, setIsLoading] = useState(true)
 
-    const [user, setUser] = useState(null)
+    const [user, setUser] = useState<any>(null)
+
+    const [userId, setUserId] = useState<number | null>(null)
+    const [userEmail, setUserEmail] = useState<string | null>(null)
+    const [userName, setUserName] = useState<string | null>(null)
+    const [userMatricula, setUserMatricula] = useState<string | null>(null)
+    const [userIsAdmin, setUserIsAdmin] = useState<boolean | null>(null)
+    const [userIsNew, setUserIsNew] = useState<boolean | null>(null)
+    const [token, setToken] = useState<string | null>(Cookies.get('token') || null)
   
     const router = useRouter();
 
     const handleLogout = () => {
         localStorage.removeItem('currentUser');
+        Cookies.remove("token")
 
         router.push('/').then(() => {
             setUser(null)
@@ -38,43 +45,111 @@ export default function AuthProvider({children} : AuthProviderProps) {
     };
 
     useEffect(() => {
+        const tk = Cookies.get('token') || null;
+        setToken(tk);
+    
+    }, []);
+
+    const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+    };
+
+    const handleUser = (id: number, nome: string, email: string, matricula: string, isAdmin:boolean, isNew: boolean) => {
+        setUserId(id) 
+        setUserEmail(email)
+        setUserMatricula(matricula)
+        setUserIsAdmin(isAdmin)
+        setUserIsNew(isNew)
+
+        const usuario = {
+            id: id,
+            nome: nome,
+            email: email,
+            matricula: matricula,
+            isAdmin: isAdmin,
+            isNew: isNew
+        }
+
+        setUser(usuario)
+        console.log(usuario)
+    }
+    
+    const fetchUser = async () => {
+        try {
+            const ip = process.env.NEXT_PUBLIC_IP || "localhost"
+            
+            const response =  await axios.get(`http://${ip}:8080/api/usuario/${userId}`)
+            console.log(response)
+            if(response.status === 200){
+                setUser(response.data.user)
+                console.log(user)
+            }
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
+    useEffect(() => {
         const storageData = localStorage.getItem("currentUser");
         const usuario = storageData ? JSON.parse(storageData) : null;
-    
-        if (!usuario && router.asPath !== "/registrar") {
+
+        async function fetchUser ()  {
+            try {
+                const ip = process.env.NEXT_PUBLIC_IP || "localhost"
+                
+                const user = await axios.get(`http://${ip}:8080/api/usuario/${usuario.id}`, config)
+                console.log(user)
+                
+                if(user.status === 200) {
+                    usuario.isAdmin = user.data.isAdmin == true ? true : false
+                }
+            } catch (error) {
+                console.error(error)
+            }
+            
+        }
+        
+        
+        const token = Cookies.get("token")
+        
+        if (!token && router.asPath !== "/registrar") {
             router.push("/");
             return;
         }
+
+        fetchUser()
     
-        if (usuario) {
-            if (usuario.isAdmin === true) {
-                usuario.permissions = [
-                    "/admin/dashboard",
-                    "/admin/templates",
-                    "/admin/usuarios",
-                    "/admin/usuarios/editar-usuario",
-                    "/admin/usuarios/solicitacoes-cadastro",
-                    "/arquivos",
-                    "/arquivos/meus-arquivos",
-                    "/arquivos/validar-arquivo",
-                    "/templates",
-                    "/templates/cadastrar-template",
-                ];
-            } else {
-                usuario.permissions = [
-                    "/templates",
-                    "/templates/cadastrar-template",
-                    "/arquivos",
-                    "/arquivos/meus-arquivos",
-                    "/arquivos/validar-arquivo",
-                ];
-            }
+        // if (usuario) {
+        //     if (usuario.isAdmin === true) {
+        //         usuario.permissions = [
+        //             "/admin/dashboard",
+        //             "/admin/templates",
+        //             "/admin/usuarios",
+        //             "/admin/usuarios/editar-usuario",
+        //             "/admin/usuarios/solicitacoes-cadastro",
+        //             "/arquivos",
+        //             "/arquivos/meus-arquivos",
+        //             "/arquivos/validar-arquivo",
+        //             "/templates",
+        //             "/templates/cadastrar-template",
+        //         ];
+        //     } else {
+        //         usuario.permissions = [
+        //             "/templates",
+        //             "/templates/cadastrar-template",
+        //             "/arquivos",
+        //             "/arquivos/meus-arquivos",
+        //             "/arquivos/validar-arquivo",
+        //         ];
+        //     }
     
-            if (!usuario.permissions.includes(router.asPath)) {
-                router.push(usuario.permissions[0]);
-                return;
-            }
-        }
+        //     if (!usuario.permissions.includes(router.asPath)) {
+        //         router.push(usuario.permissions[0]);
+        //         return;
+        //     }
+        // }
     
         setUser(usuario);
         setTimeout(() => {
@@ -92,7 +167,7 @@ export default function AuthProvider({children} : AuthProviderProps) {
     }
 
     return (
-        <authContext.Provider value={{user, handleLogout}}>
+        <authContext.Provider value={{user, handleLogout, handleUser, config, userIsAdmin, userId}}>
             {children}
         </authContext.Provider>
     )

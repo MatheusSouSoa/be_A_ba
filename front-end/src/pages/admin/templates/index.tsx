@@ -5,6 +5,7 @@ import DefaultLayout from "@/components/util/LayoutDefault/DefaultLayout";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { CircleNotch } from "phosphor-react";
+import { UseAuth } from "@/hooks/useAuth";
 
 const camposTemplate = ["Nome", "Formato", "Campos", "Criado por", "Ativo"];
 
@@ -24,6 +25,7 @@ export default function AdminTemplates() {
   const [campoSelecionado, setCampoSelecionado] = useState<keyof Template>("nome");
   const [loading, setLoading] = useState(true); 
   const [forceUpdate, setForceUpdate] = useState(false);
+  const {config} = UseAuth()
 
 
   useEffect(() => {
@@ -31,7 +33,7 @@ export default function AdminTemplates() {
       const ip = process.env.NEXT_PUBLIC_IP || "localhost";
 
       try {
-        const response = await axios.get(`http://${ip}:8080/api/template/getAllAdmin`);
+        const response = await axios.get(`http://${ip}:8080/api/admin/template/getAllAdmin`, config);
         if (response.status === 200) {
           setTemplateReq(response.data);
         }

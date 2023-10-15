@@ -40,10 +40,12 @@ export default function CreateTemplate() {
   const [NomeColunaError, setNomeColunaError] = useState("");
   const [NomeColunaPH, setNomeColunaPH] = useState("Nome da Coluna");
   const [indexToEdit, setIndexToEdit] = useState(-1); // Inicialmente nenhum índice está sendo editado
-  const [editedColuna, setEditedColuna] = useState<ColunasProps | null>(null); // Armazena os valores de edição
+  const [editedColuna, setEditedColuna] = useState<ColunasProps | null>(null); 
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const { config } = UseAuth()
   
-  const {user} = UseAuth()
+  const {user, userIsAdmin} = UseAuth()
   const router = useRouter()
 
   const [ modalErrs, setModalErrs] = useState(false);
@@ -52,10 +54,20 @@ export default function CreateTemplate() {
     setIsModalOpen(true);
   };
 
-  const closeModal = () => {
-    modalErrs == true && user && user.isAdmin == true ? router.push(user?.permissions[1]) : 
-    modalErrs == true && user && user.isAdmin == false ? router.push(user?.permissions[0]) :
-    null
+  const closeModal = async () => {
+    try {
+      const ip = process.env.NEXT_PUBLIC_IP || "localhost"
+      const response =  await axios.get(`http://${ip}:8080/api/usuario/${user?.id}`, config)
+
+      if(response.status === 200){
+        response.data.isAdmin == true ? router.push("/admin/templates") : router.push("/templates")
+      }
+    } catch (error) {
+      console.log(error)
+    }
+    // modalErrs == true && userIsAdmin && userIsAdmin == true ? router.push(user?.permissions[1]) : 
+    // modalErrs == true  && userIsAdmin == false ? router.push(user?.permissions[0]) :
+    // null
     setIsModalOpen(false);
   };
 
@@ -143,12 +155,12 @@ export default function CreateTemplate() {
 
       if(usuario && templateNome){
         const ip = process.env.NEXT_PUBLIC_IP || "localhost"
-        const response = await axios.post(`http://${ip}:8080/api/template`, {
+        const response = await axios.post(`http://${ip}:8080/api/template`,{
           usuarioId: usuario.id,
           nome: String(templateNome),
           extensao: tipo,
           campos: colunas
-        })
+        }, config )
 
         openModal()
 

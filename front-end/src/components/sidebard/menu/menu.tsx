@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import MenuItem from "./menuItem/menuItem";
 import { ChartBar, FolderSimple, MicrosoftExcelLogo, UsersThree } from "phosphor-react";
+import axios from "axios";
+import { UseAuth } from "@/hooks/useAuth";
 
 
 const usuarioMenu = [
@@ -48,21 +50,27 @@ const adminMenu = [
 
 export default function Menu() {
 
-    const [currentUser, setCurrentUser] = useState<any>(null);
+    const [currentUser, setCurrentUser] = useState<any | null>(null);
+
+    const {user, config} = UseAuth()
 
     useEffect(() => {
-        const userString = localStorage.getItem("currentUser");
-        
-        if (userString) {
+        async function fetchUser ()  {
             try {
-                const user = JSON.parse(userString);
-                setCurrentUser(user);
+                const ip = process.env.NEXT_PUBLIC_IP || "localhost"
+
+                const response =  await axios.get(`http://${ip}:8080/api/usuario/${user?.id}`, config)
+
+                if(response.status === 200){
+                    setCurrentUser(response.data)
+                }
             } catch (error) {
-                console.error("Erro ao analisar JSON de usuário do localStorage:", error);
+                console.log(error)
             }
         }
-    }, []);
+        fetchUser()
 
+    }, []);
     return (
         <div className="pt-5">
             <ul className="flex flex-col justify-center items-center sm:items-stretch gap-2 p-2">
@@ -71,15 +79,27 @@ export default function Menu() {
                         <MenuItem key={index} nome={name} icon={icon} url={url} />
                     ))
                     :
-                    usuarioMenu.map(({name, icon, url}, index) => (
+                     usuarioMenu.map(({name, icon, url}, index) => (
                         <MenuItem key={index} nome={name} icon={icon} url={url} />
-                    ))
+                    )) 
                 }
             </ul>
         </div>
     )
-    
 }
+
+        // const userString = localStorage.getItem("currentUser");
+        
+        // if (userString) {
+        //     try {
+        //         const user = JSON.parse(userString);
+        //         setCurrentUser(user);
+        //     } catch (error) {
+        //         console.error("Erro ao analisar JSON de usuário do localStorage:", error);
+        //     }
+        // }
+
+
 
 
 

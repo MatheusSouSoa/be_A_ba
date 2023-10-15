@@ -1,3 +1,4 @@
+import { UseAuth } from "@/hooks/useAuth";
 import axios from "axios";
 import { DownloadSimple, HandPointing } from "phosphor-react"
 import { useEffect, useState } from "react"
@@ -49,13 +50,15 @@ export default function SelecaoTemplate({handleSelectedTemplate}: SelecaoTemplat
     const [loading, setLoading] = useState(true); 
     const [search, setSearch] = useState("");
     const [campoSelecionado, setCampoSelecionado] = useState<keyof Template>("nome");
+
+    const {config} = UseAuth()
   
     useEffect(() => {
         async function fetchTemplates() {
         const ip = process.env.NEXT_PUBLIC_IP || "localhost";
 
         try {
-            const response = await axios.get(`http://${ip}:8080/api/template/getAll`);
+            const response = await axios.get(`http://${ip}:8080/api/template/getAll`, config);
             if (response.status === 200) {
             console.log(response.data)
             setTemplateReq(response.data.filter((template: { status: boolean; }) => template.status === true));
@@ -123,11 +126,11 @@ export default function SelecaoTemplate({handleSelectedTemplate}: SelecaoTemplat
                                     <div 
                                         className="bg-green-800 flex gap-2 rounded-xl px-2 font-semibold text-white cursor-pointer hover:bg-green-600"
                                         title="Selecionar template para validação"
+                                        onClick={() => handleSelectedTemplate(item)}
                                     >
                                         selecionar
                                         <HandPointing
                                             className="cursor-pointer  w-7 h-7"
-                                            onClick={() => handleSelectedTemplate(item)}
                                         />
                                     </div>
                                 </td>

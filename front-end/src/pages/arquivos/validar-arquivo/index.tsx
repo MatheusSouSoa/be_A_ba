@@ -10,6 +10,7 @@ export default function MeusArquivos() {
   const [selectedTemplate, setSelected] = useState("Não Selecionado")
 
   function handleSelectedTemplate(temp: any) {
+    console.log(temp)
     setSelected(temp)
   }
 

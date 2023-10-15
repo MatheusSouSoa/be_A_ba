@@ -1,6 +1,7 @@
 import Header from "@/components/header/header";
 import Side from "@/components/sidebard/side";
 import DefaultLayout from "@/components/util/LayoutDefault/DefaultLayout";
+import { UseAuth } from "@/hooks/useAuth";
 import axios from "axios";
 import Head from "next/head";
 import { useEffect, useState } from "react";
@@ -25,13 +26,14 @@ export default function Templates() {
   const [search, setSearch] = useState("")
   const [campoSelecionado, setCampoSelecionado] = useState<keyof Template>("nome");
   const [loading, setLoading] = useState(true); 
+  const { config } = UseAuth()
   
   useEffect(() => {
     async function fetchTemplates() {
       const ip = process.env.NEXT_PUBLIC_IP || "localhost";
 
       try {
-        const response = await axios.get(`http://${ip}:8080/api/template/getAll`);
+        const response = await axios.get(`http://${ip}:8080/api/template/getAll`, config);
         if (response.status === 200) {
           console.log(response.data)
           setTemplateReq(response.data.filter((template: { status: boolean; }) => template.status === true));

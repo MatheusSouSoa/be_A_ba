@@ -1,13 +1,20 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useRouter } from 'next/router';
-import { User2 } from "lucide-react";
-import { User, UserCircle, UserFocus } from "phosphor-react";
+import { CircleNotch, User } from "phosphor-react";
 import { UseAuth } from "@/hooks/useAuth";
 
 export default function UserProfile() {
     const router = useRouter();
     const {user, handleLogout} = UseAuth()
+
+    if(!user) {
+        return (
+            <div className="w-screen h-screen grid place-items-center bg-white">
+                <CircleNotch className="h-8 w-8 text-yellow-600 animate-spin"/>
+            </div>
+        )
+    }
 
     return (
         <div className="flex justify-around gap-5 items-center font-black  text-white ">

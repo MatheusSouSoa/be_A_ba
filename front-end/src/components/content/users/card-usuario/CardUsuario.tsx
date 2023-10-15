@@ -1,3 +1,4 @@
+import { UseAuth } from "@/hooks/useAuth";
 import axios from "axios";
 import { useState } from "react";
 
@@ -16,6 +17,7 @@ interface UsuariosCardProps {
 export default function CardUsuario({ id, nome, email, isadmin, buttons, isNew, pagina, matricula, onDelete} : UsuariosCardProps): any {
 
     const [isAdmin, setIsAdmin] = useState(isadmin || false);
+    const {config} = UseAuth()
 
     function handleRadioChange(event:any) {
         const novoStatus = event.target.value === "admin";
@@ -29,7 +31,7 @@ export default function CardUsuario({ id, nome, email, isadmin, buttons, isNew, 
         if(acao && acao.toLocaleLowerCase() == "salvar"){
             console.log("salvar")
             try {
-                const response = await axios.put(`http://${ip}:8080/api/usuario/${id}/update-isnew/${isNew}/${isAdmin}`)
+                const response = await axios.put(`http://${ip}:8080/api/admin/usuario/${id}/update-isnew/${isNew}/${isAdmin}`, {status: true}, config)
                 
                 if(response.status === 200){
                     return console.log(response.data)
@@ -42,7 +44,7 @@ export default function CardUsuario({ id, nome, email, isadmin, buttons, isNew, 
         }
         else if(acao && acao.toLocaleLowerCase() == "aprovar"){
             try {
-                const response = await axios.put(`http://${ip}:8080/api/usuario/${id}/update-isnew/false/${isAdmin}`)
+                const response = await axios.put(`http://${ip}:8080/api/admin/usuario/${id}/update-isnew/false/${isAdmin}`, {status: true}, config)
                 
                 if(response.status === 200){
                     onDelete(response.data.id)
@@ -61,7 +63,7 @@ export default function CardUsuario({ id, nome, email, isadmin, buttons, isNew, 
 
         if(acao && acao?.toLocaleLowerCase() == "bloquear"){
             try {
-                const response = await axios.put(`http://${ip}:8080/api/usuario/${id}/update-isnew/true/${isAdmin}`)
+                const response = await axios.put(`http://${ip}:8080/api/admin/usuario/${id}/update-isnew/true/${isAdmin}`, {status: true}, config)
                 console.log(response.data.id)
                 if(response.status === 200){
                     onDelete(response.data.id)
@@ -75,7 +77,7 @@ export default function CardUsuario({ id, nome, email, isadmin, buttons, isNew, 
         }
         else {
             try {
-                const response = await axios.delete(`http://${ip}:8080/api/usuario/${id}/delete/${isAdmin}`)
+                const response = await axios.delete(`http://${ip}:8080/api/admin/usuario/${id}/delete/${isAdmin}`, config)
                 
                 if(response.status === 200){
                     onDelete(response.data.id)

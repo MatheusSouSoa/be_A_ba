@@ -1,5 +1,6 @@
 import Modal from "@/components/util/modal/Modal";
 import Select from "@/components/util/select/Select";
+import { UseAuth } from "@/hooks/useAuth";
 import axios from "axios";
 import { ArrowBigLeft, ArrowBigRight } from "lucide-react";
 import { DownloadSimple, MagnifyingGlass, Trash, X } from "phosphor-react";
@@ -60,13 +61,15 @@ export default function TabelaDashboard() {
     const [loading, setLoading] = useState(true); 
     const [search, setSearch] = useState("");
     const [modalCampos, setModalCampos] = useState<any>()
+
+    const {config} = UseAuth()
   
     useEffect(() => {
         async function fetchTemplates() {
         const ip = process.env.NEXT_PUBLIC_IP || "localhost";
 
         try {
-            const response = await axios.get(`http://${ip}:8080/api/template/getAll`);
+            const response = await axios.get(`http://${ip}:8080/api/template/getAll`, config);
             if (response.status === 200) {
             console.log(response.data)
             setTemplateReq(response.data.filter((template: { status: boolean; }) => template.status === true));
@@ -85,7 +88,7 @@ export default function TabelaDashboard() {
         const ip = process.env.NEXT_PUBLIC_IP || "localhost";
 
         try {
-            const response = await axios.get(`http://${ip}:8080/api/campos/${id}`)
+            const response = await axios.get(`http://${ip}:8080/api/campos/${id}`, config)
 
             if(response.status === 200) {
                 setModalCampos(response.data)
@@ -100,21 +103,20 @@ export default function TabelaDashboard() {
     
     const filteredTemp = search
         ? templateReq.filter((item: { [x: string]: any }) => {
-            console.log(search, item)
             if (campoSelecionado.toLowerCase() === "nome") {
                 return String(item["nome"]).toLowerCase().includes(search.toLowerCase());      
             }
             if (campoSelecionado.toLowerCase() === "campos") {
-                return String(item["nome"]).toLowerCase().includes(search.toLowerCase());      
+                return String(item["campos"]).toLowerCase().includes(search.toLowerCase());      
             }
             if (campoSelecionado.toLowerCase() === "criado por") {
-                return String(item["nome"]).toLowerCase().includes(search.toLowerCase()); 
+                return String(item["criado_por"]).toLowerCase().includes(search.toLowerCase()); 
             }     
             if (campoSelecionado.toLowerCase() === "formato") {
-                return String(item["nome"]).toLowerCase().includes(search.toLowerCase());      
+                return String(item["formato"]).toLowerCase().includes(search.toLowerCase());      
             }
             if (campoSelecionado.toLowerCase() === "data") {
-                return String(item["nome"]).toLowerCase().includes(search.toLowerCase());      
+                return String(item["data"]).toLowerCase().includes(search.toLowerCase());      
             }
             return 0; 
         })

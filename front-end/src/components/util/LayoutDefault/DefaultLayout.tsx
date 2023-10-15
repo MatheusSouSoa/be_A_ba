@@ -7,6 +7,7 @@ import { useState } from "react";
 import Modal from "../modal/Modal";
 import { ArrowBigLeft, ArrowBigRight } from "lucide-react";
 import axios from "axios";
+import { UseAuth } from "@/hooks/useAuth";
 
 interface ListagemProps {
   titulo: string;
@@ -93,6 +94,7 @@ export default function DefaultLayout({
     const [isModalOpen2, setIsModalOpen2] = useState(false);
     const [modalContent, setModalContent] = useState<any>()
     const [modalCamposIndex, setModalCamposIndex] = useState(0)
+    const {config} = UseAuth()
 
     const closeModal2 = () => {
         setModalCamposIndex(0)
@@ -111,7 +113,7 @@ export default function DefaultLayout({
         const ip = process.env.NEXT_PUBLIC_IP || "localhost";
 
         try {
-            const response = await axios.get(`http://${ip}:8080/api/campos/${id}`)
+            const response = await axios.get(`http://${ip}:8080/api/campos/${id}`, config)
 
             if(response.status === 200) {
                 setModalCampos(response.data)
