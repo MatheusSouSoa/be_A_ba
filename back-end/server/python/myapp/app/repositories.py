@@ -5,7 +5,7 @@ from app.config import create_connection
 
 class FilesRepository:
     @staticmethod
-    def save_file_details(user_id, template, file_path, hora_criacao, qtd_linhas):
+    def save_file_details(filename, template, file_path, hora_criacao, qtd_linhas):
         connection = create_connection()
         if connection is None:
             return
@@ -23,7 +23,8 @@ class FilesRepository:
             template_data = json.loads(template)
             template_id = template_data["id"]
             
-            values = (file_path, data_hora_obj, qtd_linhas, file_path, template_id)
+            values = (filename, data_hora_obj, qtd_linhas, file_path, template_id)
+            #modificação, tirando o filepath duplicado e adicionando o filename
             
             cursor.execute(query, values)
 

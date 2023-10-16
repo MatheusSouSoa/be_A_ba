@@ -1,4 +1,5 @@
-from flask import request, jsonify
+import os
+from flask import request, jsonify, send_from_directory, send_file
 from app import app
 from app.services import FileService
 
@@ -18,6 +19,13 @@ def upload_file():
     'status': 200
     }
     return jsonify(response_data)
+
+@app.route('/api/files/download/<path:user_id>/<path:filename>', methods=['GET'])
+def download_file(user_id, filename):
+    DIRETORIO = 'C:/Users/980189/Documents/Matheus/QueroQuero/QQTech tarefas/Bê á bá/back-end/server/python/myapp/data/users'
+    user_directory = os.path.join(DIRETORIO, user_id, 'files')
+    return send_from_directory(user_directory, filename, as_attachment=True)
+
 
 @app.route('/teste', methods=['get'])
 def teste():
