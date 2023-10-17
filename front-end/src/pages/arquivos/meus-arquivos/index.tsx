@@ -1,12 +1,14 @@
 import Header from "@/components/header/header";
 import Side from "@/components/sidebard/side";
 import DefaultLayout from "@/components/util/LayoutDefault/DefaultLayout";
+import { UseAuth } from "@/hooks/useAuth";
+import axios from "axios";
 import Head from "next/head";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-const camposArquivo = ["Nome", "Template", "Linhas", "Data", "Download"]
-const arquivoLista = [
-  { nome: "Supermercado MegaMart", template: "Folha Salarial 2023", linhas: 67, data: "2023-05-05", status: true },
+const camposArquivo = ["Nome", "Template", "Enviado por", "Data", "Download"]
+const arquivoLista1 = [
+  { nome: "Supermercado MegaMart", template: "Folha Salarial 2023", enviado_por: "Matheus", data: "2023-05-05", status: true },
   { nome: "Loja de Roupas Fashionista", template: "Controle de Entradas", linhas: 45, data: "2023-06-15", status: true },
   { nome: "Restaurante Sabor do Sertão", template: "Relatório de Vendas", linhas: 89, data: "2023-07-20", status: false },
   { nome: "Loja de Eletrônicos TecnoShop", template: "Folha de Pagamento", linhas: 53, data: "2023-08-10", status: true },
@@ -32,12 +34,35 @@ const arquivoLista = [
 interface Arquivos {
   nome: string;
   template: string;
-  linhas: number;
+  enviado_por: string;
   data: Date;
   status: boolean;
 }
 
 export default function MeusArquivos() {
+  const [arquivoLista, setArquivoLista] = useState(arquivoLista1)
+  const [loading, setLoading] = useState(true); 
+  const {config} = UseAuth()
+
+  useEffect(() => {
+    async function fetchTemplates() {
+      const ip = process.env.NEXT_PUBLIC_IP || "localhost";
+
+      try {
+        const response = await axios.get(`http://${ip}:8080/api/arquivo`, config);
+        if (response.status === 200) {
+          console.log(response.data)
+          setTemplateReq(response.data.filter((template: { status: boolean; }) => template.status === true));
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchTemplates();
+  }, []);
 
   const [templateReq, setTemplateReq] = useState(arquivoLista)
   const [search, setSearch] = useState("")
@@ -59,8 +84,8 @@ export default function MeusArquivos() {
     if(value == "Template"){
       setCampoSelecionado("template")
     }
-    if(value == "Linhas"){
-      setCampoSelecionado("linhas")
+    if(value == "Enviado por"){
+      setCampoSelecionado("enviado_por")
       console.log("Pendentes rapaz: ",value)
     }
   };

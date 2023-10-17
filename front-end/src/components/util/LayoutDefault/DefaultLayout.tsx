@@ -124,6 +124,8 @@ export default function DefaultLayout({
         }
     }
 
+    console.log(listaObj)
+
 
     return (
         <div className="flex flex-col gap-4 w-full h-full p-2 sm:p-5">
