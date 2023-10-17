@@ -206,14 +206,14 @@ export default function TabelaDashboard() {
                         </div>
                         <div className="flex justify-stretch md:justify-end md:items-end">
                             <input 
-                                className=" max-w-[100px] sm:max-w-[150px] md:max-w-[190px] lg:max-w-[200px] xl:max-w-full outline-none border-2 rounded-l-2xl h-8 bg-zinc-200 px-5"  
+                                className="hidden sm:block max-w-[100px] sm:max-w-[150px] md:max-w-[190px] lg:max-w-[200px] xl:max-w-full outline-none border-2 rounded-l-2xl h-8 bg-zinc-200 px-5"  
                                 type="text" 
                                 placeholder="Buscas"
                                 value={search}
                                 onChange={(event:any) => setSearch(event.target.value)}
                             />
                             <div
-                                className="w-8 h-8 bg-zinc-200 rounded-r-2xl flex justify-center items-center"
+                                className="w-8 h-8 bg-zinc-200 rounded-2xl sm:rounded-none sm:rounded-r-2xl flex justify-center items-center"
                                 title="Pesquisar"
                             >
                                 <MagnifyingGlass 
@@ -224,7 +224,7 @@ export default function TabelaDashboard() {
                         </div>
                     </div>
                 </div>
-                <div className="flex flex-col flex-1 max-h-[100%] ">
+                <div className="flex flex-col flex-1 max-h-[100%] overflow-y-auto">
                     <table className="w-full bg-gray-300 rounded-t-2xl overflow-hidden">
                         <thead className="bg-green-800 text-white">
                             <tr className="">
@@ -236,9 +236,9 @@ export default function TabelaDashboard() {
                             </tr>
                         </thead>
                     </table>
-                    <div className="flex-1 overflow-y-auto scrollbar-custom max-h-[65%] xl:max-h-[72%] rounded-b-2xl rounded-r-3xl">
-                        <table className="w-full bg-gray-300 rounded-b-2xl">
-                            <tbody className="text-center font-semibold text-zinc-600">
+                    <div className="flex-1 overflow-y-auto scrollbar-custom max-h-[100%] xl:max-h-[100%] rounded-b-2xl ">
+                        <table className="w-full h-full bg-gray-300 rounded-b-2xl">
+                            <tbody className="text-center h-full font-semibold text-zinc-600">
                                 {listaAtiva.map((lista: any, index: any) => (
                                     <tr
                                         onClick={() => openModal(index)}

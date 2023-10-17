@@ -103,6 +103,7 @@ export default function AuthProvider({children} : AuthProviderProps) {
                 console.log(user)
                 
                 if(user.status === 200) {
+                    console.log("resposta ok")
                     if (usuario) {
                         if (user.data.isAdmin === true) {
                             usuario.permissions = [
@@ -126,16 +127,19 @@ export default function AuthProvider({children} : AuthProviderProps) {
                                 "/arquivos/validar-arquivo",
                             ];
                         }
-                
+                        
                         if (!usuario.permissions.includes(router.asPath)) {
                             router.push(usuario.permissions[0]);
                             return;
                         }
                     }
-
+                    
                 }
             } catch (error) {
                 console.error(error)
+                setUser(null)
+                Cookies.remove("token")
+                router.push('/')
             }
             
         }
@@ -147,8 +151,9 @@ export default function AuthProvider({children} : AuthProviderProps) {
             router.push("/");
             return;
         }
-
-        fetchUser()
+        
+        if(storageData != null) 
+            fetchUser()
 
         console.log(userIsAdmin)
     

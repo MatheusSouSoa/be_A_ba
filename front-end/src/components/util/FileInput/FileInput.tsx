@@ -3,8 +3,11 @@ import { DropzoneState, useDropzone } from 'react-dropzone';
 import { CloseIcon } from "../../../../public/icons/CloseIcon"
 import { FileIcon } from "../../../../public/icons/FileIcon"
 import { UploadIcon } from "../../../../public/icons/UploadIcon"
-import { Check, FileCsv, FileXls, WarningCircle, X } from 'phosphor-react';
+import { Check, CircleNotch, FileCsv, FileXls, WarningCircle, X } from 'phosphor-react';
 import Modal from '../modal/Modal';
+import { UseAuth } from '@/hooks/useAuth';
+import axios from 'axios';
+import Cookies from 'js-cookie';
 
 interface InputProps {
   dropzone: DropzoneState;
@@ -79,6 +82,9 @@ const HasFile = ({ file, removeFile, template }: HasFileProps) => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [ modalErrs, setModalErrs] = useState(false);
+  const [modalErrsMsg, setModalErrsMsg] = useState("");
+  const [isModalLoading, setIsModalLoading] = useState(false);
+  const {user, config} =UseAuth()
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -87,16 +93,94 @@ const HasFile = ({ file, removeFile, template }: HasFileProps) => {
   const closeModal = () => {
     setIsModalOpen(false);
   };
-  
-  function validarTemplate(file: any, template: any) {
-    if(template.nome) {
-      setIsModalOpen(true)
-      setModalErrs(true)
-      console.log(template)
-      console.log(file)
-      return
+
+  const handleUpload = async () => {
+    
+    try {
+      const ip = process.env.NEXT_PUBLIC_IP || "localhost"
+      
+      const campos = await axios.get(`http://${ip}:8080/api/campos/${template.id}`, config)
+
+      const formData = new FormData();
+      formData.append('user_id', user.id);
+      formData.append('template', JSON.stringify(template));
+      formData.append('campos', JSON.stringify(campos));
+      
+      if(file)
+        formData.append('file', file);
+
+      const token = Cookies.get('token') || null;
+      const response = await axios.post('http://127.0.0.1:5000/api/files/upload', formData, {headers: {
+        'Content-Type': 'multipart/form-data',
+        'Authorization': `Bearer ${token}`
+      }});
+
+      if (response.status === 200) {
+        console.log("ok no if: ",response)
+        return {
+          valid: true,
+          response: "Arquivo validado com sucesso!"
+        }
+      } else {
+        console.log("Erro no else: ",response.data)
+        return {
+          valid: false,
+          response: response.data.message
+        }
+      }
+    } catch (error) {
+      if(axios.isAxiosError(error))
+      if (error.response) {
+        console.error('Erro ao enviar o arquivo 1:', error.response.data);
+        return {
+          valid: false,
+          response: error.response.data
+        }
+      } else {
+        console.error('Erro ao enviar o arquivo 2:', error);
+        return {
+          valid: false,
+          response: "Arquivo não atende ao template utilizado"
+        }
+        // error.config?.data
+      }
     }
+  };
+  
+  async function validarTemplate(file: any, template: any) {
     setIsModalOpen(true)
+    setIsModalLoading(true)
+    try{
+      const response = await handleUpload()
+      
+      if(template.nome) {
+        if(response && response.valid === true) {
+          setModalErrs(true)
+          console.log(template)
+          console.log(file)
+          setModalErrsMsg(response.response)
+          setIsModalLoading(false)
+          return
+        }
+      }
+      else{
+        setIsModalLoading(false)
+        setModalErrsMsg("Selecione um template")
+      }
+      setIsModalLoading(false)
+      if(response)
+      setModalErrsMsg(response.response)
+    
+  }catch(err){
+    setIsModalLoading(false)
+    console.log("entrou no: ",err)
+    if(err instanceof Error)
+    setModalErrsMsg(err.message)
+  else
+  setModalErrsMsg("Ocorreu um erro desconhecido.");
+  }
+  setIsModalLoading(false)
+    // setIsModalOpen(true)
     setModalErrs(false)
   }
 
@@ -120,30 +204,37 @@ const HasFile = ({ file, removeFile, template }: HasFileProps) => {
             Validar
         </button>
         <Modal isOpen={isModalOpen} onClose={closeModal}>
-          <div className="flex flex-col gap-5 justify-center items-center">
-              <h2 className="text-2xl font-semibold">
-                {modalErrs == true ?
-                  "Arquivo validado com sucesso" : 
-                  "Erro ao validar o arquivo. Por favor, selecione um template"
-                }    
-              </h2>
-              <div className={`w-44 h-44 rounded-full flex justify-center items-center 
-                ${modalErrs ? "border border-green-500" : ""}
-              `}>
-                {modalErrs ? 
-                  <Check className="text-green-500 h-32 w-32"/> :
-                  <WarningCircle className="text-red-500 h-44 w-44"/>
-                }
+          {isModalLoading ? 
+              <div className="grid place-items-center bg-white">
+                  <CircleNotch className="h-8 w-8 text-yellow-600 animate-spin"/>
               </div>
-              <button
-                  onClick={closeModal}
-                  className={`
-                  modal-close ${modalErrs ? "bg-green-500 hover:bg-green-600" : "bg-red-500 hover:bg-red-600"} text-white font-bold py-2 px-4 rounded-2xl focus:outline-none focus:shadow-outline text-3xl
-                  `}
-              >
-                  {modalErrs ? "Ok" : "Fechar"}
-              </button>
-            </div>
+            :
+            <div className="flex flex-col gap-5 justify-center items-center">
+                <h2 className="text-2xl font-semibold">
+                  {/* {modalErrs == true ?
+                    "Arquivo validado com sucesso" : 
+                    "Erro ao validar o arquivo. Por favor, selecione um template"
+                  }     */}
+                  {modalErrsMsg}
+                </h2>
+                <div className={`w-44 h-44 rounded-full flex justify-center items-center 
+                  ${modalErrs ? "border border-green-500" : ""}
+                `}>
+                  {modalErrs ? 
+                    <Check className="text-green-500 h-32 w-32"/> :
+                    <WarningCircle className="text-red-500 h-44 w-44"/>
+                  }
+                </div>
+                <button
+                    onClick={closeModal}
+                    className={`
+                    modal-close ${modalErrs ? "bg-green-500 hover:bg-green-600" : "bg-red-500 hover:bg-red-600"} text-white font-bold py-2 px-4 rounded-2xl focus:outline-none focus:shadow-outline text-3xl
+                    `}
+                >
+                    {modalErrs ? "Ok" : "Fechar"}
+                </button>
+              </div>
+              }
         </Modal>
       </div>
     </div>
