@@ -5,7 +5,7 @@ from app.config import create_connection
 
 class FilesRepository:
     @staticmethod
-    def save_file_details(filename, template, file_path, hora_criacao, qtd_linhas):
+    def save_file_details(filename, template, file_path, hora_criacao, qtd_linhas, user_id):
         connection = create_connection()
         if connection is None:
             return
@@ -16,15 +16,14 @@ class FilesRepository:
             data_hora_obj = datetime.strptime(hora_criacao, '%Y%m%d%H%M%S')
 
             query = """
-                INSERT INTO "Uploads" (nome, data, qtd_linhas, path, id_template)
-                VALUES (%s, %s, %s, %s, %s)
+                INSERT INTO "Uploads" (nome, data, qtd_linhas, path, id_template, id_usuario)
+                VALUES (%s, %s, %s, %s, %s, %s)
                 RETURNING id;
             """ 
             template_data = json.loads(template)
             template_id = template_data["id"]
             
-            values = (filename, data_hora_obj, qtd_linhas, file_path, template_id)
-            #modificação, tirando o filepath duplicado e adicionando o filename
+            values = (filename, data_hora_obj, qtd_linhas, file_path, template_id, user_id)
             
             cursor.execute(query, values)
 

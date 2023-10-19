@@ -10,15 +10,19 @@ def upload_file():
     campos = request.form.get('campos')
     # uploaded_file = request.files['file']
 
-    if not user_id or not template:
-        return jsonify({'error': 'Dados incompletos no corpo da solicitação'}), 400
 
-    response = FileService.upload_file(user_id, template, campos)
-    response_data = {
-    'result': response,
-    'status': 200
-    }
-    return jsonify(response_data)
+    try:    
+        if not user_id or not template:
+            return jsonify({'error': 'Dados incompletos no corpo da solicitação'}), 400
+
+        response = FileService.upload_file(user_id, template, campos)
+        response_data = {
+        'result': response,
+        'status': 200
+        }
+        return jsonify(response_data)
+    except Exception as error:
+        return jsonify(error)
 
 @app.route('/api/files/download/<path:user_id>/<path:filename>', methods=['GET'])
 def download_file(user_id, filename):
