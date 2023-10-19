@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { DropzoneState, useDropzone } from 'react-dropzone';
 import { CloseIcon } from "../../../../public/icons/CloseIcon"
 import { FileIcon } from "../../../../public/icons/FileIcon"
@@ -121,20 +121,21 @@ const HasFile = ({ file, removeFile, template }: HasFileProps) => {
           valid: true,
           response: "Arquivo validado com sucesso!"
         }
-      } else {
+      } 
+      else {
         console.log("Erro no else: ",response.data)
         return {
           valid: false,
-          response: response.data.message
+          response: "asiodhaodho"
         }
       }
     } catch (error) {
       if(axios.isAxiosError(error))
       if (error.response) {
-        console.error('Erro ao enviar o arquivo 1:', error.response.data);
+        console.error('Erro ao enviar o arquivo 1:', error.response.data.message);
         return {
           valid: false,
-          response: error.response.data
+          response: error.response.data.message
         }
       } else {
         console.error('Erro ao enviar o arquivo 2:', error);
@@ -142,7 +143,6 @@ const HasFile = ({ file, removeFile, template }: HasFileProps) => {
           valid: false,
           response: "Arquivo não atende ao template utilizado"
         }
-        // error.config?.data
       }
     }
   };

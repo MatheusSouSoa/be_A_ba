@@ -77,7 +77,7 @@ export default function PaginaSolicitacoesUsuarios() {
         <div className="h-full w-full flex flex-col overflow-y-auto scrollbar-custom px-5 pt-5">
             <div className="flex flex-col justify-center items-center  w-full">
                 <header className="bg-green-700 p-4 text-4xl font-black w-full flex justify-center items-center rounded-t-3xl">
-                    <h1>Solicitações de cadastro</h1>
+                    <h1>Usuários bloqueados</h1>
                 </header>
                 <div className="w-full bg-white rounded-b-full p-3">
                     <ul className="flex text-zinc-700 font-bold justify-around">

@@ -11,7 +11,7 @@ export default function PaginaUsuarios () {
             </div>
             <div className="flex max-h-[50%] flex-col w-full h-full items-cente bg-white rounded-2xl gap-4 shadow-md hover:shadow-blue-100 hover:shadow-2xl transition duration-300 cursor-pointer  ">
                 <Link href={"usuarios/solicitacoes-cadastro"}>
-                    <MenuUser titulo="Novos usuários" descricao="Clique aqui para acessar a página de solicitações de novos usuários" icone="/novos-usuarios.png"/>
+                    <MenuUser titulo="Usuários bloqueados" descricao="Clique aqui para acessar a página de solicitações de novos usuários" icone="/novos-usuarios.png"/>
                 </Link>
             </div>
         </div>

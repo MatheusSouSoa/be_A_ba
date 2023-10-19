@@ -64,15 +64,14 @@ export default function CardUsuario({ id, nome, email, isadmin, buttons, isNew, 
         if(acao && acao?.toLocaleLowerCase() == "bloquear"){
             try {
                 const response = await axios.put(`http://${ip}:8080/api/admin/usuario/${id}/update-isnew/true/${isAdmin}`, {status: true}, config)
-                console.log(response.data.id)
                 if(response.status === 200){
                     onDelete(response.data.id)
-                    return console.log(response.data)
+                    return 
                 }
-                return console.log(response.data)
+                return 
             } catch (error) {
                 console.error(error)
-                console.log(error)
+                console.log("bla: ",error)
             }
         }
         else {

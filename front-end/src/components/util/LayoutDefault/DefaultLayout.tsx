@@ -206,12 +206,17 @@ export default function DefaultLayout({
                                     onChange={handleSelectValue}
                                     className="outline-none border-2 rounded-2xl font-semibold bg-white overflow-hidden cursor-pointer"
                                 >
-                                    {listaCampos.map((campo, index) => (
-                                    <option key={index} value={campo == "Ativo" ? "Pendentes" : campo}>
-                                        {campo == "Ativo" ? "Pendentes" : 
-                                        campo}
-                                    </option>
-                                    ))}
+                                    {listaCampos.map((campo, index) => {
+                                        if(campo == "download"){
+                                            return null
+                                        }
+                                        return (
+                                        <option key={index} value={campo == "Ativo" ? "Pendentes" : campo}>
+                                            {campo == "Ativo" ? "Pendentes" : campo.toLowerCase() === "download" ? "" :
+                                            campo}
+                                        </option>
+                                        )
+                                        })}
                                 </select>
                                 </li>
                             </ul>

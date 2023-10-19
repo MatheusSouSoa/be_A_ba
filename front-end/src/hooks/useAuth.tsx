@@ -100,10 +100,8 @@ export default function AuthProvider({children} : AuthProviderProps) {
                 const ip = process.env.NEXT_PUBLIC_IP || "localhost"
                 
                 const user = await axios.get(`http://${ip}:8080/api/usuario/${usuario.id}`, config)
-                console.log(user)
-                
+
                 if(user.status === 200) {
-                    console.log("resposta ok")
                     if (usuario) {
                         if (user.data.isAdmin === true) {
                             usuario.permissions = [
@@ -155,7 +153,6 @@ export default function AuthProvider({children} : AuthProviderProps) {
         if(storageData != null) 
             fetchUser()
 
-        console.log(userIsAdmin)
     
     
         setUser(usuario);
