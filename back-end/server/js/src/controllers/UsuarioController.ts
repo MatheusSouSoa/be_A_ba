@@ -3,6 +3,8 @@ import { UsuarioRepository } from "../repositories/UsuariosRepository";
 import { Usuario } from "../entities/Usuario";
 const bcrypt = require("bcrypt");
 import jwt from 'jsonwebtoken'
+import { templateRepository } from "../repositories/TemplateRepository";
+import { arquivoRepository } from "../repositories/ArquivosRepository";
 
 
 export class UsuarioController {
@@ -136,6 +138,27 @@ export class UsuarioController {
             console.error(err)
             res.status(404).send()
         }
+    }
+
+    async checkTemplatesCampos(req: Request, res: Response){
+
+        const {id} = req.params
+        
+        const user = await UsuarioRepository.findOneBy({id: parseInt(id)})
+
+        if(user) {
+            const template = await templateRepository.findOneBy({usuario: user})
+            const arquivo = await arquivoRepository.findOneBy({usuario: user})
+
+            if(template || arquivo){
+                return res.status(200).json({
+                    usuario: user,
+                    template: template,
+                    arquivo: arquivo
+                })
+            }
+        }
+        return res.status(404).json({user})
     }
 
     async changePermissions(req: Request, res: Response) {

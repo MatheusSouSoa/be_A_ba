@@ -1,6 +1,7 @@
 // src/entities/User.ts
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { Template } from './Template';
+import { Upload } from './Upload';
 
 @Entity({name: "Usuarios"})
 export class Usuario {
@@ -27,5 +28,8 @@ export class Usuario {
 
   @OneToMany(() => Template, (template) => template.usuario, {onDelete: "CASCADE"})
   templates: Template[];
+  
+  @OneToMany(() => Upload, (upload) => upload.usuario, {onDelete: "CASCADE"})
+  uploads: Upload[];
   
 }

@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { templateRepository } from "../repositories/TemplateRepository";
 import { campoRepository } from "../repositories/CampoRepository";
 import { UsuarioRepository } from "../repositories/UsuariosRepository";
-import { campoController } from "./CampoController.ts";
+import { campoController } from "./CampoController";
 import { Usuario } from "../entities/Usuario";
 
 export class TemplateController {
@@ -221,4 +221,12 @@ export class TemplateController {
       })
     }
   }
+
+  async getTemplateById(id: number) {
+    const templateToFind = await templateRepository.findOneBy({id: id})
+      if(templateToFind)
+          return templateToFind.nome
+      return 0
+  }
+
 }

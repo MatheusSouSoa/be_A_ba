@@ -1,6 +1,7 @@
 // src/entities/Upload.ts
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { Template } from './Template';
+import { Usuario } from './Usuario';
 
 @Entity({name: "Uploads"})
 export class Upload {
@@ -22,4 +23,8 @@ export class Upload {
   @ManyToOne(() => Template, (template) => template.uploads)
   @JoinColumn({name: "id_template"})
   template: Template;
+  
+  @ManyToOne(() => Usuario, (usuario) => usuario.uploads)
+  @JoinColumn({name: "id_usuario"})
+  usuario: Usuario;
 }
