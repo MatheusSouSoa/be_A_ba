@@ -5,6 +5,7 @@ import pandas as pd
 import os
 from datetime import datetime
 from flask import request, jsonify
+import shutil
 
 class FileService:
     @staticmethod
@@ -35,7 +36,7 @@ class FileService:
 
         if file_extension != template_data['formato']:
             print("Parou na verificação de extensao")
-            return jsonify({'error': 'A extensão do arquivo não corresponde ao formato do template'}), 400
+            return {'message': 'A extensão do arquivo não corresponde ao formato do template'}, 400
         
         print("Template: ", template_data['formato'])
         print("File: ", file_extension)
@@ -83,3 +84,21 @@ class FileService:
                 
             FilesRepository.save_file_details(file.filename, template, f'{user_id}/{timestamp}/{file.filename}', timestamp, qtd_linhas, user_id)
             return response_data
+
+    @staticmethod
+    def delete_file(user_id, filename, file_id, timestamp):
+        DIRETORIO = 'C:/Users/980189/Documents/Matheus/QueroQuero/QQTech tarefas/Bê á bá/back-end/server/python/myapp/data/users'
+        user_directory = os.path.join(DIRETORIO, str(user_id), 'files', str(timestamp))
+        file_path = os.path.join(user_directory, filename)
+        print(file_path)
+        print(user_directory)
+        # return {'message': DIRETORIO}, 200
+
+        if os.path.exists(file_path):
+            drop_success = FilesRepository.drop_table("Uploads", file_id)
+            if drop_success:
+                shutil.rmtree(user_directory)
+                return {'message': 'Arquivo excluído com sucesso'}, 200
+            return {'message': 'Erro ao excluir arquivo'}, 500
+        else:
+            return {'error': 'Arquivo não encontrado', 'caminho': user_directory}, 404
