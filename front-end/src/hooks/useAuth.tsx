@@ -71,8 +71,6 @@ export default function AuthProvider({children} : AuthProviderProps) {
             isAdmin: isAdmin,
             isNew: isNew
         }
-
-        setUser(usuario)
         console.log(usuario)
     }
     
@@ -130,6 +128,8 @@ export default function AuthProvider({children} : AuthProviderProps) {
                             router.push(usuario.permissions[0]);
                             return;
                         }
+
+                        setUser(usuario);
                     }
                     
                 }
@@ -155,7 +155,6 @@ export default function AuthProvider({children} : AuthProviderProps) {
 
     
     
-        setUser(usuario);
         setTimeout(() => {
             setIsLoading(false);
         }, 1000);

@@ -91,6 +91,7 @@ const HasFile = ({ file, removeFile, template }: HasFileProps) => {
   };
   
   const closeModal = () => {
+    modalErrs ? removeFile() : null
     setIsModalOpen(false);
   };
 

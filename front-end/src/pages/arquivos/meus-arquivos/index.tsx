@@ -24,14 +24,13 @@ interface Arquivos {
 export default function MeusArquivos() {
   const [arquivoLista, setArquivoLista] = useState(arquivoLista1)
   const [loading, setLoading] = useState(true); 
-  const {config} = UseAuth()
+  const {config, user} = UseAuth()
 
   useEffect(() => {
     async function fetchTemplates() {
       const ip = process.env.NEXT_PUBLIC_IP || "localhost";
-
       try {
-        const response = await axios.get(`http://${ip}:8080/api/arquivo`, config);
+        const response = await axios.get(`http://${ip}:8080/api/arquivo/${user.id}`, config);
         if (response.status === 200) {
           console.log(response.data)
           setTemplateReq(response.data.filter((template: { status: boolean; }) => template.status === true));

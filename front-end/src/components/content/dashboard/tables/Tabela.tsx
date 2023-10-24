@@ -19,7 +19,7 @@ interface Template {
     pendentes?: string;
   }
 
-const camposArquivo = ["Nome", "Template", "Linhas", "Data", "Criado por"]
+const camposArquivo = ["Nome", "Template", "Criado por", "Data"]
 const arquivoLista = [
     {nome: "Loja 01", template: "Loja A", linhas: 67, data: "2023-05-05", criado_por: "Matheus"},
     {nome: "Loja 01", template: "Loja A", linhas: 67, data: "2023-05-05", criado_por: "Matheus"},
@@ -52,27 +52,39 @@ export default function TabelaDashboard() {
     const [objetoSelecionado, setObjetoSelecionado] = useState("Arquivos");
     const [campoSelecionado, setCampoSelecionado] = useState(camposArquivo[0]);
     const [camposDisponiveis, setCamposDisponiveis] = useState(camposArquivo);
-    const [listaAtiva, setListaAtiva]: any[]= useState(arquivoLista)
+    const [listaAtiva, setListaAtiva] = useState<any[]>([])
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalContent, setModalContent] = useState<any>()
     const [modalCamposIndex, setModalCamposIndex] = useState(0)
 
+    const [filesReq, setFilesReq] = useState<any[]>([]);
     const [templateReq, setTemplateReq] = useState<Template[]>([]);
     const [loading, setLoading] = useState(true); 
     const [search, setSearch] = useState("");
     const [modalCampos, setModalCampos] = useState<any>()
+    const [reload, setReload] = useState<boolean>(false)
 
     const {config} = UseAuth()
   
     useEffect(() => {
         async function fetchTemplates() {
         const ip = process.env.NEXT_PUBLIC_IP || "localhost";
+        
+
 
         try {
+            const responseFiles = await axios.get(`http://${ip}:8080/api/arquivo`, config);
             const response = await axios.get(`http://${ip}:8080/api/template/getAll`, config);
             if (response.status === 200) {
             console.log(response.data)
             setTemplateReq(response.data.filter((template: { status: boolean; }) => template.status === true));
+            }
+            else{
+                console.log("Erro ao buscar templates")
+            }
+            if(responseFiles.status === 200){
+                setFilesReq(responseFiles.data)
+                setListaAtiva(responseFiles.data)
             }
         } catch (error) {
             console.error(error);
@@ -80,9 +92,9 @@ export default function TabelaDashboard() {
             setLoading(false);
         }
         }
-
         fetchTemplates();
-    }, []);
+        setReload(false)
+    }, [reload]);
 
     const fetchModalCampos= async (id: number) => {
         const ip = process.env.NEXT_PUBLIC_IP || "localhost";
@@ -95,12 +107,29 @@ export default function TabelaDashboard() {
                 console.log(response.data)
             }
         } catch (error) {
-          console.error(error);
+            console.error(error);
         } finally {
             setLoading(false);
         }
     }
     
+    const deleteFile = async(id: number, caminho: string) => {
+        setLoading(true)
+        
+        try {
+            const response = await axios.delete(`http://127.0.0.1:5000/api/files/delete/${id}/${caminho}`)
+            
+            if(response.status === 200) {
+                setReload(true)
+                closeModal()
+            }
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setLoading(false)
+        }
+    }
+
     const filteredTemp = search
         ? templateReq.filter((item: { [x: string]: any }) => {
             if (campoSelecionado.toLowerCase() === "nome") {
@@ -122,6 +151,27 @@ export default function TabelaDashboard() {
         })
         : templateReq;
 
+    const filteredFiles = search
+        ? filesReq.filter((item: { [x: string]: any }) => {
+            if (campoSelecionado.toLowerCase() === "nome") {
+                return String(item["nome"]).toLowerCase().includes(search.toLowerCase());      
+            }
+            if (campoSelecionado.toLowerCase() === "campos") {
+                return String(item["campos"]).toLowerCase().includes(search.toLowerCase());      
+            }
+            if (campoSelecionado.toLowerCase() === "criado por") {
+                return String(item["criado_por"]).toLowerCase().includes(search.toLowerCase()); 
+            }     
+            if (campoSelecionado.toLowerCase() === "formato") {
+                return String(item["formato"]).toLowerCase().includes(search.toLowerCase());      
+            }
+            if (campoSelecionado.toLowerCase() === "data") {
+                return String(item["data"]).toLowerCase().includes(search.toLowerCase());      
+            }
+            return 0; 
+        })
+        : filesReq;
+
         const sortedTemp = filteredTemp.sort((a, b) => {
             if (campoSelecionado.toLowerCase() === "nome") {
               return String(a.nome).localeCompare(b.nome);
@@ -140,14 +190,34 @@ export default function TabelaDashboard() {
             }
             return 0; 
           });
+
+        const sortedFiles = filteredFiles.sort((a, b) => {
+            if (campoSelecionado.toLowerCase() === "nome") {
+              return String(a.nome).localeCompare(b.nome);
+            }
+            if (campoSelecionado.toLowerCase() === "template") {
+              return String(a.template).localeCompare(b.template);
+            }
+            if (campoSelecionado.toLowerCase() === "criado por") {
+              return String(a.criado_por).localeCompare(b.criado_por);
+            }
+            if (campoSelecionado.toLowerCase() === "formato") {
+              return String(a.formato).localeCompare(b.formato);
+            }
+            if (campoSelecionado.toLowerCase() === "data") {
+              return new Date(b.data).getTime() - new Date(a.data).getTime();
+            }
+            return 0; 
+          });
           
 
 
     const openModal = (value: number) => {
-        if(objetoSelecionado.toLowerCase() != "templates") return 
         setIsModalOpen(true);
         setModalContent(listaAtiva[value]);
-        fetchModalCampos(listaAtiva[value].id);
+        console.log(listaAtiva)
+        if(objetoSelecionado.toLowerCase() == "templates")  
+            fetchModalCampos(listaAtiva[value].id);
     };
     
     const closeModal = () => {
@@ -160,7 +230,8 @@ export default function TabelaDashboard() {
         setObjetoSelecionado(novoObjetoSelecionado);
 
         if (novoObjetoSelecionado === "Arquivos") {
-            setListaAtiva(arquivoLista)
+            setListaAtiva(sortedFiles)
+            console.log(sortedFiles)
             setCamposDisponiveis(camposArquivo);
             setCampoSelecionado(camposArquivo[0]);
         } else if (novoObjetoSelecionado === "Templates") {
@@ -248,9 +319,13 @@ export default function TabelaDashboard() {
                                         } cursor-pointer hover:bg-green-200`}
                                     >
                                         {Object.keys(lista).map((lista2, index) => (
-                                            <td key={index} className="w-1/5">{
+                                            <td key={index} className={`
+                                                ${objetoSelecionado.toLowerCase() == "templates" ? "w-1/5" : "w-1/4"}
+                                            `}>{
                                                 lista2 == "id" ? ""  : 
                                                 lista2.toLocaleLowerCase() == "isnew" ? "" : 
+                                                lista2 == "download" ? "" :
+                                                lista2 == "id_usuario" ? "" :
                                                 lista2 == "status" ? "" : 
                                                 lista2 == "data" ? 
                                                 <span>
@@ -269,10 +344,10 @@ export default function TabelaDashboard() {
                                 ))}
                             </tbody>
                         </table>
-                        {objetoSelecionado == "Templates" ?
+                        {/* {objetoSelecionado == "Templates" ? */}
                         <Modal isOpen={isModalOpen} onClose={closeModal}>
                             <div className="p-5 select-none">
-                                {objetoSelecionado == "Templates"}
+                                {/* {objetoSelecionado == "Templates"} */}
                                 <div className="flex justify-between">
                                     <h2 className=" font-bold text-2xl">
                                         {modalContent ? modalContent.nome : ""}
@@ -281,74 +356,90 @@ export default function TabelaDashboard() {
                                 </div>
                                 <div className="flex justify-around items-center gap-4 pr-0">
                                     <div className="flex flex-col w-full">
-                                        <div className="flex flex-col">
-                                            <span className="font-semibold">Data de criação:</span><span> {modalContent ? new Date(modalContent.data).toLocaleString() : ""}</span>
-                                            <span className="font-semibold">Criado por:</span><span> {modalContent ? modalContent.criado_por : ""}</span>
-                                        </div>
+                                        {objetoSelecionado == "Templates" ? 
+                                            <div className="flex flex-col">
+                                                <span className="font-semibold">Data de criação:</span><span> {modalContent ? new Date(modalContent.data).toLocaleString() : ""}</span>
+                                                <span className="font-semibold">Criado por:</span><span> {modalContent ? modalContent.criado_por : ""}</span>
+                                            </div>
+                                        :
+                                            <div className="flex flex-col">
+                                                <span className="font-semibold">Data de criação:</span><span> {modalContent ? new Date(modalContent.data).toLocaleString() : ""}</span>
+                                                <span className="font-semibold">Criado por:</span><span> {modalContent ? modalContent.enviado_por : ""}</span>
+                                            </div>
+                                        }
                                     </div>
                                     <div className="flex flex-col w-full">
                                         <div className="flex flex-col">
-                                        <span className="font-semibold">Número de colunas:</span>
-                                            <span> {modalContent && modalContent.campos}</span>
-                                            <span className="font-semibold">Formato:</span>
-                                            <span> {modalContent && modalContent.formato}</span>
-                                            <span className="font-semibold">Status:</span>
-                                            <span> {modalContent && modalContent.status == true ? "Ativo" : "Inativo"}</span>
+                                            {objetoSelecionado === "Templates" ? (
+                                                <><span className="font-semibold">Número de colunas:</span><span> {modalContent && modalContent.campos}</span><span className="font-semibold">Formato:</span><span> {modalContent && modalContent.formato}</span><span className="font-semibold">Status:</span><span> {modalContent && modalContent.status == true ? "Ativo" : "Inativo"}</span></> 
+                                            ) : (
+                                                <><span className="font-bold">Template:</span>
+                                                <span>{modalContent && modalContent.template}</span></>
+                                            )}
                                         </div>
                                     </div>
                                     <div className="flex flex-col justify-center items-center gap-2 flex-1">
-                                        <div>
-                                            {modalCampos && modalCampos.length > 1 ? 
-                                            <div className="flex justify-between items-center gap-5">
-                                                <span>
-                                                    <ArrowBigLeft
-                                                        className=" h-16 w-16 cursor-pointer"
-                                                        onClick={() => {
-                                                            modalCamposIndex > 0 ? setModalCamposIndex(modalCamposIndex - 1) :
-                                                            setModalCamposIndex(modalCampos.length - 1)
-                                                        }}
-                                                    />
-                                                </span>
-                                                {modalCamposIndex + 1}/{modalCampos.length}
-                                                <span>
-                                                    <ArrowBigRight 
-                                                        className=" h-16 w-16 cursor-pointer"
-                                                        onClick={() => {
-                                                            modalCamposIndex < modalCampos.length - 1 ? setModalCamposIndex(modalCamposIndex + 1) :
-                                                            setModalCamposIndex(0)
-                                                        }}
-                                                    />
-                                                </span>
-                                            </div>
-                                            : ""}
-                                        </div>
-                                        <div className="bg-green-700 rounded-xl">
-                                                <div className="flex flex-col h-full justify-center items-center w-28 p-3 gap-3">
-                                                    <div className="bg-white w-full text-center rounded-xl px-2 overflow-hidden">
-                                                        {modalCampos && modalCampos[modalCamposIndex].nome }
+                                        {objetoSelecionado == "Templates" && (
+                                        <><div>
+                                                {modalCampos && modalCampos.length > 1 ?
+                                                    <div className="flex justify-between items-center gap-5">
+                                                        <span>
+                                                            <ArrowBigLeft
+                                                                className=" h-16 w-16 cursor-pointer"
+                                                                onClick={() => {
+                                                                    modalCamposIndex > 0 ? setModalCamposIndex(modalCamposIndex - 1) :
+                                                                        setModalCamposIndex(modalCampos.length - 1);
+                                                                } } />
+                                                        </span>
+                                                        {modalCamposIndex + 1}/{modalCampos.length}
+                                                        <span>
+                                                            <ArrowBigRight
+                                                                className=" h-16 w-16 cursor-pointer"
+                                                                onClick={() => {
+                                                                    modalCamposIndex < modalCampos.length - 1 ? setModalCamposIndex(modalCamposIndex + 1) :
+                                                                        setModalCamposIndex(0);
+                                                                } } />
+                                                        </span>
                                                     </div>
-                                                    <div className="bg-white w-full text-center rounded-xl px-2 overflow-hidden">
-                                                        {modalCampos && modalCampos[modalCamposIndex].tipo }
+                                                    : ""}
+                                            </div><div className="bg-green-700 rounded-xl">
+                                                    <div className="flex flex-col h-full justify-center items-center w-28 p-3 gap-3">
+                                                        <div className="bg-white w-full text-center rounded-xl px-2 overflow-hidden">
+                                                            {modalCampos && modalCampos[modalCamposIndex].nome}
+                                                        </div>
+                                                        <div className="bg-white w-full text-center rounded-xl px-2 overflow-hidden">
+                                                            {modalCampos && modalCampos[modalCamposIndex].tipo}
+                                                        </div>
+                                                        <div className="bg-white w-full text-center rounded-xl px-2 overflow-hidden">
+                                                            {modalCampos && modalCampos[modalCamposIndex].nulo == true ? "Nulo" : "Não nulo"}
+                                                        </div>
                                                     </div>
-                                                    <div className="bg-white w-full text-center rounded-xl px-2 overflow-hidden">
-                                                        {modalCampos && modalCampos[modalCamposIndex].nulo == true? "Nulo" : "Não nulo" }
-                                                    </div>
-                                                </div>
-                                        </div>
+                                                </div></>
+                                        )}
                                     </div>
                                 </div>
                                 <div className="flex gap-5 justify-center items-center w-full pt-5">
-                                    <button className=" flex justify-center items-center gap-2 rounded-2xl text-white bg-green-800 hover:bg-green-600 p-2 px-4 font-semibold text-xl">
-                                        Baixar <DownloadSimple className="text-white text-2xl"/>
-                                    </button>
-                                    <button className="flex justify-center items-center gap-2 rounded-2xl text-white bg-red-800 hover:bg-red-600 p-2 px-4 font-semibold text-xl">
-                                        Excluir<Trash className="text-white text-2xl"/>
-                                    </button>
+                                    {objetoSelecionado == "Arquivos" ? (
+                                        <>
+                                            <a href={`http://127.0.0.1:5000/api/files/download/${modalContent && modalContent.download}`} download className=" flex justify-center items-center gap-2 rounded-2xl text-white bg-green-800 hover:bg-green-600 p-2 px-4 font-semibold text-xl">
+                                                Baixar <DownloadSimple className="text-white text-2xl" />
+                                            </a>
+                                            <button onClick={() => deleteFile(modalContent.id, modalContent.download )} className="flex justify-center items-center gap-2 rounded-2xl text-white bg-red-800 hover:bg-red-600 p-2 px-4 font-semibold text-xl">
+                                                Excluir<Trash className="text-white text-2xl" />
+                                            </button>
+                                        </>
+
+                                    ) : (
+                                        <><a href={""} download className=" flex justify-center items-center gap-2 rounded-2xl text-white bg-green-800 hover:bg-green-600 p-2 px-4 font-semibold text-xl">
+                                            Baixar <DownloadSimple className="text-white text-2xl" />
+                                        </a><button className="flex justify-center items-center gap-2 rounded-2xl text-white bg-red-800 hover:bg-red-600 p-2 px-4 font-semibold text-xl">
+                                                Excluir<Trash className="text-white text-2xl" />
+                                            </button></>
+                                    )
+                                    }
                                 </div>
                             </div>
-                        </Modal> :
-                        ""
-                        }
+                        </Modal> 
                     </div>
                 </div>
             </div>
