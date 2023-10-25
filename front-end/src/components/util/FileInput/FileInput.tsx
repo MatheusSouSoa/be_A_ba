@@ -151,10 +151,16 @@ const HasFile = ({ file, removeFile, template }: HasFileProps) => {
   async function validarTemplate(file: any, template: any) {
     setIsModalOpen(true)
     setIsModalLoading(true)
+    
+    if(template === "Não Selecionado"){
+      setModalErrsMsg("Selecione um template")
+      setIsModalLoading(false)
+      return
+    }
+
     try{
       const response = await handleUpload()
-      
-      if(template.nome) {
+      if(template) {
         if(response && response.valid === true) {
           setModalErrs(true)
           console.log(template)

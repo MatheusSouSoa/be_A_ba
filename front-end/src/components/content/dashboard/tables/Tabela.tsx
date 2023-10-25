@@ -64,7 +64,7 @@ export default function TabelaDashboard() {
     const [modalCampos, setModalCampos] = useState<any>()
     const [reload, setReload] = useState<boolean>(false)
 
-    const {config} = UseAuth()
+    const {config, user} = UseAuth()
   
     useEffect(() => {
         async function fetchTemplates() {
@@ -156,8 +156,8 @@ export default function TabelaDashboard() {
             if (campoSelecionado.toLowerCase() === "nome") {
                 return String(item["nome"]).toLowerCase().includes(search.toLowerCase());      
             }
-            if (campoSelecionado.toLowerCase() === "campos") {
-                return String(item["campos"]).toLowerCase().includes(search.toLowerCase());      
+            if (campoSelecionado.toLowerCase() === "template") {
+                return String(item["template"]).toLowerCase().includes(search.toLowerCase());      
             }
             if (campoSelecionado.toLowerCase() === "criado por") {
                 return String(item["criado_por"]).toLowerCase().includes(search.toLowerCase()); 
@@ -199,7 +199,7 @@ export default function TabelaDashboard() {
               return String(a.template).localeCompare(b.template);
             }
             if (campoSelecionado.toLowerCase() === "criado por") {
-              return String(a.criado_por).localeCompare(b.criado_por);
+              return String(a.enviado_por).localeCompare(b.enviado_por);
             }
             if (campoSelecionado.toLowerCase() === "formato") {
               return String(a.formato).localeCompare(b.formato);
@@ -252,7 +252,6 @@ export default function TabelaDashboard() {
             return acum + item[novoCampoSelecionado];
         }, 0);
         
-        console.log(novoTotal);
     };
     
     return (
@@ -327,6 +326,7 @@ export default function TabelaDashboard() {
                                                 lista2 == "download" ? "" :
                                                 lista2 == "id_usuario" ? "" :
                                                 lista2 == "status" ? "" : 
+                                                lista2 == "id_criador" ? "" :
                                                 lista2 == "data" ? 
                                                 <span>
                                                     {
@@ -430,11 +430,13 @@ export default function TabelaDashboard() {
                                         </>
 
                                     ) : (
-                                        <><a href={""} download className=" flex justify-center items-center gap-2 rounded-2xl text-white bg-green-800 hover:bg-green-600 p-2 px-4 font-semibold text-xl">
+                                        <><a href={`http://127.0.0.1:5000/api/templates/download/${modalContent && modalContent.id_criador}/${modalContent && modalContent.id}`} download className=" flex justify-center items-center gap-2 rounded-2xl text-white bg-green-800 hover:bg-green-600 p-2 px-4 font-semibold text-xl">
                                             Baixar <DownloadSimple className="text-white text-2xl" />
-                                        </a><button className="flex justify-center items-center gap-2 rounded-2xl text-white bg-red-800 hover:bg-red-600 p-2 px-4 font-semibold text-xl">
+                                        </a>
+                                        {/* <button className="flex justify-center items-center gap-2 rounded-2xl text-white bg-red-800 hover:bg-red-600 p-2 px-4 font-semibold text-xl">
                                                 Excluir<Trash className="text-white text-2xl" />
-                                            </button></>
+                                        </button> */}
+                                        </>
                                     )
                                     }
                                 </div>

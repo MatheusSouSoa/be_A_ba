@@ -28,6 +28,7 @@ export default function DefaultLayout({
 }: ListagemProps) {
     
     const router = useRouter()
+    const {user} = UseAuth()
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -340,9 +341,9 @@ export default function DefaultLayout({
                         </div>
                     </div>
                     <div className="flex gap-5 justify-center items-center w-full pt-5">
-                        <button className=" flex justify-center items-center gap-2 rounded-2xl text-white bg-green-800 hover:bg-green-600 p-2 px-4 font-semibold text-xl">
+                        <a href={`http://127.0.0.1:5000/api/templates/download/${modalContent && modalContent.id_criador}/${modalContent && modalContent.id}`} className=" flex justify-center items-center gap-2 rounded-2xl text-white bg-green-800 hover:bg-green-600 p-2 px-4 font-semibold text-xl">
                             Baixar <DownloadSimple className="text-white text-2xl" />
-                        </button>
+                        </a>
                     </div>
                 </div>
             </Modal>

@@ -28,7 +28,7 @@ export default function TemplatesComponent({
                 >
                     {Object.keys(lista).map((lista2, innerIndex) => (
                         <td key={innerIndex} className={`w-1/5`}>
-                            {lista2 === "id" ? "" : lista2 === "status" ? (
+                            {lista2 === "id" ? "" : lista2 === "id_criador" ? "" : lista2 === "status" ? (
                                 ""
                                 // JSON.parse(lista[lista2]) ? 
                                 //     <span className="text-green-500">ativo</span> : 

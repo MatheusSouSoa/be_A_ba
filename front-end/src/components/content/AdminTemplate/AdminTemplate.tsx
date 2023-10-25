@@ -137,7 +137,7 @@ export default function AdminTemplate({
                     <tr key={index} className={`rounded-md border-y-2 text-xs md:text-md lg:text-lg hover:bg-green-100`}>
                     {Object.keys(lista).map((lista2, innerIndex) => (
                         <td key={innerIndex} className={`w-1/5 p-1 `}>
-                        {lista2 === "id" ? "" &&  setCurrentId(lista2) : lista2 === "status" ? (
+                        {lista2 === "id" ? "" : lista2 === "id_criador" ? "" &&  setCurrentId(lista2) : lista2 === "status" ? (
                             pendente != true ? (
                                 <div className="flex gap-5 items-center justify-center">
                                     <span title="Aceitar solicitação">
