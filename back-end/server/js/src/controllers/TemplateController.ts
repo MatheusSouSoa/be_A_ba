@@ -60,15 +60,7 @@ export class TemplateController {
       const templates = await templateRepository.find({relations: ["usuario"]});
   
       const templatesComContagem = await Promise.all(
-        templates.map(async (template: {
-          status: any;
-          usuario: any;
-          nome: any;
-          extensao: any;
-          campos: any; 
-          id: any;
-          isNew: any 
-          }) => {
+        templates.map(async (template) => {
             
             const controladorCampos = new campoController()
             const campos = await controladorCampos.findByTemplateId(template.id)
@@ -82,6 +74,7 @@ export class TemplateController {
               status: template.status,
               id: template.id,
               isNew: template.isNew,
+              id_criador: template.usuario.id
             };
 
             return templateOrdenado
@@ -103,16 +96,7 @@ export class TemplateController {
       });
   
       const templatesComContagem = await Promise.all(
-        templates.map(async (template: {
-          usuario: any;
-          nome: any;
-          extensao: any;
-          campos: any; 
-          id: any;
-          isNew: any,
-          data: any
-          status: any;
-          }) => {
+        templates.map(async (template) => {
             
             const controladorCampos = new campoController()
             const campos = await controladorCampos.findByTemplateId(template.id)
@@ -127,6 +111,7 @@ export class TemplateController {
               isNew: template.isNew,
               id: template.id,
               status: template.status,
+              id_criador: template.usuario.id
             };
             return templateOrdenado
           })

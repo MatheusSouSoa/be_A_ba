@@ -1,9 +1,5 @@
 import { Request, Response } from "express";
-import { campoRepository } from "../repositories/CampoRepository";
-import { templateRepository } from "../repositories/TemplateRepository";
 import { arquivoRepository } from "../repositories/ArquivosRepository";
-import { TemplateController } from "./TemplateController";
-import { Usuario } from "../entities/Usuario";
 import { UsuarioRepository } from "../repositories/UsuariosRepository";
 
 export class ArquivoController {
