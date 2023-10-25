@@ -13,6 +13,8 @@ class FileService:
         user_id = request.form.get('user_id')
         template = request.form.get('template')
         campos = request.form.get('campos')
+        
+        print("campos: ", campos)
 
         file = request.files.get('file')
         print(file)
