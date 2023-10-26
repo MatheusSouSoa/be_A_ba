@@ -3,6 +3,7 @@ from flask import request, jsonify, send_from_directory, send_file
 from app import app
 from app.services import FileService
 from app.templateService import TemplateService, create_directory_if_not_exists
+from app.DashboardService import DashboardService
 
 @app.route('/api/files/upload', methods=['POST'])
 def upload_file():
@@ -60,3 +61,11 @@ def download_template(user_id, template_id):
         return send_from_directory(user_directory, f"{template}", as_attachment=True)
     else:
         return jsonify({'error': 'Arquivo não encontrado', 'diretorio': DIRETORIO}), 404
+
+@app.route('/api/dashboard', methods=['GET'])
+def get_dashboard():
+    try:
+        dashboard_data = DashboardService.genDashboardData()
+        return jsonify(dashboard_data)
+    except Exception as error:
+        return jsonify({'error': str(error)}), 500

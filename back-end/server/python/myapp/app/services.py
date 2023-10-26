@@ -17,20 +17,20 @@ class FileService:
         file = request.files.get('file')
         
         if user_id is None or template is None:
-            return jsonify({'message': 'Dados incompletos no corpo da solicitação'}), 400
+            return {'message': 'Dados incompletos no corpo da solicitação'}, 400
         
         if 'file' not in request.files:
             return 'Nenhum arquivo foi enviado', 400
         if not template:
-            return jsonify({'message': 'O campo de template é obrigatório'}), 400
+            return {'message': 'O campo de template é obrigatório'}, 400
         if not campos:
-            return jsonify({'message': 'Os campos do template são obrigatórios'}), 400
+            return {'message': 'Os campos do template são obrigatórios'}, 400
 
 
         try:
             template_data = json.loads(template)
         except json.JSONDecodeError:
-            return jsonify({'message': 'O campo de template não é um JSON válido'}), 400
+            return {'message': 'O campo de template não é um JSON válido'}, 400
         
         
         template_columns = template_data.get('campos', 0)
@@ -67,6 +67,8 @@ class FileService:
                     'booleano': 'bool',
                     'data': 'datetime64[ns]'
                 }
+                
+                print("\ncampos_data: ", campos_data)
 
                 expected_data_types = {col['nome']: col['tipo'] for col in campos_data['data']}
                 print("expected: ", expected_data_types)
@@ -81,6 +83,15 @@ class FileService:
 
                 print("\nCamposdata: ",{col['nome']: col['tipo'] for col in campos_data['data']})
                 print("Df : \n", df.dtypes)
+                
+                for col in campos_data['data']:
+                    col_nome = col['nome']
+                    obrigatorio = not col['nulo']
+                    print(obrigatorio)
+                    if col_nome in df.columns:
+                        if obrigatorio and df[col_nome].isnull().any():
+                            return {'message': f"A coluna '{col_nome}' é obrigatória, mas possui valores nulos ou em branco."}, 400
+
 
             except json.JSONDecodeError as e:
                 print(f"Erro ao analisar campos como JSON: {e}")

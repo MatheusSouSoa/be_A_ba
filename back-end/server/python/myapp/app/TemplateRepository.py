@@ -79,4 +79,132 @@ class TemplateRepository:
             if connection:
                 connection.close()
                 
+    @staticmethod
+    def get_templates():
+        connection = create_connection()
+        if connection is None:
+            return None
+
+        try:
+            cursor = connection.cursor()
+
+            query = sql.SQL("""
+                SELECT *
+                FROM "Templates";
+            """)
+
+            cursor.execute(query)
+            templates = cursor.fetchall()
+
+            if templates:
+                return [
+                    {
+                        "id": row[0],
+                        "nome": row[1],
+                        "formato": row[2],
+                        "ativo": row[3]
+                    }
+                    for row in templates
+                ]
+
+        except Exception as error:
+            print(f"Erro ao buscar templates: {error}")
+            return None
+
+        finally:
+            if cursor:
+                cursor.close()
+            if connection:
+                connection.close()
+    
+    
+    @staticmethod
+    def get_templates_last_7days():
+        connection = create_connection()
+        if connection is None:
+            return None
+
+        try:
+            cursor = connection.cursor()
+
+            query = sql.SQL("""
+                SELECT COUNT(*) FROM "Templates"
+                WHERE data >= NOW() - INTERVAL '7 DAY';
+            """)
+
+            cursor.execute(query)
+            templates = cursor.fetchall()
+
+            if templates:
+                return [dict(zip([desc[0] for desc in cursor.description], row)) for row in templates]
+
+        except Exception as error:
+            print(f"Erro ao buscar templates: {error}")
+            return None
+
+        finally:
+            if cursor:
+                cursor.close()
+            if connection:
+                connection.close()
+                
+    @staticmethod
+    def get_templates_last_4week():
+        connection = create_connection()
+        if connection is None:
+            return None
+
+        try:
+            cursor = connection.cursor()
+
+            query = sql.SQL("""
+                SELECT COUNT(*) FROM "Templates"
+                WHERE data >= NOW() - INTERVAL '4 WEEK';
+            """)
+
+            cursor.execute(query)
+            templates = cursor.fetchall()
+
+            if templates:
+                return [dict(zip([desc[0] for desc in cursor.description], row)) for row in templates]
+
+        except Exception as error:
+            print(f"Erro ao buscar templates: {error}")
+            return None
+
+        finally:
+            if cursor:
+                cursor.close()
+            if connection:
+                connection.close()
+    @staticmethod
+    def get_templates_last_12month():
+        connection = create_connection()
+        if connection is None:
+            return None
+
+        try:
+            cursor = connection.cursor()
+
+            query = sql.SQL("""
+                SELECT COUNT(*) FROM "Templates"
+                WHERE data >= NOW() - INTERVAL '12 MONTH';
+            """)
+
+            cursor.execute(query)
+            templates = cursor.fetchall()
+
+            if templates:
+                return [dict(zip([desc[0] for desc in cursor.description], row)) for row in templates]
+
+        except Exception as error:
+            print(f"Erro ao buscar templates: {error}")
+            return None
+
+        finally:
+            if cursor:
+                cursor.close()
+            if connection:
+                connection.close()
+                
 
