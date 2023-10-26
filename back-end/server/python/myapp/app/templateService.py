@@ -33,11 +33,11 @@ class TemplateService:
                 field_type = field_data["field_type"]
 
                 tipo_dado_mapping = {
-                    'texto': 'string',
+                    'texto': 'object',
                     'inteiro': 'int64',
                     'decimal': 'float64',
                     'booleano': 'bool',
-                    'moeda': 'string',  
+                    'data': 'datetime64'
                 }
 
                 template_info["fields"].append({
