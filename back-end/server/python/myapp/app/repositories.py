@@ -1,8 +1,9 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 import json
 import psycopg2
 from psycopg2 import sql
 from app.config import create_connection
+from dateutil.relativedelta import relativedelta
 
 class FilesRepository:
     @staticmethod
@@ -90,7 +91,7 @@ class FilesRepository:
 
             query = """
                 SELECT T.*, C.*
-                FROM "Templates" AS T
+                FROM "Uploads" AS T
                 LEFT JOIN "Campos" AS C ON T.id = C.id_template
                 WHERE T.id = %s;
             """
@@ -175,7 +176,7 @@ class FilesRepository:
                 connection.close()
                 
     @staticmethod
-    def get_files_last_7days():
+    def get_Uploads_last_7days():
         connection = create_connection()
         if connection is None:
             return None
@@ -183,19 +184,28 @@ class FilesRepository:
         try:
             cursor = connection.cursor()
 
+            # Data atual
+            current_date = datetime.now()
+
+            # Data de 7 dias atrás
+            seven_days_ago = current_date - timedelta(days=7)
+
             query = sql.SQL("""
-                SELECT COUNT(*) FROM "Uploads"
-                WHERE data >= NOW() - INTERVAL '7 DAY';
+                SELECT COUNT(*) as count, date(data) as day
+                FROM "Uploads"
+                WHERE data >= %s
+                GROUP BY day
+                ORDER BY day;
             """)
 
-            cursor.execute(query)
-            templates = cursor.fetchall()
+            cursor.execute(query, [seven_days_ago])
+            template_counts = cursor.fetchall()
 
-            if templates:
-                return [dict(zip([desc[0] for desc in cursor.description], row)) for row in templates]
+            if template_counts:
+                return [{"date": row[1], "count": row[0]} for row in template_counts]
 
         except Exception as error:
-            print(f"Erro ao buscar templates: {error}")
+            print(f"Erro ao buscar envios de Uploads nos últimos 7 dias: {error}")
             return None
 
         finally:
@@ -205,7 +215,7 @@ class FilesRepository:
                 connection.close()
                 
     @staticmethod
-    def get_files_last_4week():
+    def get_Uploads_last_4week():
         connection = create_connection()
         if connection is None:
             return None
@@ -213,19 +223,28 @@ class FilesRepository:
         try:
             cursor = connection.cursor()
 
+            # Data atual
+            current_date = datetime.now()
+
+            # Data de 7 dias atrás
+            four_weeks_ago = current_date - timedelta(weeks=4)
+
             query = sql.SQL("""
-                SELECT COUNT(*) FROM "Uploads"
-                WHERE data >= NOW() - INTERVAL '4 WEEK';
+                SELECT COUNT(*) as count, date(data) as day
+                FROM "Uploads"
+                WHERE data >= %s
+                GROUP BY day
+                ORDER BY day;
             """)
 
-            cursor.execute(query)
-            templates = cursor.fetchall()
+            cursor.execute(query, [four_weeks_ago])
+            template_counts = cursor.fetchall()
 
-            if templates:
-                return [dict(zip([desc[0] for desc in cursor.description], row)) for row in templates]
+            if template_counts:
+                return [{"date": row[1], "count": row[0]} for row in template_counts]
 
         except Exception as error:
-            print(f"Erro ao buscar templates: {error}")
+            print(f"Erro ao buscar envios de Uploads nas últimas 4 semanas: {error}")
             return None
 
         finally:
@@ -234,7 +253,7 @@ class FilesRepository:
             if connection:
                 connection.close()
     @staticmethod
-    def get_files_last_12month():
+    def get_Uploads_last_12months():
         connection = create_connection()
         if connection is None:
             return None
@@ -242,19 +261,28 @@ class FilesRepository:
         try:
             cursor = connection.cursor()
 
+            # Data atual
+            current_date = datetime.now()
+
+            # Data de 12 meses atrás
+            twelve_months_ago = current_date - relativedelta(months=12)
+
             query = sql.SQL("""
-                SELECT COUNT(*) FROM "Uploads"
-                WHERE data >= NOW() - INTERVAL '12 MONTH';
+                SELECT COUNT(*) as count, date(data) as day
+                FROM "Uploads"
+                WHERE data >= %s
+                GROUP BY day
+                ORDER BY day;
             """)
 
-            cursor.execute(query)
-            templates = cursor.fetchall()
+            cursor.execute(query, [twelve_months_ago])
+            template_counts = cursor.fetchall()
 
-            if templates:
-                return [dict(zip([desc[0] for desc in cursor.description], row)) for row in templates]
+            if template_counts:
+                return [{"date": row[1], "count": row[0]} for row in template_counts]
 
         except Exception as error:
-            print(f"Erro ao buscar templates: {error}")
+            print(f"Erro ao buscar envios de Uploads nos últimos 12 meses: {error}")
             return None
 
         finally:
@@ -262,3 +290,4 @@ class FilesRepository:
                 cursor.close()
             if connection:
                 connection.close()
+    

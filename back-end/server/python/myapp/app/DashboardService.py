@@ -28,11 +28,11 @@ class DashboardService:
         
         temp7Days = TemplateRepository.get_templates_last_7days()
         temp4Weeks = TemplateRepository.get_templates_last_4week()
-        temp12Months = TemplateRepository.get_templates_last_12month()
+        temp12Months = TemplateRepository.get_templates_last_12months()
         
-        files7Days = FilesRepository.get_files_last_7days()
-        files4Weeks = FilesRepository.get_files_last_4week()
-        files12Months = FilesRepository.get_files_last_12month()
+        files7Days = FilesRepository.get_Uploads_last_7days()
+        files4Weeks = FilesRepository.get_Uploads_last_4week()
+        files12Months = FilesRepository.get_Uploads_last_12months()
 
         return {
             "quantidade_total_arquivos": quantidade_total_arquivos,
