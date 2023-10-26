@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import { Check, Pencil, Trash, X } from "phosphor-react";
 import { useEffect, useState } from "react";
 
-const tiposDados = ["texto", "data", "inteiro", "decimal", "booleano", "moeda"];
+const tiposDados = ["texto", "data", "inteiro", "decimal", "booleano"];
 const tipoArquivos = ["csv", "xls", "xlsx"];
 
 interface TemplateProps {

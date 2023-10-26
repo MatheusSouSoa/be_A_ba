@@ -133,7 +133,7 @@ const HasFile = ({ file, removeFile, template }: HasFileProps) => {
     } catch (error) {
       if(axios.isAxiosError(error))
       if (error.response) {
-        console.error('Erro ao enviar o arquivo 1:', error.response.data.message);
+        console.error('Erro ao enviar o arquivo 1:', error);
         return {
           valid: false,
           response: error.response.data.message

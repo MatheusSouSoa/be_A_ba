@@ -385,7 +385,7 @@ export default function TabelaDashboard() {
                                                     <div className="flex justify-between items-center gap-5">
                                                         <span>
                                                             <ArrowBigLeft
-                                                                className=" h-16 w-16 cursor-pointer"
+                                                                className=" h-16 w-16 cursor-pointer text-green-700 fill-green-700 hover:text-green-500 hover:fill-green-500"
                                                                 onClick={() => {
                                                                     modalCamposIndex > 0 ? setModalCamposIndex(modalCamposIndex - 1) :
                                                                         setModalCamposIndex(modalCampos.length - 1);
@@ -394,7 +394,7 @@ export default function TabelaDashboard() {
                                                         {modalCamposIndex + 1}/{modalCampos.length}
                                                         <span>
                                                             <ArrowBigRight
-                                                                className=" h-16 w-16 cursor-pointer"
+                                                                className=" h-16 w-16 cursor-pointer text-green-700 fill-green-700 hover:text-green-500 hover:fill-green-500"
                                                                 onClick={() => {
                                                                     modalCamposIndex < modalCampos.length - 1 ? setModalCamposIndex(modalCamposIndex + 1) :
                                                                         setModalCamposIndex(0);

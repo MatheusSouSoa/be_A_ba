@@ -26,7 +26,7 @@ export default function Arquivos() {
       </Head>
       <div className="h-screen w-screen max-h-full max-w-full">
         <Header/>
-        <div className="flex bg-zinc-300 h-full w-full main-content">
+        <div className="flex  bg-zinc-300 h-full w-full main-content">
           <Side/>
           <PaginaArquivos/>
         </div>
