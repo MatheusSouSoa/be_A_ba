@@ -70,14 +70,12 @@ export default function TabelaDashboard() {
         async function fetchTemplates() {
         const ip = process.env.NEXT_PUBLIC_IP || "localhost";
         
-
-
         try {
             const responseFiles = await axios.get(`http://${ip}:8080/api/arquivo`, config);
-            const response = await axios.get(`http://${ip}:8080/api/template/getAll`, config);
+            const response = await axios.get(`http://${ip}:8080/api/admin/template/getAllAdmin`, config);
             if (response.status === 200) {
             console.log(response.data)
-            setTemplateReq(response.data.filter((template: { status: boolean; }) => template.status === true));
+            setTemplateReq(response.data);
             }
             else{
                 console.log("Erro ao buscar templates")
