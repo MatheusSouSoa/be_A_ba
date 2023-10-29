@@ -7,6 +7,63 @@ from dateutil.relativedelta import relativedelta
 
 class TemplateRepository:
     @staticmethod
+    def select_template_with_related_fields(record_id):
+        connection = create_connection()
+        if connection is None:
+            return None  
+
+        try:
+            cursor = connection.cursor()
+
+            query = """
+                SELECT T.*, C.*
+                FROM "Templates" AS T
+                LEFT JOIN "Campos" AS C ON T.id = C.id_template
+                WHERE T.id = %s;
+            """
+
+            values = (record_id,)
+
+            cursor.execute(query, values)
+
+            template_data = cursor.fetchall() 
+
+            if template_data:
+                
+                template_info = {
+                    "template_id": template_data[0][0],
+                    "template_name": template_data[0][1],
+                    "template_extension": template_data[0][2],
+                    "fields": []
+                }
+
+                for row in template_data:
+                    field = {
+                        "template_id": row[6],
+                        "field_id": row[7],
+                        "field_name": row[8],
+                        "field_type": row[9],
+                        "field_required": row[10]
+                    }
+                    template_info["fields"].append(field)
+
+                print("Informações do template organizadas com sucesso.")
+                return template_info
+
+            else:
+                print(f"Nenhum registro de template encontrado para o ID {record_id}")
+                return None  
+        except (Exception, psycopg2.Error) as error:
+            print(f"Erro ao buscar o registro do template: {error}")
+            return None  
+
+        finally:
+            if cursor:
+                cursor.close()
+            if connection:
+                connection.close()
+                
+    @staticmethod
     def save_file_details(filename, template, file_path, hora_criacao, qtd_linhas, user_id):
         connection = create_connection()
         if connection is None:

@@ -1,4 +1,4 @@
-from app.repositories import FilesRepository
+from app.TemplateRepository import TemplateRepository
 import json
 import pandas as pd
 import os
@@ -19,9 +19,10 @@ class TemplateService:
         user_directory = os.path.join(DIRETORIO, str(user_id), 'downloadTemplates', str(template_id))
         file_path = os.path.join(user_directory)
         
-        template_data = FilesRepository.select_template_with_related_fields(template_id)
+        template_data = TemplateRepository.select_template_with_related_fields(template_id)
         
         if template_data:
+            print(template_data)
             template_info = {
                 "fields": [],
                 "template_extension": template_data["template_extension"],

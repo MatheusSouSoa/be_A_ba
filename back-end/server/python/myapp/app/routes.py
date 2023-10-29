@@ -49,7 +49,7 @@ def download_template(user_id, template_id):
     DIRETORIO = 'C:/Users/980189/Documents/Matheus/QueroQuero/QQTech tarefas/Bê á bá/back-end/server/python/myapp/data/users'
     user_directory = os.path.join(DIRETORIO, str(user_id), 'downloadTemplates', str(template_id))
     
-    print(user_directory)
+    print("diretorio: ",user_directory)
     create_directory_if_not_exists(user_directory)
 
     template = TemplateService.upload_template(user_id, template_id)
@@ -60,7 +60,7 @@ def download_template(user_id, template_id):
     if os.path.exists(template_file): 
         return send_from_directory(user_directory, f"{template}", as_attachment=True)
     else:
-        return jsonify({'error': 'Arquivo não encontrado', 'diretorio': DIRETORIO}), 404
+        return jsonify({'error': 'Arquivo não encontrado', 'diretorio': DIRETORIO, 'user_dir': user_directory}), 404
 
 @app.route('/api/dashboard', methods=['GET'])
 def get_dashboard():
