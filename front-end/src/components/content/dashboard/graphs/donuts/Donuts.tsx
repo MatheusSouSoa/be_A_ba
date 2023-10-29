@@ -12,7 +12,7 @@ const DonutChartComponent = ({ data }: DonutsProps) => {
   };
 
   return (
-    <div className={"h-[83%] p-5"}>
+    <div className={"h-[83%]"}>
       <Doughnut data={data} options={options} />
     </div>
   );

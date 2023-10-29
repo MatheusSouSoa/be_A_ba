@@ -130,38 +130,38 @@ export default function AdminTemplate({
             )
         }, 1000)
     }
-    else{
-        return (
-            <> 
-                {filteredListaObj.map((lista: any, index: any) => (
-                    <tr key={index} className={`rounded-md border-y-2 text-xs md:text-md lg:text-lg hover:bg-green-100`}>
-                    {Object.keys(lista).map((lista2, innerIndex) => (
-                        <td key={innerIndex} className={`w-1/5 p-1 `}>
-                        {lista2 === "id" ? "" : lista2 === "id_criador" ? "" &&  setCurrentId(lista2) : lista2 === "status" ? (
-                            pendente != true ? (
-                                <div className="flex gap-5 items-center justify-center">
-                                    <span title="Aceitar solicitação">
-                                        <Check onClick={() => aproveTemplate(index, lista)} className="w-7 h-7 text-green-500 cursor-pointer"/>
-                                    </span>
-                                    <span title="Recusar solicitação">
-                                        <X onClick={() => denieTemplate(index, lista)} className="w-7 h-7 text-red-500 cursor-pointer"/>
-                                    </span>
-                                </div>
-                            ) :
-                            <SliderToggle
-                                isChecked={statuses[index]}
-                                onChange={(newStatus) =>
-                                    handleStatusChange(index, newStatus, lista)
-                                }
-                                />
-                        ) : (
-                            <span className="cursor-default">{lista[lista2]}</span>
-                        )}
-                        </td>
-                    ))}
-                    </tr>
+   
+    return (
+        <> 
+            {filteredListaObj.map((lista: any, index: any) => (
+                <tr key={index} className={`rounded-md border-y-2 text-xs md:text-md lg:text-lg hover:bg-green-100`}>
+                {Object.keys(lista).map((lista2, innerIndex) => (
+                    <td key={innerIndex} className={`w-1/5 p-1 `}>
+                    {lista2 === "id" ? "" : lista2 === "id_criador" ? "" &&  setCurrentId(lista2) : lista2 === "status" ? (
+                        pendente != true ? (
+                            <div className="flex gap-5 items-center justify-center">
+                                <span title="Aceitar solicitação">
+                                    <Check onClick={() => aproveTemplate(index, lista)} className="w-7 h-7 text-green-500 cursor-pointer"/>
+                                </span>
+                                <span title="Recusar solicitação">
+                                    <X onClick={() => denieTemplate(index, lista)} className="w-7 h-7 text-red-500 cursor-pointer"/>
+                                </span>
+                            </div>
+                        ) :
+                        <SliderToggle
+                            isChecked={statuses[index]}
+                            onChange={(newStatus) =>
+                                handleStatusChange(index, newStatus, lista)
+                            }
+                            />
+                    ) : (
+                        <span className="cursor-default">{lista[lista2]}</span>
+                    )}
+                    </td>
                 ))}
-            </>
-        )
-    }
+                </tr>
+            ))}
+        </>
+    )
+
 }
