@@ -35,9 +35,14 @@ export default function Graficos() {
     const [data, setData] = useState<any>()
 
     const [periodSelect, setPeriodSelect] = useState("últimos 7 dias")
+    const [graphicsSelect, setGraphicsSelect] = useState("arquivos")
 
     function handlePeriod(value: any) {
         setPeriodSelect(value)
+    }
+
+    function handleGraphicsSelect(value: any) {
+        setGraphicsSelect(value)
     }
 
     useEffect(() => {
@@ -210,18 +215,63 @@ export default function Graficos() {
             },
         ],
     };
+    
     const totalAno: number[] = data?.total_por_mes
-
+    
     const totalyear = {
-labels: ["Jan", "Fev", "Mar", "Abr", "Mai","Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez" ],
-    datasets: [
+        labels: ["Jan", "Fev", "Mar", "Abr", "Mai","Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez" ],
+        datasets: [
             {
             label: "Arquivos no ano",
             data: totalAno,
             backgroundColor: 'green'
-            },
-        ],
-    };
+        },
+    ],
+};
+
+const totalTemp7Days: number[] = data?.total_temp_12_meses
+
+const sevenTempDays = {
+    labels: labels,
+    datasets: [
+        {
+        label: "Templates últimos7 dias",
+        data: totalTemp7Days,
+        backgroundColor: 'green'
+        },
+    ],
+};
+
+let total4TempSemanas: number[] = data?.total_temp_4_semanas
+
+// let reverse4Semanas: number[] = []
+
+// if(total4Semanas)
+//     reverse4Semanas = [total4Semanas[3], total4Semanas[2], total4Semanas[1], total4Semanas[0]]
+
+const fourTempWeeks = {
+labels: ["Antepenúltima", "Penúltima", "Última", "Atual"],
+datasets: [
+        {
+        label: "Templates nas últimas 4 semanas",
+        data: total4TempSemanas,
+        backgroundColor: 'green'
+        },
+    ],
+};
+
+const totalTempAno: number[] = data?.total_temp_12_meses
+
+const totalTempYear = {
+    labels: ["Jan", "Fev", "Mar", "Abr", "Mai","Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez" ],
+    datasets: [
+        {
+        label: "Templates no ano",
+        data: totalTempAno,
+        backgroundColor: 'green'
+        },
+    ],
+};
 
     const csvCount = data?.quantidade_arquivos_por_formato?.csv;
     const xlsxCount = data?.quantidade_arquivos_por_formato?.xlsx;
@@ -256,13 +306,22 @@ labels: ["Jan", "Fev", "Mar", "Abr", "Mai","Jun", "Jul", "Ago", "Set", "Out", "N
             <div className="flex-1 h-full flex flex-col p-2 px-10 ">
                 <div className="flex text-zinc-700 font-semibold gap-2">
                     <div>
-                        <select name="" id="" className="outline-none bg-gray-200 rounded-2xl">
+                        <select 
+                            value={graphicsSelect} 
+                            onChange={(event) => handleGraphicsSelect(event.target.value)}  
+                            className="outline-none bg-gray-200 rounded-2xl"
+                        >
                             <option value="arquivos">Arquivos</option>
+                            <option value="templates">Templates</option>
                         </select>
                     </div>
                     <div>enviados</div>
                     <div>
-                        <select value={periodSelect} onChange={(event) => handlePeriod(event.target.value)} className="outline-none bg-gray-200 rounded-2xl">
+                        <select 
+                            value={periodSelect} 
+                            onChange={(event) => handlePeriod(event.target.value)} 
+                            className="outline-none bg-gray-200 rounded-2xl"
+                        >
                             <option value="últimos 7 dias">Últimos 7 dias</option>
                             <option value="últimas 4 semanas">Últimas 4 semanas</option>
                             <option value="no ano">No ano</option>
@@ -271,9 +330,12 @@ labels: ["Jan", "Fev", "Mar", "Abr", "Mai","Jun", "Jul", "Ago", "Set", "Out", "N
                 </div>
                 <BarChartComponent 
                     data={
-                        periodSelect == "últimos 7 dias" ? sevenDays : 
-                        periodSelect == "últimas 4 semanas" ? fourWeeks :
-                        totalyear
+                        periodSelect == "últimos 7 dias" && graphicsSelect == "arquivos"  ? sevenDays : 
+                        periodSelect == "últimas 4 semanas" && graphicsSelect == "arquivos" ? fourWeeks :
+                        periodSelect == "no ano" && graphicsSelect == "arquivos" ? totalyear :
+                        periodSelect == "últimos 7 dias" && graphicsSelect == "templates"  ?  sevenTempDays: 
+                        periodSelect == "últimas 4 semanas" && graphicsSelect == "templates" ? fourTempWeeks :
+                        totalTempYear 
                     } 
                 />
                 <div className="text-sm font-bold">

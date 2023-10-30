@@ -72,7 +72,7 @@ export default function TabelaDashboard() {
         
         try {
             const responseFiles = await axios.get(`http://${ip}:8080/api/arquivo`, config);
-            const response = await axios.get(`http://${ip}:8080/api/admin/template/getAllAdmin`, config);
+            const response = await axios.get(`http://${ip}:8080/api/admin/template/getAllAdminDashboard`, config);
             if (response.status === 200) {
             console.log(response.data)
             setTemplateReq(response.data);
