@@ -190,6 +190,19 @@ class DashboardService:
             total_dia = sum(template["count"] for template in temp7DaysTemplates if template["date"] == data_limite)
             total_temp_7_dias[i] = total_dia
             
+        files7Days = FilesRepository.get_Uploads_last_7days()
+
+        print(files7Days)
+        
+        hoje = datetime.now().date()
+
+        total_files_7_dias = [0] * 7
+
+        for i in range(7):
+            data_limite = hoje - timedelta(days=i)
+            total_dia = sum(upload["count"] for upload in files7Days if upload["date"] == data_limite)
+            total_files_7_dias[i] = total_dia
+            
         return {
             "quantidade_total_arquivos": quantidade_total_arquivos,
             "quantidade_arquivos_por_formato": quantidade_arquivos_por_formato,
@@ -202,4 +215,5 @@ class DashboardService:
             "total_temp_7_dias": total_temp_7_dias,
             "total_temp_4_semanas": total_por_semana_templates,
             "total_temp_12_meses": total_por_mes_12months_templates,
+            "total_files_7_dias" : total_files_7_dias
         }
