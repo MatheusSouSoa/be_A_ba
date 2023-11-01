@@ -122,13 +122,13 @@ export default function Graficos() {
         }
         if(new Date().getDay() == 2){
             daysOfWeek = {
-                "invalidoo1": 0,
-                "invalidoo": 0,
-                "invalidooo": 0,
-                "invalido": 0,
-                "invalido2": 0,
-                "Sunday": 0,
-                "Monday": 0,
+                // "invalidoo1": 0,
+                // "invalidoo": 0,
+                // "invalidooo": 0,
+                // "invalido": 0,
+                // "invalido2": 0,
+                // "Sunday": 0,
+                // "Monday": 0,
                 "Tuesday": 0,
                 "Wednesday": 0,
                 "Thursday": 0,
@@ -138,13 +138,13 @@ export default function Graficos() {
         }
         if(new Date().getDay() == 1){
             daysOfWeek = {
-                "invalidoo12": 0,
-                "invalidoo1": 0,
-                "invalidoo": 0,
-                "invalidooo": 0,
-                "invalido": 0,
-                "invalido2": 0,
-                "Sunday": 0,
+                // "invalidoo12": 0,
+                // "invalidoo1": 0,
+                // "invalidoo": 0,
+                // "invalidooo": 0,
+                // "invalido": 0,
+                // "invalido2": 0,
+                // "Sunday": 0,
                 "Monday": 0,
                 "Tuesday": 0,
                 "Wednesday": 0,
@@ -227,51 +227,66 @@ export default function Graficos() {
             backgroundColor: 'green'
         },
     ],
-};
+    };
 
-const totalTemp7Days: number[] = data?.total_temp_12_meses
+    const totalTemp7Days: number[] = data?.total_temp_7_dias
 
-const sevenTempDays = {
-    labels: labels,
+    let reverse7Daystemp:number[] = []
+    
+    console.log(totalTemp7Days)
+    if(totalTemp7Days)
+    reverse7Daystemp =
+    [
+        totalTemp7Days[6],
+        totalTemp7Days[5],
+        totalTemp7Days[4],
+        totalTemp7Days[3],
+        totalTemp7Days[2],
+        totalTemp7Days[1],
+        totalTemp7Days[0],
+    ]
+
+    const sevenTempDays = {
+        labels: labels,
+        datasets: [
+            {
+            label: "Templates últimos7 dias",
+            data: reverse7Daystemp,
+            backgroundColor: 'green'
+            },
+        ],
+    };
+
+    let total4TempSemanas: number[] = data?.total_temp_4_semanas
+
+    let reverse4TempSemanas: number[] = []
+
+    if(total4TempSemanas)
+        reverse4TempSemanas = [total4TempSemanas[3], total4TempSemanas[2], total4TempSemanas[1], total4TempSemanas[0]]
+
+    const fourTempWeeks = {
+    labels: ["Antepenúltima", "Penúltima", "Última", "Atual"],
     datasets: [
-        {
-        label: "Templates últimos7 dias",
-        data: totalTemp7Days,
-        backgroundColor: 'green'
-        },
-    ],
-};
+            {
+            label: "Templates nas últimas 4 semanas",
+            data: reverse4TempSemanas,
+            backgroundColor: 'green'
+            },
+        ],
+    };
 
-let total4TempSemanas: number[] = data?.total_temp_4_semanas
+    const totalTempAno: number[] = data?.total_temp_12_meses
 
-// let reverse4Semanas: number[] = []
-
-// if(total4Semanas)
-//     reverse4Semanas = [total4Semanas[3], total4Semanas[2], total4Semanas[1], total4Semanas[0]]
-
-const fourTempWeeks = {
-labels: ["Antepenúltima", "Penúltima", "Última", "Atual"],
-datasets: [
-        {
-        label: "Templates nas últimas 4 semanas",
-        data: total4TempSemanas,
-        backgroundColor: 'green'
-        },
-    ],
-};
-
-const totalTempAno: number[] = data?.total_temp_12_meses
-
-const totalTempYear = {
-    labels: ["Jan", "Fev", "Mar", "Abr", "Mai","Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez" ],
-    datasets: [
-        {
-        label: "Templates no ano",
-        data: totalTempAno,
-        backgroundColor: 'green'
-        },
-    ],
-};
+    const totalTempYear = {
+        labels: ["Jan", "Fev", "Mar", "Abr", "Mai","Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez" ],
+        datasets: [
+            {
+            label: "Templates no ano",
+            data: totalTempAno,
+            backgroundColor: 'green'
+            },
+        ],
+    };
 
     const csvCount = data?.quantidade_arquivos_por_formato?.csv;
     const xlsxCount = data?.quantidade_arquivos_por_formato?.xlsx;
@@ -339,7 +354,24 @@ const totalTempYear = {
                     } 
                 />
                 <div className="text-sm font-bold">
-                    Total {periodSelect}: {data?.quantidade_arquivos_7_dias.reduce((acum:number, dia:any) => acum + dia.count, 0 )}
+                    Total {periodSelect}: {
+                        periodSelect == "últimos 7 dias" && graphicsSelect == "arquivos"  ? (
+                            data?.quantidade_arquivos_7_dias.reduce((acum:number, dia:any) => acum + dia.count, 0 )
+                        ) : 
+                        periodSelect == "últimas 4 semanas" && graphicsSelect == "arquivos" ? (
+                            total4Semanas.reduce((accum:number, dia:any) => accum + dia)
+                        ) : 
+                        periodSelect == "no ano" && graphicsSelect == "arquivos" ? (
+                            totalAno.reduce((accum:number, dia:any) => accum + dia)
+                        ) :
+                        periodSelect == "últimos 7 dias" && graphicsSelect == "templates"  ? (
+                            totalTemp7Days.reduce((accum:number, dia:any) => accum + dia)
+                        ) :
+                        periodSelect == "últimas 4 semanas" && graphicsSelect == "templates" ? (
+                            total4TempSemanas.reduce((accum:number, dia:any) => accum + dia)
+                        ) :
+                        totalTempAno.reduce((accum:number, dia:any) => accum + dia)
+                    }
                 </div>
             </div>
             <div className="h-full flex flex-1 justify-center items-center">
