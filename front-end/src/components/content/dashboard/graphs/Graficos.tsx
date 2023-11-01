@@ -107,12 +107,12 @@ export default function Graficos() {
         }
         if(new Date().getDay() == 3){
             daysOfWeek = {
-                "invalidoo": 0,
-                "invalidooo": 0,
-                "invalido": 0,
-                "invalido2": 0,
-                "Sunday": 0,
-                "Monday": 0,
+                // "invalidoo": 0,
+                // "invalidooo": 0,
+                // "invalido": 0,
+                // "invalido2": 0,
+                // "Sunday": 0,
+                // "Monday": 0,
                 "Tuesday": 0,
                 "Wednesday": 0,
                 "Thursday": 0,
@@ -178,12 +178,29 @@ export default function Graficos() {
         return daysOfWeek;
     };
 
+        const totalFiles7Days: number[] = data?.total_files_7_dias
+
+    let reverse7DaysFiles:number[] = []
+    
+    console.log(totalFiles7Days)
+    if(totalFiles7Days)
+    reverse7DaysFiles =
+    [
+        totalFiles7Days[6],
+        totalFiles7Days[5],
+        totalFiles7Days[4],
+        totalFiles7Days[3],
+        totalFiles7Days[2],
+        totalFiles7Days[1],
+        totalFiles7Days[0],
+    ]
+
     const sevenDays = {
         labels: labels,
         datasets: [
             {
                 label: "Arquivos enviados nos últimos 7 dias",
-                data: Object.values(mapDataToDaysOfWeek(data)),
+                data: reverse7DaysFiles,
                 backgroundColor: 'green'
             }
         ]
