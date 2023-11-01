@@ -27,7 +27,7 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
         const currentTimeStamp = Math.floor(Date.now() / 1000)
 
         if(currentTimeStamp > exp){
-            return res.status(401).json({ message: "Token expirado" });
+            return res.status(401).json({ message: "Sessão expirada. Efetue o login novamente" });
         }
     
         const user = await UsuarioRepository.findOneBy({ id })

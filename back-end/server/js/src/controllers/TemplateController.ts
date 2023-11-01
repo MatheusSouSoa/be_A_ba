@@ -87,6 +87,40 @@ export class TemplateController {
     }
   }
 
+  async listAllTemplatesAdminDashboard(req: Request, res: Response) {
+    try {
+  
+      const templates = await templateRepository.find({relations: ["usuario"]});
+  
+      const templatesComContagem = await Promise.all(
+        templates.map(async (template) => {
+            
+            const controladorCampos = new campoController()
+            const campos = await controladorCampos.findByTemplateId(template.id)
+            template.campos = campos
+            
+            const templateOrdenado = {
+              nome: template.nome,
+              formato: template.extensao,
+              campos: campos,
+              criado_por: template.usuario.nome,
+              data: template.data,
+              status: template.status,
+              id: template.id,
+              isNew: template.isNew,
+              id_criador: template.usuario.id
+            };
+
+            return templateOrdenado
+          })
+      );
+  
+      if (templatesComContagem) return res.status(200).json(templatesComContagem);
+    } catch (error) {
+      return res.status(500).json({ error: error });
+    }
+  }
+
   async listAllTemplates(req: Request, res: Response) {
     try {
   

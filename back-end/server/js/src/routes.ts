@@ -22,6 +22,7 @@ routes.delete("/api/admin/usuario/:id/delete/:isNewParam", new UsuarioController
 
 routes.post('/api/template', new TemplateController().create)
 routes.get('/api/admin/template/getAllAdmin', new TemplateController().listAllTemplatesAdmin)
+routes.get('/api/admin/template/getAllAdminDashboard', new TemplateController().listAllTemplatesAdminDashboard)
 routes.get('/api/template/getAll', new TemplateController().listAllTemplates)
 routes.put('/api/admin/template/changeStatus/:id', new TemplateController().changeStatus)
 routes.put('/api/admin/template/aprove/:id', new TemplateController().aproveTemplate)
