@@ -224,7 +224,7 @@ export default function TabelaDashboard() {
     };
 
     const handleObjetoChange = (e: any) => {
-        const novoObjetoSelecionado = e.target.value;
+        const novoObjetoSelecionado = e;
         setObjetoSelecionado(novoObjetoSelecionado);
 
         if (novoObjetoSelecionado === "Arquivos") {
@@ -261,7 +261,7 @@ export default function TabelaDashboard() {
                             <span>
                                 Ordenar:
                             </span>
-                            <Select name="objeto" options={objetos} id="0" value={objetoSelecionado} onChange={handleObjetoChange} />
+                            <Select name="objeto" options={objetos} id="0" value={objetoSelecionado} onChange={(event) => handleObjetoChange(event.target.value)} />
                         </div>
                         <div className="flex">
                             Por:
@@ -286,7 +286,17 @@ export default function TabelaDashboard() {
                             >
                                 <MagnifyingGlass 
                                     className="cursor-pointer" 
-                                    onClick={() => filteredTemp}
+                                    onClick={() => {
+                                        console.log("Clicou madame!")
+                                        objetoSelecionado == "Arquivos" ? (
+                                            handleObjetoChange("Templates"),
+                                            handleObjetoChange("Arquivos")
+                                        ) : (
+                                            handleObjetoChange("Arquivos"),
+                                            handleObjetoChange("Templates")
+                                        )
+                                        console.log("obj sele: ", objetoSelecionado)
+                                    }}
                                 />
                             </div>
                         </div>
