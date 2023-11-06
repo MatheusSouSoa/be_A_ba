@@ -6,6 +6,7 @@ import os
 from datetime import datetime
 from flask import request, jsonify
 import shutil
+import xlrd
 
 class FileService:
     @staticmethod
@@ -49,7 +50,7 @@ class FileService:
         if file:
             if file.filename.endswith('.csv'):
                 df = pd.read_csv(file)
-            elif file.filename.endswith('.xlsx'):
+            elif file.filename.endswith('.xlsx') or file.filename.endswith('.xls'):
                 df = pd.read_excel(file)
             else:
                 return 'Formato de arquivo não suportado', 400
@@ -78,7 +79,7 @@ class FileService:
                         mapped_dtype = tipo_dado_mapping.get(expected_dtype, 'object')
                         print("aqui: ",df[col_name].dtype.name, mapped_dtype)
                         if df[col_name].dtype.name != mapped_dtype:
-                            return {'message': f'O tipo de dados da coluna {col_name} do arquivo não corresponde ao tipo de dados da coluna cpf ({expected_dtype}) do template'}, 400
+                            return {'message': f'O tipo de dados da coluna {col_name.upper()} do arquivo não corresponde ao tipo de dados no template ({expected_dtype}) do template'}, 400
                         df[col_name] = df[col_name].astype(mapped_dtype)
 
                 print("\nCamposdata: ",{col['nome']: col['tipo'] for col in campos_data['data']})
@@ -113,7 +114,7 @@ class FileService:
                 os.makedirs(user_directory)
 
                 
-            df['hora_criacao'] = timestamp
+            # df['hora_criacao'] = timestamp
             
             qtd_linhas = 10
 

@@ -41,7 +41,7 @@ class DashboardService:
         
         dados_por_mes = {}
 
-        for item in files4Weeks:
+        for item in files12Months:
             data = item["date"]
             mes_ano = data.strftime("%B")
 

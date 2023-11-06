@@ -1,0 +1,45 @@
+import pandas as pd
+import random
+from faker import Faker
+from datetime import datetime
+
+# Função para gerar dados fictícios
+def gerar_dados_ficticios_rh(template_file, output_file, num_registros=10):
+    # Ler o arquivo CSV de template
+    df_template = pd.read_csv(template_file)
+
+    # Inicializar o Faker para geração de nomes
+    fake = Faker()
+
+    # Criar listas de valores fictícios para cada coluna
+    nomes = [fake.name() for _ in range(num_registros)]
+    cargos = [fake.job() for _ in range(num_registros)]
+    salarios = [round(random.uniform(3000, 8000), 2) for _ in range(num_registros)]
+
+    datas_admissao = []
+
+    while len(datas_admissao) < num_registros:
+        data_admissao = fake.date_between(start_date='-3y', end_date='today').strftime('%Y-%m-%d')
+
+        # Verificar se a data gerada é válida
+        try:
+            datetime.strptime(data_admissao, '%Y-%m-%d')
+            datas_admissao.append(data_admissao)
+        except ValueError:
+            # Tratar datas inválidas
+            pass
+
+    # Preencher o DataFrame com os dados fictícios
+    df_template["Nome do Funcionário"] = nomes
+    df_template["Cargo"] = cargos
+    df_template["Salário"] = salarios
+
+    # Converter as datas de admissão para o tipo de dado de data
+    df_template["Data de Admissão"] = pd.to_datetime(datas_admissao, format='%Y-%m-%d')
+
+    # Exportar os dados fictícios em um arquivo CSV
+    df_template.to_csv(output_file, index=False)
+
+# Exemplo de uso:
+
+gerar_dados_ficticios_rh("Relatório de RH.csv", "Relatorio_RH_outubro_2023.csv")
