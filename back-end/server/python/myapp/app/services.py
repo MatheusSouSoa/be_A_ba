@@ -69,10 +69,31 @@ class FileService:
                     'data': 'datetime64[ns]'
                 }
                 
-                print("\ncampos_data: ", campos_data)
+                # print("\ncampos_data: ", campos_data)
 
                 expected_data_types = {col['nome']: col['tipo'] for col in campos_data['data']}
-                print("expected: ", expected_data_types)
+                # print("expected: ", expected_data_types)
+                
+                for col in campos_data['data']:
+                    col_nome = col['nome']
+                    obrigatorio = not col['nulo']
+                    print(obrigatorio)
+                    print("aqui 1234567", df[col_nome].isna().any())
+                    print("aqui 1234567987654", df[col_nome].empty)
+                    if col_nome in df.columns:
+                        print("tem teste")
+                        if obrigatorio == True and (df[col_nome].isnull().any() or df[col_nome].empty):
+                            print("tem2")
+                            mensagem = f"A coluna '{col_nome}' é obrigatória, mas possui valores nulos ou em branco."
+                            print(mensagem)
+                            # Define uma variável de sinalização para indicar que encontrou um problema.
+                            erro_encontrado = True
+                            # Encerre o loop
+                            break
+
+                # Verifica se ocorreu um erro durante o loop.
+                if erro_encontrado:
+                    return {'message': mensagem}, 400
 
                 for col_name, expected_dtype in expected_data_types.items():
                     if col_name in df.columns:
@@ -84,15 +105,6 @@ class FileService:
 
                 print("\nCamposdata: ",{col['nome']: col['tipo'] for col in campos_data['data']})
                 print("Df : \n", df.dtypes)
-                
-                for col in campos_data['data']:
-                    col_nome = col['nome']
-                    obrigatorio = not col['nulo']
-                    print(obrigatorio)
-                    if col_nome in df.columns:
-                        if obrigatorio and df[col_nome].isnull().any():
-                            return {'message': f"A coluna '{col_nome}' é obrigatória, mas possui valores nulos ou em branco."}, 400
-
 
             except json.JSONDecodeError as e:
                 print(f"Erro ao analisar campos como JSON: {e}")
