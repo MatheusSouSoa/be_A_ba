@@ -4,7 +4,7 @@ import { Folder, FolderOpen, FolderPlus } from "phosphor-react";
 export default function PaginaArquivos () {
     return (
         <div className="flex text-black w-full h-full rounded-3xl items-center justify-around flex-col gap-4 px-5 py-5">
-            <div className="flex max-h-[50%] flex-col w-full h-full items-cente bg-white rounded-2xl gap-4 shadow-md hover:shadow-blue-100 hover:shadow-2xl transition duration-300 cursor-pointer  ">
+            <div className="flex max-h-[50%] flex-col w-full h-full items-cente bg-white rounded-2xl gap-4 shadow-md hover:shadow-blue-100 hover:shadow-2xl transition duration-300 cursor-pointer ">
                 <Link href={"arquivos/meus-arquivos"} className="w-full h-full flex justify-center items-center">
                     <div className="flex flex-col flex-1 bg-white rounded-2xl overflow-hidden">
                         <div className=" p-3 flex justify-center items-center">
@@ -13,7 +13,7 @@ export default function PaginaArquivos () {
                         <div className=" flex-1 flex justify-center items-center">
                             <FolderOpen
                                 weight="fill"
-                                className="w-36 h-36 text-zinc-600"
+                                className="w-20 h-20  text-zinc-600"
                             />
                         </div>
                         <div className="p-3 flex justify-center items-center">
@@ -31,7 +31,7 @@ export default function PaginaArquivos () {
                         <div className=" flex-1 flex justify-center items-center">
                             <FolderPlus
                                 weight="fill"
-                                className="w-36 h-36 text-zinc-600"
+                                className="w-20 h-20 text-zinc-600"
                             />
                         </div>
                         <div className="p-3 flex justify-center items-center">

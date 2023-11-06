@@ -50,7 +50,7 @@ const templateLista = [
 export default function TabelaDashboard() {
 
     const [objetoSelecionado, setObjetoSelecionado] = useState("Arquivos");
-    const [campoSelecionado, setCampoSelecionado] = useState(camposArquivo[0]);
+    const [campoSelecionado, setCampoSelecionado] = useState(camposArquivo[3]);
     const [camposDisponiveis, setCamposDisponiveis] = useState(camposArquivo);
     const [listaAtiva, setListaAtiva] = useState<any[]>([])
     const [isModalOpen, setIsModalOpen] = useState(false);

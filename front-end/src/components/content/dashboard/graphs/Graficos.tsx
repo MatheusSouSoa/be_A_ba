@@ -373,7 +373,7 @@ export default function Graficos() {
                 <div className="text-sm font-bold">
                     Total {periodSelect}: {
                         periodSelect == "últimos 7 dias" && graphicsSelect == "arquivos"  ? (
-                            data?.quantidade_arquivos_7_dias.reduce((acum:number, dia:any) => acum + dia.count, 0 )
+                            data?.total_files_7_dias.reduce((acum:number, dia:any) => acum + dia, 0 )
                         ) : 
                         periodSelect == "últimas 4 semanas" && graphicsSelect == "arquivos" ? (
                             total4Semanas.reduce((accum:number, dia:any) => accum + dia)
