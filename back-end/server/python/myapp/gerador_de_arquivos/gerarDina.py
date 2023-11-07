@@ -50,9 +50,7 @@ def gerar_arquivo_dinamico(nome_arquivo, colunas, i):
 # }
 #Defina aqui as colunas do seu arquivo com os seus tipos para a geração
 colunas = {
-    'Práticas Sustentáveis': 'texto',
-    'Resultados Ambientais e Sociais': 'texto',
-    'Metas de Sustentabilidade': 'inteiro'
+    'Data': 'data',
 }
 
 	
@@ -63,4 +61,4 @@ if qtd > 1:
     for i in range(qtd):
         gerar_arquivo_dinamico(f"{nome_arquivo}", colunas, i)
 else:
-    gerar_arquivo_dinamico(nome_arquivo, colunas)
+    gerar_arquivo_dinamico(nome_arquivo, colunas, i = 1)

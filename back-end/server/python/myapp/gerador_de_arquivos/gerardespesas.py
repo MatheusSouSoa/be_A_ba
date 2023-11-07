@@ -21,4 +21,4 @@ def gerar_dados_ficticios_despesas(output_file, num_registros=10):
     df.to_excel(output_file, index=False, engine='openpyxl')
 
 # Exemplo de uso:
-gerar_dados_ficticios_despesas("gerados/Relatorio_Despesas_10-2023.xlsx")
+gerar_dados_ficticios_despesas("gerados/Relatorio_Despesas_-2023.xlsx")

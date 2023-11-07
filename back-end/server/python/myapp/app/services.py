@@ -74,8 +74,34 @@ class FileService:
                 expected_data_types = {col['nome']: col['tipo'] for col in campos_data['data']}
                 # print("expected: ", expected_data_types)
                 
+                for col_name, expected_dtype in expected_data_types.items():
+                    if col_name in df.columns:
+                        mapped_dtype = tipo_dado_mapping.get(expected_dtype, 'object')
+                        print("aqui: ",df[col_name].dtype.name, mapped_dtype)
+                        if mapped_dtype == "datetime64[ns]":
+                            print("Começa aqui: ")
+                            converted_column = pd.to_datetime(df[col_name], errors='coerce')
+                            print(converted_column)
+                            print(pd.isna(converted_column).any())
+                            if pd.isna(converted_column).any():
+                                print("Achou")
+                                mensagem =  f'O tipo de dados da coluna {col_name.upper()} do arquivo não é data e não corresponde ao tipo de dados no template ({expected_dtype}) do template'
+                                erro_encontrado = True
+                                break
+                        else:
+                            if df[col_name].dtype.name != mapped_dtype:
+                                return {'message': f'O tipo de dados da coluna {col_name.upper()} do arquivo não corresponde ao tipo de dados no template ({expected_dtype}) do template'}, 400
+                            df[col_name] = df[col_name].astype(mapped_dtype)
+                
+                if erro_encontrado:
+                    return {'message': mensagem}, 400
+                        
                 for col in campos_data['data']:
                     col_nome = col['nome']
+                    if col['tipo'] == "data" and pd.to_datetime(df[col_nome], errors='coerce'): 
+                        # df[campo.nome] = 
+                        return {'message': f'O tipo de dados da coluna {col_name.upper()} tipo data não é uma data ({expected_dtype}) do template'}, 400
+                        
                     obrigatorio = not col['nulo']
                     print(obrigatorio)
                     print("aqui 1234567", df[col_nome].isna().any())
@@ -86,22 +112,12 @@ class FileService:
                             print("tem2")
                             mensagem = f"A coluna '{col_nome}' é obrigatória, mas possui valores nulos ou em branco."
                             print(mensagem)
-                            # Define uma variável de sinalização para indicar que encontrou um problema.
                             erro_encontrado = True
-                            # Encerre o loop
                             break
 
-                # Verifica se ocorreu um erro durante o loop.
                 if erro_encontrado:
                     return {'message': mensagem}, 400
 
-                for col_name, expected_dtype in expected_data_types.items():
-                    if col_name in df.columns:
-                        mapped_dtype = tipo_dado_mapping.get(expected_dtype, 'object')
-                        print("aqui: ",df[col_name].dtype.name, mapped_dtype)
-                        if df[col_name].dtype.name != mapped_dtype:
-                            return {'message': f'O tipo de dados da coluna {col_name.upper()} do arquivo não corresponde ao tipo de dados no template ({expected_dtype}) do template'}, 400
-                        df[col_name] = df[col_name].astype(mapped_dtype)
 
                 print("\nCamposdata: ",{col['nome']: col['tipo'] for col in campos_data['data']})
                 print("Df : \n", df.dtypes)
