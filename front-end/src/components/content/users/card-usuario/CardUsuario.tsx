@@ -1,5 +1,7 @@
+import Modal from "@/components/util/modal/Modal";
 import { UseAuth } from "@/hooks/useAuth";
 import axios from "axios";
+import { X } from "phosphor-react";
 import { useState } from "react";
 
 interface UsuariosCardProps {
@@ -17,11 +19,17 @@ interface UsuariosCardProps {
 export default function CardUsuario({ id, nome, email, isadmin, buttons, isNew, pagina, matricula, onDelete} : UsuariosCardProps): any {
 
     const [isAdmin, setIsAdmin] = useState(isadmin || false);
-    const {config} = UseAuth()
+    const {config} = UseAuth();
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     function handleRadioChange(event:any) {
         const novoStatus = event.target.value === "admin";
         setIsAdmin(novoStatus);
+    }
+
+    const closeModal= () => {
+        setIsModalOpen(false)
     }
 
     async function  mudarPermissao(acao:string | undefined){
@@ -86,6 +94,7 @@ export default function CardUsuario({ id, nome, email, isadmin, buttons, isNew, 
             } catch (error) {
                 console.error(error)
                 console.log(error)
+                setIsModalOpen(true);
             }   
         }
     }
@@ -149,6 +158,12 @@ export default function CardUsuario({ id, nome, email, isadmin, buttons, isNew, 
                     </button>
                 </div>
             </div>
+            <Modal isOpen={isModalOpen} onClose={closeModal}>
+                <div className="flex justify-center items-center flex-col">
+                    <span className="text-3xl">Usuário possui arquivos ou templates e não pode ser excluído</span>
+                    <button className="bg-red-500 text-4xl px-6 py-2 text-white rounded-xl text-center hover:bg-red-400" onClick={closeModal}>ok</button>
+                </div>
+            </Modal>
         </div>
     )
 }

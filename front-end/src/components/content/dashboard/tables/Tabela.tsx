@@ -33,7 +33,7 @@ const arquivoLista = [
     {nome: "Loja 01", template: "Loja A", linhas: 67, data: "2023-05-05", criado_por: "Matheus"},
 ]
 
-const camposTemplate = ["Nome", "Formato", "Campos", "Criado por", "Data"]
+const camposTemplate = ["Nome", "Formato",  "Criado por", "Data"]
 const templateLista = [
     {nome: "Loja A", formato: "csv",  campos: 6, data: "2023-03-10", criado_por: "Matheus"},
     {nome: "Loja A", formato: "csv",  campos: 6, data: "2023-03-10", criado_por: "Matheus"},
@@ -71,7 +71,8 @@ export default function TabelaDashboard() {
         const ip = process.env.NEXT_PUBLIC_IP || "localhost";
         
         try {
-            const responseFiles = await axios.get(`http://${ip}:8080/api/arquivo`, config);
+            // const responseFiles = await axios.get(`http://${ip}:8080/api/arquivo`, config);
+            const responseFiles = await axios.get(`http://127.0.0.1:5000/api/arquivos`, config);
             const response = await axios.get(`http://${ip}:8080/api/admin/template/getAllAdminDashboard`, config);
             if (response.status === 200) {
             console.log(response.data)
@@ -213,7 +214,8 @@ export default function TabelaDashboard() {
     const openModal = (value: number) => {
         setIsModalOpen(true);
         setModalContent(listaAtiva[value]);
-        console.log(listaAtiva)
+        console.log(listaAtiva[value].download.split('/').length);
+        // console.log(listaAtiva)
         if(objetoSelecionado.toLowerCase() == "templates")  
             fetchModalCampos(listaAtiva[value].id);
     };
@@ -251,6 +253,7 @@ export default function TabelaDashboard() {
         }, 0);
         
     };
+
     
     return (
         <div className="flex max-h-[50%] flex-col w-full h-full items-cente bg-white rounded-2xl gap-4  ">
@@ -307,7 +310,7 @@ export default function TabelaDashboard() {
                         <thead className="bg-green-800 text-white">
                             <tr className="">
                                 {camposDisponiveis.map((campo, index) => (
-                                <th key={index} className="w-1/5">
+                                <th key={index} className="w-1/4 text-center">
                                     {campo}
                                 </th>
                                 ))}
@@ -324,8 +327,40 @@ export default function TabelaDashboard() {
                                         className={`${
                                         index % 2 == 0 ? "bg-gray-200" : "bg-gray300"
                                         } cursor-pointer hover:bg-green-200`}
-                                    >
-                                        {Object.keys(lista).map((lista2, index) => (
+                                    >   
+                                        {objetoSelecionado == "Arquivos" ? 
+                                        <>
+                                            <td className="w-1/6 text-start px-2">{lista['nome']}</td>
+                                            <td className="w-1/6 text-center">{lista['template']}</td>
+                                            <td className="w-3/6 ">{lista['enviado_por']}</td>
+                                            <td className="w-1/6 text-start">
+                                                {/* {new Date(lista['data']).getDate()+ "/"+
+                                                 (new Date(lista['data']).getMonth() + 1)+ "/" +
+                                                 new Date(lista['data']).getFullYear()} */}
+                                                {
+                                                    (new Date(lista['data']).getDay() < 10 ? 
+                                                    `0${new Date(lista['data']).getDay()}` : new Date(lista['data']).getDay() ) + "/" +
+                                                    (new Date(lista['data']).getMonth() < 10 ? 
+                                                    `0${(new Date(lista['data']).getMonth() + 1)}` : (new Date(lista['data']).getMonth() + 1) ) + "/" +
+                                                    new Date(lista['data']).getFullYear() 
+                                                }
+                                            </td>
+                                        </>
+                                        : 
+                                            <>
+                                                <td className="w-1/4 text-start px-2">{lista['nome']}</td>
+                                                <td className="w-1/4 text-center">{lista['formato']}</td> 
+                                                <td className="w-1/4 text-center">{lista['criado_por']}</td>
+                                                {
+                                                    (new Date(lista['data']).getDay() < 10 ? 
+                                                    `0${new Date(lista['data']).getDay()}` : new Date(lista['data']).getDay() ) + "/" +
+                                                    (new Date(lista['data']).getMonth() < 10 ? 
+                                                    `0${(new Date(lista['data']).getMonth() + 1)}` : (new Date(lista['data']).getMonth() + 1) ) + "/" +
+                                                    new Date(lista['data']).getFullYear() 
+                                                }  
+                                            </>
+                                        }
+                                        {/* {Object.keys(lista).map((lista2, index) => (
                                             <td key={index} className={`
                                                 ${objetoSelecionado.toLowerCase() == "templates" ? "w-1/5" : "w-1/4"}
                                             `}>{
@@ -347,7 +382,7 @@ export default function TabelaDashboard() {
                                                 : 
                                                 lista[lista2]
                                             }</td>
-                                        ))}
+                                        ))} */}
                                     </tr>
                                 ))}
                             </tbody>
@@ -429,9 +464,15 @@ export default function TabelaDashboard() {
                                 <div className="flex gap-5 justify-center items-center w-full pt-5">
                                     {objetoSelecionado == "Arquivos" ? (
                                         <>
-                                            <a href={`http://127.0.0.1:5000/api/files/download/${modalContent && modalContent.download}`} download className=" flex justify-center items-center gap-2 rounded-2xl text-white bg-green-800 hover:bg-green-600 p-2 px-4 font-semibold text-xl">
-                                                Baixar <DownloadSimple className="text-white text-2xl" />
-                                            </a>
+                                            {modalContent && modalContent.download.split('/').length < 4 ?
+                                                <a href={`http://127.0.0.1:5000/api/files/download/${modalContent && modalContent.download}`} download className=" flex justify-center items-center gap-2 rounded-2xl text-white bg-green-800 hover:bg-green-600 p-2 px-4 font-semibold text-xl">
+                                                    Baixar <DownloadSimple className="text-white text-2xl" />
+                                                </a> 
+                                                : 
+                                                <a href={`http://127.0.0.1:5000/api/files/download-dir/${modalContent && modalContent.download}`} download className=" flex justify-center items-center gap-2 rounded-2xl text-white bg-green-800 hover:bg-green-600 p-2 px-4 font-semibold text-xl">
+                                                    Baixar <DownloadSimple className="text-white text-2xl" />
+                                                </a> 
+                                            }
                                             <button onClick={() => deleteFile(modalContent.id, modalContent.download )} className="flex justify-center items-center gap-2 rounded-2xl text-white bg-red-800 hover:bg-red-600 p-2 px-4 font-semibold text-xl">
                                                 Excluir<Trash className="text-white text-2xl" />
                                             </button>

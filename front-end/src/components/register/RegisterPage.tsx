@@ -158,10 +158,10 @@ export default function PaginaCriarConta() {
                                         Voltar
                                     </Link>
                                 </li>
-                                <li className="flex gap-2  justify-center items-center">
+                                {/* <li className="flex gap-2  justify-center items-center">
                                     <input type="checkbox"/>
                                     <span>Li e concordo com os <span className="underline cursor-pointer">termos</span> de uso</span>
-                                </li>
+                                </li> */}
                             </ul>
                         </form>
                     </div>

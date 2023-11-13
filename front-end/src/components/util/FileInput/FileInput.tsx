@@ -14,16 +14,18 @@ interface InputProps {
 }
 
 interface FileInputProps {
-    template: any
+    template: any;
+    diretorio: string;
 }
 
 interface HasFileProps {
   file?: File;
   removeFile: () => void;
-  template: any
+  template: any;
+  diretorio: string;
 }
 
-export const FileInput = ({template} : FileInputProps) => {
+export const FileInput = ({template, diretorio} : FileInputProps) => {
   const [file, setFile] = useState<File | null>(null);
 
   const removeFile = useCallback(() => {
@@ -42,7 +44,7 @@ export const FileInput = ({template} : FileInputProps) => {
     },
   });
 
-  if (file) return <HasFile file={file} removeFile={removeFile} template={template}/>;
+  if (file) return <HasFile diretorio={diretorio} file={file} removeFile={removeFile} template={template}/>;
 
   return <Input dropzone={dropzone} />;
 };
@@ -78,7 +80,7 @@ const Input = ({ dropzone }: InputProps) => {
   );
 };
 
-const HasFile = ({ file, removeFile, template }: HasFileProps) => {
+const HasFile = ({ file, removeFile, template, diretorio }: HasFileProps) => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [ modalErrs, setModalErrs] = useState(false);
@@ -106,6 +108,7 @@ const HasFile = ({ file, removeFile, template }: HasFileProps) => {
       formData.append('user_id', user.id);
       formData.append('template', JSON.stringify(template));
       formData.append('campos', JSON.stringify(campos));
+      formData.append('diretorio', JSON.stringify(diretorio));
       
       if(file)
         formData.append('file', file);
