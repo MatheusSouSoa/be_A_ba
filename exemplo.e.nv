@@ -1,0 +1,7 @@
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=usuario banco
+DB_PASS=senha banco
+DB_NAME=nome banco
+
+PORT=3000
